@@ -25,6 +25,16 @@ const routes: Routes = [
         path: 'searchAndClaim',
         loadComponent: () => import('./features/components/search-and-claim/search-and-claim.component')
       },
+      {
+        title: 'addItem | claimit',
+        path: 'addItem',
+        loadComponent: () => import('./features/components/admin/additem/additem.component')
+      },
+      {
+        title: 'removeOrArchive | claimit',
+        path: 'removeOrArchive',
+        loadComponent: () => import('./features/components/admin/remove-or-archive/remove-or-archive.component')
+      },
     ]
   },
 

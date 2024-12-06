@@ -43,12 +43,8 @@
           <div *ngIf="tableColumn.type === 'date'">
             {{ formatDate(element[tableColumn.name]) }}
           </div>
-          <div *ngIf="tableColumn.label === 'Image Data' ">
+          <div *ngIf="tableColumn.label === 'Image Data' || tableColumn.name === 'image' " (click)="openPreviewImage(element)">
             <img [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image" class="item-image"
-                style="max-width: 100px; max-height: 100px;" />
-        </div>
-          <div *ngIf="tableColumn.name === 'image' && tableColumn.label !== 'Image Data' ">
-            <img [src]="element.image" alt="Item Image" class="item-image"
               style="max-width: 100px; max-height: 100px;" />
           </div>
           <div *ngIf="tableColumn.label === 'Status'  ">
@@ -59,13 +55,9 @@
               {{ element | dataPropertyGetter : tableColumn.name }}
             </div>
           </div>
-          <div *ngIf="tableColumn.name === 'ListActions'">
-            <span class="text-[#3E969F] hover:underline">
-              Click
-            </span>
-          </div>
           <div *ngIf="tableColumn.label === 'Action'">
-            <button (click)="unClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+            <button *ngIf="element.claimStatus === 'PENDING_PICKUP' " (click)="unClaimItem(element)" mat-raised-button
+              color="primary" class="txt-button">
               UnClaim
             </button>
           </div>
@@ -87,6 +79,6 @@
 <div *ngIf="dataSource.data.length === 0" class="relative flex flex-col items-center justify-center">
   <img src="assets/noresults.png" class="absolute w-56 mt-36  object-contain " alt="Image" />
   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-      No Records Found
+    No Records Found
   </p>
 </div>

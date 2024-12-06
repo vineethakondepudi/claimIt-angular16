@@ -15,6 +15,7 @@ import { fadeInUp400ms } from 'src/app/@amc/animations/fade-in-up.animation';
 import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ClaimitService } from '../../sharedServices/claimit.service';
 
 @Component({
   selector: 'app-view-or-unclaim',
@@ -55,7 +56,7 @@ export default class ViewOrUnclaimComponent {
     },
     {
       label: "Status",
-      name: "status",
+      name: "claimStatus",
       type: "text",
       isSortable: true,
       position: "left",
@@ -81,97 +82,20 @@ export default class ViewOrUnclaimComponent {
       index: 1,
     },
   ]
-  data = [
-    {
-      email: 'vkondepudi@miraclesoft.com',
-      items: [
-        {
-          image: 'https://www.shutterstock.com/image-photo/sand-timerhour-glass-feather-quill-260nw-240558520.jpg',
-          claimDate: new Date('11 /4/2024'),
-          status: 'open',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://www.rebag.com/thevault/wp-content/uploads/2021/10/5-Entry-Level-Luxury-Accessories-Hero.jpg',
-          claimDate: new Date('11/27/2024'),
-          status: 'claimed',
-        },
-        {
-          image: 'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg',
-          claimDate: new Date('12/3/2024'),
-          status: 'pending pickup',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://uncommongifts.in/cdn/shop/files/TribefacePrintedWomen_sOfficeBag_8d951812-bc08-4e82-8e0a-310bf5e9bbff_510x@2x.jpg?v=1702898334',
-          claimDate: new Date('10/1/2024'),
-          status: 'unclaim',
-          showConfirmation: false,
-        },
-      ],
-    },
-    {
-      email: 'pgupta@miraclesoft.com',
-      items: [
-        {
-          image: 'https://www.hamburg-airport.de/resource/image/35168/landscape_ratio5x4_card/670/536/7a8548f5eebfc589a713116c0e10ada8/851A25FEEC37824CB8775EC0A150AD65/fundsachen-lost-and-found-baggage-gepaeck.jpg',
-          claimDate: new Date('11/2/2024'),
-          status: 'pending request',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg',
-          claimDate: new Date('12/1/2024'),
-          status: 'unclaim',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://www.rebag.com/thevault/wp-content/uploads/2021/10/5-Entry-Level-Luxury-Accessories-Hero.jpg',
-          claimDate: new Date('11/30/2024'),
-          status: 'open',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://www.shutterstock.com/image-photo/sand-timerhour-glass-feather-quill-260nw-240558520.jpg',
-          claimDate: new Date('12/4/2024'),
-          status: 'claimed',
-        },
-      ],
-    },
-  ];
-  constructor(public dialog: MatDialog){
+  constructor(public dialog: MatDialog, private service: ClaimitService) {
 
   }
-  ngOnInit(){
-this.search()
-  }
-
-  sortDataByClaimDate() {
-    this.searchResults.sort((a: { claimDate: { getTime: () => number; }; }, b: { claimDate: { getTime: () => number; }; }) => {
-      return b.claimDate.getTime() - a.claimDate.getTime();
-    });
+  ngOnInit() {
+    this.search()
   }
 
   search() {
-    const query = this.searchQuery.trim().toLowerCase();
-    if (!query) {
-      this.searchResults = [];
-      this.showNoResults = false;
-      return;
-    }
+    const query = this.searchQuery.trim();
+    this.service.getAllItems(query).subscribe((res: any) => {
+      console.log('res', res)
+      this.searchResults = res
+    })
 
-    setTimeout(() => {
-      const result = this.data.find((entry) => entry.email.toLowerCase() === query);
-      if (result) {
-        this.searchResults = result.items;
-        this.showNoResults = this.searchResults.length === 0;
-      } else {
-        this.searchResults = [];
-        this.showNoResults = true;
-      }
-
-      this.sortDataByClaimDate();
-    }, 2000);
   }
   clearResultsIfEmpty() {
     if (!this.searchQuery.trim()) {
@@ -186,7 +110,7 @@ this.search()
       this.searchResults = [];
       this.showNoResults = false;
     } else {
-
+      this.search()
     }
 
   }
@@ -195,17 +119,33 @@ this.search()
       width: "500px",
       data: {
         message: 'Are you sure you want to unclaim this item?',
-        title:'UnClaim'
+        title: 'UnClaim'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      console.log('confirmed', confirmed)
+      if (confirmed === 'yes') {
+        const params = {
+          newStatus:'UNCLAIMED'
+        }
+        this.service.unClaimItem(params).subscribe((res:any)=>{
+          console.log(res)
+        })
+      }
+    });
+  }
+  previewImage(event: any) {
+    console.log(event)
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        requiredData: event,
+        title: 'Preview Image'
       },
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.unclaimItem(result); 
-      }
     });
-  }
-  unclaimItem(result: any) {
-    this.searchResults = this.searchResults.filter((item: any) => item !== result);
   }
 }

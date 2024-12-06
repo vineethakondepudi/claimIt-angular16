@@ -1,1 +1,58 @@
-<p>additem works!</p>
+<div class="min-h-screen flex flex-col">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3]">
+        <div @fadeInRight class="flex flex-row justify-between px-5">
+          <div class="flex flex-col">
+            <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Add-Item</h1>
+          </div>
+        </div>
+        <div class="flex-grow px-5">
+          <mat-card class="w-full">
+            <mat-accordion>
+              <mat-expansion-panel hideToggle (opened)="containerPanelOpened = true" (closed)="containerPanelOpened = false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="text-lg">
+                    <h3 class="font-semibold">Add Item</h3>
+                  </mat-panel-title>
+                  <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
+                </mat-expansion-panel-header>
+                <div class="panel-content">
+                  <!-- Add Item Header -->
+                  <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow">
+                    <!-- Date on the Left -->
+                    <p class="text-gray-600 text-sm">{{ currentDate | date: 'dd MMMM yyyy' }}</p>
+    
+                    <!-- Upload Image Icon on the Right -->
+                    <button mat-icon-button color="primary" (click)="fileInput.click()" class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full shadow hover:bg-blue-600">
+                      <mat-icon>add_a_photo</mat-icon>
+                    </button>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      #fileInput
+                      (change)="onFileSelected($event)"
+                      class="hidden"
+                      accept="image/*"
+                    />
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </mat-card>
+        </div>
+      </div>
+  
+
+
+  <div class="flex-grow mt-14 mx-3">
+  <app-data-table [tableColumns]="displayColumns" 
+  [isPageable]="true" 
+  [tableData]="searchResults" 
+  [paginationSizes]="[5, 10, 15, 20]" 
+  [defaultPageSize]="15">
+</app-data-table>
+</div>
+
+<div class="flex-none">
+    <app-form-footer></app-form-footer>
+</div>
+</div>

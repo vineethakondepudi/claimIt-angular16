@@ -1,48 +1,46 @@
-
 <div class="h-screen bg-darkblue flex flex-col">
-    <header class="flex items-center justify-between bg-[#3e969f] shadow-lg h-16">
-      <div class="flex items-center space-x-2">
-        <img routerLink="" src="assets/loginLogo.jpg" class="w-18 mr-2 ml-1 h-8 ">
-          <span class="text-2xl font-semibold text-white flex">Claim IT</span>
-      </div>
-      <div class="flex items-center mr-4 space-x-4">
-        <!-- <button mat-button>About Us</button>
-        <button mat-button>Company</button> -->
-      </div>
-    </header>
-  
-    <div class="flex-grow flex items-center justify-center bg-[#E8F2F3]">
-      <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <p class="text-sm font-medium text-center mb-4">Enter your credentials.</p>
-        <form [formGroup]="loginForm">
-          <mat-form-field class="w-full mb-4" appearance="outline">
-            <mat-label>Username/Mail Id</mat-label>
-            <input matInput placeholder="Enter your username" formControlName="username"/>
-          </mat-form-field>
-  
-          <mat-form-field class="w-full mb-2" appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" placeholder="Enter your password" formControlName="password"/>
-          </mat-form-field>
-          <div class="mb-2 flex items-center justify-between space-x-3">
-            <div class="flex items-center">
-              <mat-checkbox class="example-margin">Remember me</mat-checkbox>
-            </div>
-  
-            <button impact="none" tone="primary" shape="rounded" size="small">
-              Forgot your password?
-            </button>
+  <header class="flex items-center justify-between bg-[#3e969f] shadow-lg h-16">
+    <div class="flex items-center space-x-2">
+      <img routerLink="" src="assets/loginLogo.jpg" class="w-18 mr-2 ml-1 h-8 ">
+        <span class="text-2xl font-semibold text-white flex">Claim IT</span>
+    </div>
+    <div class="flex items-center mr-4 space-x-4">
+      <!-- <button mat-button>About Us</button>
+      <button mat-button>Company</button> -->
+    </div>
+  </header>
+  <div class="flex-grow flex items-center justify-center bg-[#E8F2F3]">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+      <p class="text-sm font-medium text-center mb-4">Enter your credentials.</p>
+      <form [formGroup]="loginForm">
+        <mat-form-field class="w-full mb-4" appearance="outline">
+          <mat-label>Username/Mail Id</mat-label>
+          <input matInput placeholder="Enter your username" formControlName="email"/>
+        </mat-form-field>
+
+        <mat-form-field class="w-full mb-2" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" placeholder="Enter your password" formControlName="password"/>
+        </mat-form-field>
+        <div class="mb-2 flex items-center justify-between space-x-3">
+          <div class="flex items-center">
+            <mat-checkbox class="example-margin">Remember me</mat-checkbox>
           </div>
-          <button mat-raised-button type='button' color="primary" class="w-full" (click)="onSubmit()">Login</button>
-          
-          <div class="flex items-center text-sm text-muted-foreground mt-2 text-red-500">
-            {{errMsg}}
-          </div>
-          <!-- <div class="flex items-center text-sm text-muted-foreground mt-2">
-            Don't have an account? &nbsp; <span class="underline  underline-offset-4 cursor-pointer"
-              routerLink="/register">Click Here</span>
-          </div> -->
-        </form>
-      </div>
+
+          <button impact="none" tone="primary" shape="rounded" size="small">
+            Forgot your password?
+          </button>
+        </div>
+        <button mat-raised-button type='button' color="primary" class="w-full" (click)="onSubmit()">Login</button>
+        
+        <div class="flex items-center text-sm text-muted-foreground mt-2 text-red-500">
+          {{errMsg}}
+        </div>
+        <!-- <div class="flex items-center text-sm text-muted-foreground mt-2">
+          Don't have an account? &nbsp; <span class="underline  underline-offset-4 cursor-pointer"
+            routerLink="/register">Click Here</span>
+        </div> -->
+      </form>
     </div>
   </div>
+</div>

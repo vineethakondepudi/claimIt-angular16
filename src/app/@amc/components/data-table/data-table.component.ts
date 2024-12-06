@@ -50,11 +50,12 @@ export class DataTableComponent<T> {
   @Output() rowData: EventEmitter<T> = new EventEmitter();
   indexValue!: number;
   slicedSkills: any;
-  @Input() set tableData(data: T[]) {
+  @Input() set tableData(data: []) {
     this.setTableDataSource(data);
   }
   @Output() unClaim = new EventEmitter()
   @Output() Claim = new EventEmitter()
+  @Output() previewImage = new EventEmitter()
   searchKeyword!: string;
   enableFilter = false;
   dataSource: any; // Variable to hold JSON data
@@ -136,13 +137,15 @@ export class DataTableComponent<T> {
   }
   getColor(element: any, columnName: string): string {
     const value = this.dataPropertyGetter(element, columnName);
-    if (value === 'claimed') {
+    if (value === 'CLAIMED') {
       return '#219C90'
-    }else if(value === 'pending request'){
+    } else if (value === 'PENDING_PICKUP') {
       return '#FEE2E2';
     }
-    else if(value === 'open'){
+    else if (value === 'OPEN') {
       return '#FEF9C3'
+    } else if (value === 'UNCLAIMED') {
+      return '#F87171'
     }
     else {
       return '#EE4E4E';
@@ -156,5 +159,8 @@ export class DataTableComponent<T> {
   }
   ClaimItem(data: any) {
     this.Claim.emit(data)
-  }
+}
+openPreviewImage(data:any){
+  this.previewImage.emit(data)
+}
 }
