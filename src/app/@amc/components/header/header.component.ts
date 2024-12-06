@@ -74,11 +74,9 @@ export class HeaderComponent {
     const tabRoutes: { [key: string]: string[] } = {
       supervisor: ['/claimit/searchAndClaim', '/claimit/searchAndClaim'],
     };
-    console.log
     if (tabRoutes[tab]) {
       return tabRoutes[tab].some(route => currentUrl.startsWith(route));
     }
-    console.log('currentUrl', currentUrl, tab)
     return currentUrl === `/claimit/${tab}`;
   }
 

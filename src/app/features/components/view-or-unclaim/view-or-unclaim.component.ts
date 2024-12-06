@@ -56,7 +56,7 @@ export default class ViewOrUnclaimComponent {
     },
     {
       label: "Status",
-      name: "status",
+      name: "claimStatus",
       type: "text",
       isSortable: true,
       position: "left",
@@ -82,64 +82,6 @@ export default class ViewOrUnclaimComponent {
       index: 1,
     },
   ]
-  data = [
-    {
-      email: 'vkondepudi@miraclesoft.com',
-      items: [
-        {
-          image: 'https://www.shutterstock.com/image-photo/sand-timerhour-glass-feather-quill-260nw-240558520.jpg',
-          claimDate: new Date('11 /4/2024'),
-          status: 'open',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://www.rebag.com/thevault/wp-content/uploads/2021/10/5-Entry-Level-Luxury-Accessories-Hero.jpg',
-          claimDate: new Date('11/27/2024'),
-          status: 'claimed',
-        },
-        {
-          image: 'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg',
-          claimDate: new Date('12/3/2024'),
-          status: 'pending pickup',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://uncommongifts.in/cdn/shop/files/TribefacePrintedWomen_sOfficeBag_8d951812-bc08-4e82-8e0a-310bf5e9bbff_510x@2x.jpg?v=1702898334',
-          claimDate: new Date('10/1/2024'),
-          status: 'unclaim',
-          showConfirmation: false,
-        },
-      ],
-    },
-    {
-      email: 'pgupta@miraclesoft.com',
-      items: [
-        {
-          image: 'https://www.hamburg-airport.de/resource/image/35168/landscape_ratio5x4_card/670/536/7a8548f5eebfc589a713116c0e10ada8/851A25FEEC37824CB8775EC0A150AD65/fundsachen-lost-and-found-baggage-gepaeck.jpg',
-          claimDate: new Date('11/2/2024'),
-          status: 'pending request',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg',
-          claimDate: new Date('12/1/2024'),
-          status: 'unclaim',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://www.rebag.com/thevault/wp-content/uploads/2021/10/5-Entry-Level-Luxury-Accessories-Hero.jpg',
-          claimDate: new Date('11/30/2024'),
-          status: 'open',
-          showConfirmation: false,
-        },
-        {
-          image: 'https://www.shutterstock.com/image-photo/sand-timerhour-glass-feather-quill-260nw-240558520.jpg',
-          claimDate: new Date('12/4/2024'),
-          status: 'claimed',
-        },
-      ],
-    },
-  ];
   constructor(public dialog: MatDialog, private service: ClaimitService) {
 
   }
@@ -185,6 +127,19 @@ export default class ViewOrUnclaimComponent {
       if (confirmed) {
         this.unclaimItem(result);
       }
+    });
+  }
+  previewImage(event:any){
+    console.log(event)
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        requiredData:event,
+        title: 'Preview Image'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
     });
   }
   unclaimItem(result: any) {
