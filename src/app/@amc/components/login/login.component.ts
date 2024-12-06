@@ -23,7 +23,6 @@ export default class LoginComponent {
   errMsg: any;
   constructor(private router:Router, private fb: FormBuilder){}
   ngOnInit() {
-    console.log('-------');
     this.loginForm = this.fb.group({
       username: [''],
       password: ['']

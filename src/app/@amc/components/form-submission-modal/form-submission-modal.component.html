@@ -1,0 +1,30 @@
+<div class="flex flex-row items-center justify-between content-center px-5 py-1 bg-transparent">
+    <h3 class="font-semibold px-2 text-xl">
+      {{ data.status }}
+    </h3>
+    <button mat-icon-button type="button" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <mat-dialog-content align="start">
+  
+    <div *ngIf="data.msg" class="success-msg">
+      <p>{{ data.msg }}</p>
+    </div>
+    <div *ngIf="data.err" class="error-msg">
+      <p>{{ data.err }}</p>
+    </div>
+    <div *ngIf="data.warn" class="error-warn">
+      <mat-icon>warning</mat-icon>
+      <p>{{ data.warn }}</p>
+    </div>
+  </mat-dialog-content>
+  <div >
+    <mat-dialog-actions align="end" class="m-4">
+      <button mat-stroked-button color="warn" *ngIf="true && !showButton" class="cancel-button" (click)="onCancel()">
+        Cancel
+      </button>
+      <button mat-flat-button color="primary" (click)="onSubmit()">OK</button>
+    </mat-dialog-actions>
+  </div>

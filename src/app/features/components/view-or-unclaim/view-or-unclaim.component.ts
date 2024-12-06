@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { fadeInRight400ms } from 'src/app/@amc/animations/fade-in-right.animation';
 import { fadeInUp400ms } from 'src/app/@amc/animations/fade-in-up.animation';
 import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
+import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-view-or-unclaim',
@@ -26,6 +28,7 @@ import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-fo
     DataTableComponent,
     MatExpansionModule,
     MatSidenavModule,
+    MatDialogModule,
     FormFooterComponent,
     MatTooltipModule,
     MatFormFieldModule,
@@ -37,7 +40,7 @@ import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-fo
 })
 export default class ViewOrUnclaimComponent {
   @Input() containerPanelOpened: boolean = false;
-  searchQuery: string = '';
+  searchQuery: string = 'pgupta@miraclesoft.com';
   searchResults: any = [];
   showNoResults: boolean = true;
   displaycoloums: any = [
@@ -136,11 +139,11 @@ export default class ViewOrUnclaimComponent {
       ],
     },
   ];
-  constructor(){
+  constructor(public dialog: MatDialog){
 
   }
   ngOnInit(){
-
+this.search()
   }
 
   sortDataByClaimDate() {
@@ -186,5 +189,23 @@ export default class ViewOrUnclaimComponent {
 
     }
 
+  }
+  confirmUnclaim(result: any) {
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        message: 'Are you sure you want to unclaim this item?',
+        title:'UnClaim'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.unclaimItem(result); 
+      }
+    });
+  }
+  unclaimItem(result: any) {
+    this.searchResults = this.searchResults.filter((item: any) => item !== result);
   }
 }

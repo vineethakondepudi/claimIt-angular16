@@ -1,5 +1,5 @@
 <div class="min-h-screen flex flex-col">
-    <div class="flex-none px-gutter pt-5 pb-20  bg-[#E8F2F3] ">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] ">
         <div @fadeInRight class="flex flex-row justify-between px-5">
             <div class="flex flex-col">
                 <h1 class="font-semibold max-w-3xs mr-6 text-2xl">View/Unclaim</h1>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table [tableColumns]="displaycoloums"
+        <app-data-table [tableColumns]="displaycoloums" (unClaim)="confirmUnclaim($event)" 
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>

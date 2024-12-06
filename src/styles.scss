@@ -16,7 +16,7 @@
 // hue. Available color palettes: https://material.io/design/color/
 
 
-$amc-primary-palette: (
+$claimit-primary-palette: (
         50 : #e8f2f3,
         100 : #c5dfe2,
         200 : #9fcacf,
@@ -49,7 +49,7 @@ $amc-primary-palette: (
         )
 );
 
-$amc-accent-palette: (
+$claimit-accent-palette: (
         50 : #e5f4f3,
         100 : #bee4e1,
         200 : #93d3cd,
@@ -83,8 +83,8 @@ $amc-accent-palette: (
 );
 
 
-$ApplicationUI-primary: mat.define-palette($amc-primary-palette, 500);
-$ApplicationUI-accent: mat.define-palette($amc-accent-palette, A200, A100, A400);
+$ApplicationUI-primary: mat.define-palette($claimit-primary-palette, 500);
+$ApplicationUI-accent: mat.define-palette($claimit-accent-palette, A200, A100, A400);
 $my-typography: mat.define-typography-config($font-family: 'Montserrat',);
 
 // The warn palette is optional (defaults to red).

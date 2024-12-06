@@ -26,7 +26,7 @@
   </mat-menu>
 </div>
 
-<div class="min-h-screen flex flex-col" *ngIf="dataSource.data.length > 0">
+<div class="flex flex-col" *ngIf="dataSource.data.length > 0">
   <table mat-table [dataSource]="dataSource" matSort matTableFilter>
     <ng-container class="font-bold" *ngFor="let tableColumn of tableColumns" [matColumnDef]="tableColumn.name">
       <ng-container>
@@ -61,7 +61,7 @@
             </span>
           </div>
           <div *ngIf="tableColumn.label === 'Action'">
-            <button mat-raised-button color="primary" class="txt-button">
+            <button (click)="unClaimItem(element)" mat-raised-button color="primary" class="txt-button">
               UnClaim
             </button>
           </div>

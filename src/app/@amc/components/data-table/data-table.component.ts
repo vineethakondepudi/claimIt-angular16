@@ -53,6 +53,7 @@ export class DataTableComponent<T> {
   @Input() set tableData(data: T[]) {
     this.setTableDataSource(data);
   }
+  @Output() unClaim = new EventEmitter()
   searchKeyword!: string;
   enableFilter = false;
   dataSource: any; // Variable to hold JSON data
@@ -70,7 +71,6 @@ export class DataTableComponent<T> {
   constructor(public readonly router: Router, private datePipe: DatePipe) { }
   ngOnInit() {
     this.displayedColumns = this.tableColumns.map((col) => col.name);
-    console.log(this.tableColumns, this.displayedColumns);
 
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
       return col.isChecked === true;
@@ -85,7 +85,6 @@ export class DataTableComponent<T> {
     this.dataSource = new MatTableDataSource<T>(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    console.log(this.dataSource);
   }
   setPagination(tableData: T[] | undefined) {
     this.dataSource = new MatTableDataSource<T>(tableData);
@@ -93,7 +92,6 @@ export class DataTableComponent<T> {
   }
 
   handlePage(params: PageEvent) {
-    console.log(params);
   }
 
   applyFilter() {
@@ -137,7 +135,6 @@ export class DataTableComponent<T> {
   }
   getColor(element: any, columnName: string): string {
     const value = this.dataPropertyGetter(element, columnName);
-    console.log('value',value,columnName)
     if (value === 'claimed') {
       return '#219C90'
     }else if(value === 'pending request'){
@@ -152,5 +149,8 @@ export class DataTableComponent<T> {
   }
   dataPropertyGetter(element: any, property: string) {
     return element[property];
+  }
+  unClaimItem(data: any) {
+    this.unClaim.emit(data)
   }
 }

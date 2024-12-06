@@ -1,0 +1,20 @@
+<div class="flex flex-row items-center justify-between content-center px-3 py-1 bg-transparent">
+    <h3 class="font-semibold px-2 text-xl">
+      {{ data.title }}
+    </h3>
+    <button mat-icon-button type="button" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <mat-dialog-content align="start" class="mt-2">
+    <div *ngIf="data.message">
+      <p>{{ data.message }}</p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end" class="m-2" *ngIf="!data.hideActions">
+    <button mat-stroked-button color="warn" class="cancel-button" (click)="onCancel()">
+      No
+    </button>
+    <button mat-flat-button color="primary" (click)="onSubmit()">Yes</button>
+  </mat-dialog-actions>
