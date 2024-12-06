@@ -47,11 +47,7 @@ export class HeaderComponent {
   showReports: boolean = false;
   opened: boolean = true;
   param: any;
-
-  authSuccess: boolean = true;
-  opened: boolean = true;
   userRole: string | null = '';
-  param: any;
   
   constructor(public router: Router, private route: ActivatedRoute) {
     this.userRole = localStorage.getItem('role'); 
