@@ -1,0 +1,57 @@
+<div class="bottom-0 left-0 w-full">
+  <div class="lg:fixed md:fixed bottom-0 left-0 w-full">
+    <mat-card>
+      <!-- <div
+        class="w-full flex items-center flex-row flex-wrap justify-between gap-4 p-2 bg-[#E8F2F3]"
+      >
+        <span class="text-sm decoration-8">{{ footerDetails }}</span>
+      </div> -->
+      <div [hidden]="footerDetails" *ngIf="toggleButtonModule">
+        <div class="flex-none px-gutter  bg-[#E8F2F3]">
+          <div class="flex flex-row justify-end px-5">
+            <div class="flex flex-col">
+              <div class="flex flex-row flex-wrap gap-5 mb-3" *ngIf="routeType === 'e'">
+                <span class="text-sm decoration-8"
+                  >Created By<br />
+                  <span class="font-semibold">{{
+                    userFooterInfo.createdBy
+                  }}</span>
+                </span>
+                <span class="text-sm decoration-8"
+                  >Created On<br />
+                  <span class="font-semibold">{{
+                    formatDate(userFooterInfo.createdOn)
+                  }}</span>
+                </span>
+              </div>
+            </div>
+            <div class="flex flex-row flex-wrap gap-5 mb-3 mt-3">
+              <button
+                mat-stroked-button
+                color="secondary"
+                (click)="onResetData('reset')"
+              >
+                <mat-icon>close </mat-icon>
+                <span>Cancel</span>
+              </button>
+              
+              <!-- disabled="{{ !formValid }}" -->
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="onSelectedProduct()"
+              >
+                <mat-icon>save</mat-icon>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-divider *ngIf="toggleButtonModule"></mat-divider>
+      <div class="flex text-xs justify-center ml-2 mr-2 bg-[#E8F2F3] text-gray-500">
+        copyright {{ year }} {{ Owner }} {{ reserved }} {{ version }}
+      </div>
+    </mat-card>
+  </div>
+</div>

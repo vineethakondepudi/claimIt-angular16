@@ -1,0 +1,30 @@
+.dashboard-header {
+  background-color: #e8f2f3;
+}
+
+.status-chart-label {
+  position: absolute;
+  top: -20px;
+  left: 80px;
+  background-color: #3e969f;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 9999px;
+}
+
+.recent-checkin-label {
+  position: absolute;
+  top: -16px;
+  left: 64px;
+  background-color: #3e969f;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 9999px;
+}
+
+.table-header {
+  background-color: #f3f3f3;
+  padding: 8px;
+  text-align: left;
+  font-weight: 600;
+}

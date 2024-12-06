@@ -1,0 +1,105 @@
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    .mat-table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+      display: table;
+      border-collapse: collapse;
+      margin: 0px;
+    }
+    .mat-row,
+    .mat-header-row {
+      display: table-row;
+    }
+    .mat-cell,
+    .mat-header-cell {
+      word-wrap: initial;
+      display: table-cell;
+      padding: 0px 5px;
+      line-break: unset;
+      width: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: middle;
+      text-overflow: ellipsis;
+    }
+  
+    th.mat-header-cell {
+      text-align: center;
+    }
+  
+    td.mat-cell {
+      text-align: center;
+    }
+  // Service Types Columns width starts
+    .mat-column-serviceId {
+      width: 15%;
+    }
+  
+    .mat-column-description {
+      width: 38%;
+    }
+  
+    .mat-column-status {
+      width: 10%;
+    }
+  
+    .mat-column-createdOn {
+      width: 15%;
+    }
+  
+    .mat-column-createdBy {
+      width: 22%;
+    }
+  
+    // Service Types Columns width ends
+  
+    th, td {
+      max-width: 150px;
+    }
+    .custom-tooltip {
+      max-width: unset !important;
+    }
+    .column-overflow{  
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  
+    ::ng-deep .mat-sort-header-container:not(.mat-sort-header-sorted) .mat-sort-header-arrow {
+      opacity: 0.3 !important;
+      transform: translateY(0px) !important;
+      // color: aquamarine !important;
+    }
+  
+    ::ng-deep.mat-sort-header-arrow {
+      color: #1b6772;
+      height: 13px;
+    }
+    
+  }
+  .example-list {
+    width: 100px;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    background: #fff;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .example-list > li {
+    list-style-type: none;
+    border-bottom: solid 1px #8b8b8b;
+    padding: 8px 0;
+  }
+  
+  .example-list > li:last-child {
+    border-bottom: none;
+  }
+  .Inbound {
+    background-color: 219C90;
+  }

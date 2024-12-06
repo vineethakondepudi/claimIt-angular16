@@ -1,0 +1,56 @@
+<div class="min-h-screen flex flex-col">
+    <div class="flex-none px-gutter pt-5 pb-20  bg-[#E8F2F3] ">
+        <div @fadeInRight class="flex flex-row justify-between px-5">
+            <div class="flex flex-col">
+                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">View/Unclaim</h1>
+            </div>
+        </div>
+        <div class="flex-grow px-5">
+            <mat-card class="w-full">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle [expanded]="false" (opened)="containerPanelOpened = true"
+                        (closed)="containerPanelOpened = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="text-lg">
+                                <h3 class="font-semibold">Search</h3>
+                            </mat-panel-title>
+                            <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
+                        </mat-expansion-panel-header>
+                        <div class="flex flex-col sm:flex-row sm:gap-4 gap-5">
+                            <mat-form-field appearance="outline" class="search-field">
+                                <mat-label>Email</mat-label>
+                                <input matInput type="text" placeholder="Email" 
+                                    (keyup.enter)="search()" (input)="clearResultsIfEmpty()" />
+                                <button mat-icon-button matSuffix (click)="search()" aria-label="Email">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <div class="flex flex-col gap-4">
+                                <div class="items-end h-10">
+                                    <div class="flex flex-row justify-end gap-3 mr-3">
+                                        <button mat-button color="warn" (click)="SearchAndClear('clear')"
+                                            class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
+                                            Clear
+                                        </button>
+                                        <button mat-flat-button color="primary" (click)="SearchAndClear('clear')"
+                                            class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-card>
+        </div>
+    </div>
+
+    <div class="flex-grow mt-14 mx-3">
+        <app-data-table [tableColumns]="displaycoloums"
+        [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        </app-data-table>
+    </div>
+    <div class="flex-none">
+    </div>
+</div>

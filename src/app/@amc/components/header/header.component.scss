@@ -1,0 +1,98 @@
+.nav-brand {
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  display: flex;
+}
+
+.spacer {
+  width: 100%;
+}
+
+.profile-name {
+  font-size: medium !important;
+}
+
+@media screen and (max-width: 768px) {
+  .nav-brand {
+    width: 100%;
+  }
+}
+
+.mat-form-field {
+  margin-left: 1rem;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+// .mat-mdc-button {
+//   color: white !important;
+// }
+
+::ng-deep.mat-mdc-button[disabled] {
+  cursor: not-allowed !important;
+  pointer-events: all !important
+}
+
+.active-link {
+  background-color: #388d97;
+  color: white;
+}
+
+.active {
+  background: #388d97;
+  color: white;
+}
+
+.active-button {
+  background-color: #9FEFF8;
+  color: #0D5A62;
+  font-weight: 600 !important;
+  padding-right: 4px !important;
+}
+
+.menu {
+  color: white;
+  margin-top: 9px;
+}
+
+.bgcolor {
+  background-color: #3E969F;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  background-color: white;
+}
+
+.menu-button.rotated {
+  transform: rotate(180deg);
+}
+
+
+:host ::ng-deep .mat-drawer-inner-container:webkit-scrollbar {
+  width: 6px;
+  overflow-y: scroll;
+  background: #f1f1f1;
+  box-shadow: inset 0 0 4px #f1f1f1;
+}
+
+:host ::ng-deep .mat-drawer-inner-container:webkit-scrollbar-thumb {
+  background: #9FEFF8;
+  border-radius: 20px;
+}
+
+::ng-deep {
+  .iconStyle {
+    color: white;
+  }
+}
+
+// .mat-icon {
+//   height: 28px !important;
+//   width: 34px !important;
+// }

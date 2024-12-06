@@ -1,0 +1,220 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+// Plus imports for other components in your app.
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+
+$amc-primary-palette: (
+        50 : #e8f2f3,
+        100 : #c5dfe2,
+        200 : #9fcacf,
+        300 : #78b5bc,
+        400 : #5ba5ad,
+        500 : #3E969F,
+        600 : #388d97,
+        700 : #30828d,
+        800 : #287883,
+        900 : #1b6772,
+        A100 : #adf3ff,
+        A200 : #7aecff,
+        A400 : #47e5ff,
+        A700 : #2ee1ff,
+        contrast: (
+                50 : #000000,
+                100 : #000000,
+                200 : #000000,
+                300 : #000000,
+                400 : #000000,
+                500 : #ffffff,
+                600 : #ffffff,
+                700 : #ffffff,
+                800 : #ffffff,
+                900 : #ffffff,
+                A100 : #000000,
+                A200 : #000000,
+                A400 : #000000,
+                A700 : #000000,
+        )
+);
+
+$amc-accent-palette: (
+        50 : #e5f4f3,
+        100 : #bee4e1,
+        200 : #93d3cd,
+        300 : #67c1b8,
+        400 : #47b3a9,
+        500 : #26a69a,
+        600 : #229e92,
+        700 : #1c9588,
+        800 : #178b7e,
+        900 : #0d7b6c,
+        A100 : #adfff3,
+        A200 : #7affec,
+        A400 : #47ffe4,
+        A700 : #2dffe0,
+        contrast: (
+                50 : #000000,
+                100 : #000000,
+                200 : #000000,
+                300 : #000000,
+                400 : #000000,
+                500 : #ffffff,
+                600 : #ffffff,
+                700 : #ffffff,
+                800 : #ffffff,
+                900 : #ffffff,
+                A100 : #000000,
+                A200 : #000000,
+                A400 : #000000,
+                A700 : #000000,
+        )
+);
+
+
+$ApplicationUI-primary: mat.define-palette($amc-primary-palette, 500);
+$ApplicationUI-accent: mat.define-palette($amc-accent-palette, A200, A100, A400);
+$my-typography: mat.define-typography-config($font-family: 'Montserrat',);
+
+// The warn palette is optional (defaults to red).
+$ApplicationUI-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ApplicationUI-theme: mat.define-light-theme((color: (primary: $ApplicationUI-primary,
+        accent: $ApplicationUI-accent,
+        warn: $ApplicationUI-warn,
+), typography:$my-typography));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
+  border-right-style: hidden;
+}
+
+@include mat.all-component-themes($ApplicationUI-theme);
+@import url("https://fonts.googleapis.com/css?family=Montserrat:500,700");
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.mat-mdc-raised-button {
+  color: white !important;
+}
+
+// .mat-mdc-text-field-wrapper {
+//         height: 40px !important;
+// }
+
+// .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+//         padding-top: 7px !important;
+
+// }
+
+// .mat-mdc-select-arrow svg {
+//         top: 170% !important;
+// }
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.mat-mdc-table .mdc-data-table__row:hover {
+  cursor: pointer;
+ background-color: #e5f4f3 !important;
+}
+
+// .mat-mdc-row .mat-mdc-cell {
+//  cursor: pointer;
+// }
+//.mdc-data-table__header-cell {
+//  font-size: 16px !important;
+//  font-weight: 500 !important;
+//  color: #000000;
+//}
+//
+//.mdc-data-table__cell {
+//  font-size: 15px !important;
+//  // line-height: 23px !important;
+//  font-weight: 400 !important;
+//  color: #343333;
+//}
+//
+//.mat-mdc-table .mdc-data-table__row {
+//  height: 35px !important;
+//}
+//
+//.mat-mdc-text-field-wrapper {
+//  height: 40px !important;
+//}
+//
+//.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+//  padding-top: 3px !important;
+//
+//}
+//
+//.mat-mdc-icon-button .mat-mdc-button-touch-target {
+//  padding-top: 13px !important;
+//}
+//
+//.mat-mdc-select-arrow svg {
+//  top: 170% !important;
+//}
+//
+//.mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label {
+//  padding-bottom: 1em;
+//}
+
+.mat-sort-header-content{
+  font-weight:600;
+  text-transform: uppercase;
+}
+
+.mat-mdc-snack-bar-container {
+  &.green-snackbar {
+    --mdc-snackbar-container-color: #030e0d;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+  &.red-snackbar {
+    --mdc-snackbar-container-color:#9f1239;
+    --mat-mdc-snack-bar-button-color: #fff;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+
+}
+
+
+.filter-list{
+.mat-mdc-menu-content.mdc-list{
+  background-color: #E8F2F3 !important;
+  color: #1b6772 !important;
+}
+li.mat-mdc-menu-item{
+  background-color: #E8F2F3 !important;
+}
+}

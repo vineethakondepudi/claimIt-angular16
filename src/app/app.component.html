@@ -1,0 +1,17 @@
+<mat-drawer-container class="example-container" color="primary">
+  <!-- <mat-drawer *ngIf="(isCheckinScreen$ | async) === false" #drawer class="example-sidenav" mode="side">
+      <app-sidenav></app-sidenav>
+  </mat-drawer> -->
+  <mat-drawer-content>
+      <ng-container *ngIf="(isCheckinScreen$ | async) === false">
+          <app-header></app-header>
+      </ng-container>
+      <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+  <ng-container *ngIf="(isCheckinScreen$ | async) === true">
+    <router-outlet></router-outlet>
+  </ng-container>
+ 
+
