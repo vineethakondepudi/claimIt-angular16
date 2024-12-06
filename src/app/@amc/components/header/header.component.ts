@@ -43,21 +43,19 @@ export class HeaderComponent {
   applicationName = APP_NAME
   @Input() hideMenu: boolean | undefined;
 
-
-
   authSuccess: boolean = true;
   showReports: boolean = false;
   opened: boolean = true;
-  userRole: string | null = '';
   param: any;
-  
+  userRole: string | null = '';
+
   constructor(public router: Router, private route: ActivatedRoute) {
-    this.userRole = localStorage.getItem('role'); 
+    this.userRole = localStorage.getItem('role');
     this.route.queryParamMap.subscribe((params) => {
       this.param = params.get('type');
     });
   }
-  ngOnInit(){
+  ngOnInit() {
     this.getMenuItems()
   }
 
@@ -72,11 +70,10 @@ export class HeaderComponent {
 
   public isTabActive(tab: string): boolean {
     const currentUrl = this.router.url;
-  
+
     const tabRoutes: { [key: string]: string[] } = {
-      supervisor: ['/claimit/searchAndClaim','/claimit/searchAndClaim'],
+      supervisor: ['/claimit/searchAndClaim', '/claimit/searchAndClaim'],
     };
-  
     if (tabRoutes[tab]) {
       return tabRoutes[tab].some(route => currentUrl.startsWith(route));
     }
@@ -85,20 +82,21 @@ export class HeaderComponent {
 
   getMenuItems() {
     if (this.userRole === 'admin') {
+
       return [
         { label: 'Dashboard', icon: 'dashboard', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
         { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' }
       ];
-    } else  {
+    } else {
       return [
         { label: 'Dashboard', icon: 'dashboard', route: '/claimit/dashboard' },
-         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
-         { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
+        { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
+        { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
       ];
     }
-    
+
   }
 
   logout() {

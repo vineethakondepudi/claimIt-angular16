@@ -27,7 +27,7 @@ export class ConfirmationModalComponent {
   constructor(
     public dialogRef: MatDialogRef<FormSubmissionModalComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { title: string; message: string; hideActions: boolean }
+    public data: { title: string; message: string; hideActions: boolean,requiredData:any }
   ) {}
   hideActions: boolean = this.data.hideActions;
   onSubmit() {

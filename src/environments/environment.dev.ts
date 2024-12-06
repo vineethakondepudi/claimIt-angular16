@@ -1,4 +1,5 @@
 export const environment = {
     production: false,
-    apiEndpoint: 'https://uat.example.com/api'
+    getAllItems:'http://172.17.12.38:8081/api/users/claim-history',
+    unClaim:'172.17.12.38:8081/api/users/updateStatus/2'
   };

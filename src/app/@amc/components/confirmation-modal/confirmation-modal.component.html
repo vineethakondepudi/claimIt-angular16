@@ -1,20 +1,23 @@
 <div class="flex flex-row items-center justify-between content-center px-3 py-1 bg-transparent">
     <h3 class="font-semibold px-2 text-xl">
-      {{ data.title }}
+        {{ data.title }}
     </h3>
     <button mat-icon-button type="button" (click)="onCancel()">
-      <mat-icon>close</mat-icon>
+        <mat-icon>close</mat-icon>
     </button>
-  </div>
-  <mat-divider></mat-divider>
-  <mat-dialog-content align="start" class="mt-2">
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content align="start" class="mt-2">
     <div *ngIf="data.message">
-      <p>{{ data.message }}</p>
+        <p>{{ data.message }}</p>
     </div>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end" class="m-2" *ngIf="!data.hideActions">
+    <div *ngIf="data.requiredData" class="flex flex-row justify-center gap-2 ml-auto">
+        <img [src]="'data:image/jpeg;base64,' + data.requiredData.image" alt="Item Image" class="w-60 item-image justify-center" />
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="m-2" *ngIf="data.message ! === 'Preview Image' ">
     <button mat-stroked-button color="warn" class="cancel-button" (click)="onCancel()">
-      No
+        No
     </button>
     <button mat-flat-button color="primary" (click)="onSubmit()">Yes</button>
-  </mat-dialog-actions>
+</mat-dialog-actions>
