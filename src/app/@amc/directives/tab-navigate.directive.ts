@@ -13,7 +13,6 @@ export class TabNavigateDirective {
   onKeyDown(event: KeyboardEvent) : void{
     if(event.key === 'Tab'){
       event.preventDefault();
-      // console.log(this.tabOrder, 'taborder')
       const formElements = this.el.nativeElement.querySelectorAll(
         'input:not([disabled]), textarea:not([disabled]), button:not([disabled]), a[href], mat-select, mat-option'
         // 'input:not([disabled]), textarea:not([disabled]), button:not([disabled]), 
@@ -21,7 +20,6 @@ export class TabNavigateDirective {
       const currentIndex = Array.from(formElements).indexOf(
         document.activeElement
       );
-      console.log(currentIndex)
       const nextIndex = currentIndex + 1 < formElements.length ? currentIndex + 1 : 0;
       const element = formElements[nextIndex] as HTMLElement;
       element.focus();

@@ -27,7 +27,6 @@ export default class LoginComponent {
   itemFamilyRequiredErrorMessage: string = '';
   constructor(private router:Router, private fb: FormBuilder){}
   ngOnInit() {
-    console.log('-------');
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],

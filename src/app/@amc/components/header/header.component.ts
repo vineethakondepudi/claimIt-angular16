@@ -22,8 +22,8 @@ import { APP_NAME, OWNER_NAME } from '../../constants/application.details';
     MatDatepickerModule,
     MatNativeDateModule,
     MatToolbarModule,
-  RouterModule,
-  CommonModule,
+    RouterModule,
+    CommonModule,
     MatIconModule,
     MatSelectModule,
     MatDatepickerModule,
@@ -38,10 +38,15 @@ import { APP_NAME, OWNER_NAME } from '../../constants/application.details';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
-  customerName = OWNER_NAME;
-  applicationName = APP_NAME;
+export class HeaderComponent {
+  customerName = OWNER_NAME
+  applicationName = APP_NAME
   @Input() hideMenu: boolean | undefined;
+
+  authSuccess: boolean = true;
+  showReports: boolean = false;
+  opened: boolean = true;
+  param: any;
 
   authSuccess: boolean = true;
   opened: boolean = true;
@@ -67,9 +72,17 @@ export class HeaderComponent implements OnInit {
     this.opened = !this.opened;
   }
 
-
   public isTabActive(tab: string): boolean {
-    return this.router.url.includes(tab.toLowerCase());
+    const currentUrl = this.router.url;
+  
+    const tabRoutes: { [key: string]: string[] } = {
+      supervisor: ['/claimit/searchAndClaim','/claimit/searchAndClaim'],
+    };
+  
+    if (tabRoutes[tab]) {
+      return tabRoutes[tab].some(route => currentUrl.startsWith(route));
+    }
+    return currentUrl === `/claimit/${tab}`;
   }
 
   getMenuItems() {
