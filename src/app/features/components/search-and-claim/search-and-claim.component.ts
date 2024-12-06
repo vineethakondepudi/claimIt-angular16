@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 interface Item {
   itemId: number;
@@ -51,7 +52,7 @@ interface Item {
   styleUrls: ['./search-and-claim.component.scss']
 })
 export default class SearchAndClaimComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private route: ActivatedRoute) {}
   @Input() containerPanelOpened: boolean = false;
   displaycoloums: any[] = [
     {
@@ -90,7 +91,9 @@ export default class SearchAndClaimComponent {
       isChecked: true,
       index: 4,
     },
+    
   ]
+  itemName: string | null = null;
   files: File[] = [];
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
@@ -109,7 +112,16 @@ export default class SearchAndClaimComponent {
   categerorydata: any = [];
 
   selectedCategory: string = '';
-  
+  ngOnInit() {
+    // Check if there's an itemId in the query parameters
+    this.route.queryParams.subscribe(params => {
+      this.itemName = params['id']; // Get the item ID from the query parameters
+      if (this.itemName) {
+        this.searchQuery = this.itemName.toString(); // Use the itemId as the search query
+        this.searchItems(); // Call searchItems method when the itemId is present
+      }
+    });
+  }
   public onRemove(event: any) {
     this.uplodedfilesdata.splice(this.uplodedfilesdata.indexOf(event), 1)
     if (this.files.length > 0) {
@@ -125,20 +137,13 @@ searchItems() {
       (response: Item[]) => {
         this.searchResults = response;
         console.log('Search results:', response);
-        
-        // Handle the response here
       },
       (error: any) => {
         console.error('Search error:', error);
-        // this.snackBar.open('An error occurred while searching. Please try again.', 'Close', {
-        //   duration: 3000,
-        // });
       }
     );
   } else {
-    // this.snackBar.open('Please enter a search query.', 'Close', {
-    //   duration: 3000,
-    // });
+    // Handle the case when searchQuery is empty
   }
 }
 

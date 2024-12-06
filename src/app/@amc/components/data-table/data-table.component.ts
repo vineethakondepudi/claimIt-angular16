@@ -54,6 +54,7 @@ export class DataTableComponent<T> {
     this.setTableDataSource(data);
   }
   @Output() unClaim = new EventEmitter()
+  @Output() Claim = new EventEmitter()
   searchKeyword!: string;
   enableFilter = false;
   dataSource: any; // Variable to hold JSON data
@@ -152,5 +153,8 @@ export class DataTableComponent<T> {
   }
   unClaimItem(data: any) {
     this.unClaim.emit(data)
+  }
+  ClaimItem(data: any) {
+    this.Claim.emit(data)
   }
 }

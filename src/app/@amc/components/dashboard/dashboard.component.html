@@ -1,0 +1,50 @@
+<div class="min-h-screen flex flex-col bg-gray-50">
+    <!-- <mat-toolbar color="primary" class="flex justify-between px-6">
+      <span class="text-lg font-bold">ClaimIt</span>
+      <nav class="flex gap-4">
+        <a mat-button routerLink="/report-item" class="text-white">Report Item</a>
+        <a mat-button routerLink="/find-item" class="text-white">Find Item</a>
+        <a mat-button routerLink="/profile" class="text-white">Profile</a>
+      </nav>
+    </mat-toolbar> -->
+    <div class="bg-blue-100 py-10 text-center">
+      <h1 class="text-2xl md:text-4xl font-bold text-gray-700">Lost Something? Let’s Find It!</h1>
+      <div class="mt-4">
+        <mat-form-field appearance="outline" class="w-full md:w-1/2">
+          <mat-label>Search for lost items...</mat-label>
+          <input type="text" placeholder="Enter item name" aria-label="Search" matInput
+                        (input)="onSearchInput($event)" />
+          <button mat-icon-button (click)="searchItems()" matSuffix>
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+        <!-- <mat-dialog-content *ngIf="searchResults && searchResults.length > 0">
+            <div *ngFor="let item of searchResults">
+              <img [src]="item.image" alt="{{item.itemName}}" (click)="claimItem(item)">
+              <p>{{ item.itemName }}</p>
+            </div>
+          </mat-dialog-content> -->
+      </div>
+    </div>
+    <div class="px-6 py-4 flex flex-wrap gap-4 justify-center">
+      <button mat-button color="primary" class="px-6 py-2">Electronics</button>
+      <button mat-button color="primary" class="px-6 py-2">Accessories</button>
+      <button mat-button color="primary" class="px-6 py-2">Documents</button>
+      <button mat-button color="primary" class="px-6 py-2">Others</button>
+    </div>
+    <div class="px-6 py-4">
+      <h2 class="text-xl font-bold text-gray-700 mb-4">Recently Reported Items</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <mat-card *ngFor="let item of recentItems" class="p-4">
+          <mat-card-header>
+            <mat-card-title>{{ item.title }}</mat-card-title>
+            <mat-card-subtitle>Reported on: {{ item.date }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ item.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  

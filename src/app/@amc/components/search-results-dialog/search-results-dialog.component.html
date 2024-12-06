@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Search Results</h2>
+<mat-dialog-content>
+  <div *ngIf="data.length > 0; else noResults">
+    <app-data-table [tableColumns]="displaycoloums" (Claim)="claimItem($event)" 
+    [isPageable]="true" [tableData]="data" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+</app-data-table>
+  </div>
+  <ng-template #noResults>
+    <p>No items found for your search query.</p>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

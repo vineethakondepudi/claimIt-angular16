@@ -69,6 +69,11 @@
               UnClaim
             </button>
           </div>
+          <div *ngIf="tableColumn.label === 'ActionClaim'">
+            <button (click)="ClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+              Claim
+            </button>
+          </div>
         </div>
       </td>
     </ng-container>
