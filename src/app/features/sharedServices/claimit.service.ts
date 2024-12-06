@@ -11,7 +11,9 @@ export class ClaimitService {
   public getAllItems(query: any) {
     return this.http.get(environment.getAllItems);
   }
-  public unClaimItem(query:any){
-    return this.http.put(environment.unClaim,query)
+  public unClaimItem(query: any) {
+    let filterQuery = Object.fromEntries(Object.entries(query).filter(([k, v]) => v != '' && v != null))
+
+    return this.http.put(environment.unClaim+'?status='+query.status+'&claimId='+query.claimId,'')
   }
 }
