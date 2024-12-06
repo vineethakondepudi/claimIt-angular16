@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { fadeInRight400ms } from 'src/app/@amc/animations/fade-in-right.animation';
 import { fadeInUp400ms } from 'src/app/@amc/animations/fade-in-up.animation';
+import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
 
 @Component({
   selector: 'app-view-or-unclaim',
@@ -25,6 +26,7 @@ import { fadeInUp400ms } from 'src/app/@amc/animations/fade-in-up.animation';
     DataTableComponent,
     MatExpansionModule,
     MatSidenavModule,
+    FormFooterComponent,
     MatTooltipModule,
     MatFormFieldModule,
     MatIconModule,
