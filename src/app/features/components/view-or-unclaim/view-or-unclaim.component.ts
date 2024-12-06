@@ -123,26 +123,29 @@ export default class ViewOrUnclaimComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.unclaimItem(result);
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      console.log('confirmed', confirmed)
+      if (confirmed === 'yes') {
+        const params = {
+          newStatus:'UNCLAIMED'
+        }
+        this.service.unClaimItem(params).subscribe((res:any)=>{
+          console.log(res)
+        })
       }
     });
   }
-  previewImage(event:any){
+  previewImage(event: any) {
     console.log(event)
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
-        requiredData:event,
+        requiredData: event,
         title: 'Preview Image'
       },
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
     });
-  }
-  unclaimItem(result: any) {
-    this.searchResults = this.searchResults.filter((item: any) => item !== result);
   }
 }

@@ -39,10 +39,10 @@ export class ConfirmationModalComponent {
       this.dialogRef.close('Close');
     }
      else {
-      this.dialogRef.close();
+      this.dialogRef.close('yes');
     }
   }
   onCancel() {
-    this.dialogRef.close();
+    this.dialogRef.close('no');
   }
 }

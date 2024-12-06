@@ -15,7 +15,7 @@
         <img [src]="'data:image/jpeg;base64,' + data.requiredData.image" alt="Item Image" class="w-60 item-image justify-center" />
     </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end" class="m-2" *ngIf="data.message ! === 'Preview Image' ">
+<mat-dialog-actions align="end" class="m-2" *ngIf="data.message !== 'Preview Image' ">
     <button mat-stroked-button color="warn" class="cancel-button" (click)="onCancel()">
         No
     </button>
