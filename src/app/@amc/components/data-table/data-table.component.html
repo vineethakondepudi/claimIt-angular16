@@ -43,7 +43,11 @@
           <div *ngIf="tableColumn.type === 'date'">
             {{ formatDate(element[tableColumn.name]) }}
           </div>
-          <div *ngIf="tableColumn.name === 'image'  ">
+          <div *ngIf="tableColumn.label === 'Image Data' ">
+            <img [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image" class="item-image"
+                style="max-width: 100px; max-height: 100px;" />
+        </div>
+          <div *ngIf="tableColumn.name === 'image' && tableColumn.label !== 'Image Data' ">
             <img [src]="element.image" alt="Item Image" class="item-image"
               style="max-width: 100px; max-height: 100px;" />
           </div>
