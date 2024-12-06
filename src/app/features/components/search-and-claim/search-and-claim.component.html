@@ -19,19 +19,7 @@
                     </mat-panel-title>
                     <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
                   </mat-expansion-panel-header>
-                  <!-- <div class="flex flex-col items-center lablestyle space-y-4">
-                    <mat-form-field appearance="outline" class="search-field">
-                      <mat-label>Search</mat-label>
-                      <input type="text" placeholder="Enter item name" aria-label="Search" matInput
-                        [(ngModel)]="searchQuery" />
-                      <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
-                        <mat-icon>search</mat-icon>
-                      </button>
-                    </mat-form-field>
-                  </div> -->
-
-
-                  <div class="flex flex-col sm:flex-row sm:gap-4 gap-5">
+                  <div class="flex flex-wrap items-center gap-5">
                     <mat-form-field appearance="outline" class="search-field">
                         <mat-label>Item Type Search</mat-label>
                         <input type="text" placeholder="Enter item name" aria-label="Search" matInput
@@ -40,8 +28,8 @@
                             <mat-icon>search</mat-icon>
                         </button>
                     </mat-form-field>
-                    <div class="flex flex-col gap-4">
-                        <div class="items-end h-10">
+                    <div class="flex flex-row justify-end gap-2 ml-auto">
+                      <div class="items-end h-10">
                             <div class="flex flex-row justify-end gap-3 mr-3">
                                 <button mat-button color="warn" (click)="SearchAndClear('clear')"
                                     class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">

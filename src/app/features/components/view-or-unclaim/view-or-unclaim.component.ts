@@ -15,6 +15,7 @@ import { fadeInUp400ms } from 'src/app/@amc/animations/fade-in-up.animation';
 import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ClaimitService } from '../../sharedServices/claimit.service';
 
 @Component({
   selector: 'app-view-or-unclaim',
@@ -139,39 +140,20 @@ export default class ViewOrUnclaimComponent {
       ],
     },
   ];
-  constructor(public dialog: MatDialog){
+  constructor(public dialog: MatDialog, private service: ClaimitService) {
 
   }
-  ngOnInit(){
-this.search()
-  }
-
-  sortDataByClaimDate() {
-    this.searchResults.sort((a: { claimDate: { getTime: () => number; }; }, b: { claimDate: { getTime: () => number; }; }) => {
-      return b.claimDate.getTime() - a.claimDate.getTime();
-    });
+  ngOnInit() {
+    this.search()
   }
 
   search() {
-    const query = this.searchQuery.trim().toLowerCase();
-    if (!query) {
-      this.searchResults = [];
-      this.showNoResults = false;
-      return;
-    }
+    const query = this.searchQuery.trim();
+    this.service.getAllItems(query).subscribe((res: any) => {
+      console.log('res', res)
+      this.searchResults = res
+    })
 
-    setTimeout(() => {
-      const result = this.data.find((entry) => entry.email.toLowerCase() === query);
-      if (result) {
-        this.searchResults = result.items;
-        this.showNoResults = this.searchResults.length === 0;
-      } else {
-        this.searchResults = [];
-        this.showNoResults = true;
-      }
-
-      this.sortDataByClaimDate();
-    }, 2000);
   }
   clearResultsIfEmpty() {
     if (!this.searchQuery.trim()) {
@@ -186,7 +168,7 @@ this.search()
       this.searchResults = [];
       this.showNoResults = false;
     } else {
-
+      this.search()
     }
 
   }
@@ -195,13 +177,13 @@ this.search()
       width: "500px",
       data: {
         message: 'Are you sure you want to unclaim this item?',
-        title:'UnClaim'
+        title: 'UnClaim'
       },
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.unclaimItem(result); 
+        this.unclaimItem(result);
       }
     });
   }
