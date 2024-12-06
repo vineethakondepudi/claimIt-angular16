@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component'; 
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
+import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 
 interface TableData {
   image: string;
@@ -43,11 +43,11 @@ export interface TableColumn {
   templateUrl: './additem.component.html',
   styleUrls: ['./additem.component.scss']
 })
-export default class AdditemComponent implements OnInit {
-  apiUrl = 'http://172.17.12.38:8081/api/admin/listOfItems';
+export default class AdditemComponent implements OnInit {  apiUrl = 'http://172.17.12.38:8081/api/admin/listOfItems';
 
   tableData: any[] = [];
   searchResults: any = [];
+  searchQuery: string = '';
 
   currentDate: Date = new Date();
   @Input() containerPanelOpened: boolean = false;
@@ -56,7 +56,7 @@ export default class AdditemComponent implements OnInit {
     {
       label: "Image Data",
       name: "image",
-      type: "image",  // Correct type
+      type: "image", 
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -65,7 +65,7 @@ export default class AdditemComponent implements OnInit {
     {
       label: 'Found Date',
       name: 'foundDate',
-      type: 'date',  // Correct type
+      type: 'date',  
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -74,7 +74,7 @@ export default class AdditemComponent implements OnInit {
     {
       label: 'Status',
       name: 'status',
-      type: 'text',  // Correct type
+      type: 'text',  
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -82,23 +82,23 @@ export default class AdditemComponent implements OnInit {
     },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private service: ClaimitService) {}
 
   ngOnInit(): void {
     this.fetchData();
   }
 
   fetchData(): void {
-    this.http.get<TableData[]>(this.apiUrl).subscribe(
-      (data) => {
-        this.searchResults = data;
-        this.tableData = data; 
-        console.log(data, 67);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
+const query = this.searchQuery.trim();
+    this.service.listOfItems(query).subscribe((res: any) => {
+      console.log('res', res)
+      this.searchResults = res
+      this.tableData = res; 
+
+    },
+    (error) => {
+      console.error('Error fetching data:', error);
+    })
   }
 
   onFileSelected(event: any): void {
