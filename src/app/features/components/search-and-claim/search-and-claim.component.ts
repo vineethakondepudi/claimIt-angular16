@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component';
@@ -34,10 +34,10 @@ interface Item {
 @Component({
   selector: 'app-search-and-claim',
   standalone: true,
-  imports: [CommonModule,MatTabsModule,
+  imports: [CommonModule, MatTabsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,    
+    MatButtonModule,
     MatIconModule,
     MatTableModule,
     MatCardModule,
@@ -46,12 +46,12 @@ interface Item {
     DataTableComponent,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    NgxDropzoneModule, MatSelectModule,  FormsModule,HttpClientModule],
+    NgxDropzoneModule, MatSelectModule, FormsModule, HttpClientModule],
   templateUrl: './search-and-claim.component.html',
   styleUrls: ['./search-and-claim.component.scss']
 })
 export default class SearchAndClaimComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   @Input() containerPanelOpened: boolean = false;
   displaycoloums: any[] = [
     {
@@ -95,8 +95,8 @@ export default class SearchAndClaimComponent {
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
   items: any[] = [];
-  searchResults: any= [];
-  categeoryerror:boolean = false
+  searchResults: any = [];
+  categeoryerror: boolean = false
   searchQuery: string = '';
   foods = [
     { value: 'Apparel', viewValue: 'Apparel' },
@@ -109,53 +109,43 @@ export default class SearchAndClaimComponent {
   categerorydata: any = [];
 
   selectedCategory: string = '';
-  
+
   public onRemove(event: any) {
     this.uplodedfilesdata.splice(this.uplodedfilesdata.indexOf(event), 1)
     if (this.files.length > 0) {
       this.files.splice(this.files.indexOf(event), 1)
     }
   }
-//itemsearch integration code 
-searchItems() {
-  if (this.searchQuery.trim()) {
-    const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
-    
-    this.http.get<Item[]>(apiUrl).subscribe(
-      (response: Item[]) => {
-        this.searchResults = response;
-        console.log('Search results:', response);
-        
-        // Handle the response here
-      },
-      (error: any) => {
-        console.error('Search error:', error);
-        // this.snackBar.open('An error occurred while searching. Please try again.', 'Close', {
-        //   duration: 3000,
-        // });
-      }
-    );
-  } else {
-    // this.snackBar.open('Please enter a search query.', 'Close', {
-    //   duration: 3000,
-    // });
+  //itemsearch integration code 
+  searchItems() {
+    if (this.searchQuery.trim()) {
+      const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
+
+      this.http.get<Item[]>(apiUrl).subscribe(
+        (response: Item[]) => {
+          this.searchResults = response;
+        },
+        (error: any) => {
+        }
+      );
+    } else {
+    }
   }
-}
 
   //categeory integration
   search(): void {
     const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${this.selectedCategory}`;
     this.http.get<any[]>(apiUrl).subscribe(
-      (      data: any) => {
+      (data: any) => {
         this.categerorydata = data; // Directly set if it's an array
-        console.log(this.categerorydata,'categerorydata')
-        if(this.categerorydata.message.includes( 'No items found for the search term')){
-         this.categeoryerror = true
-        }else{
+        console.log(this.categerorydata, 'categerorydata')
+        if (this.categerorydata.message.includes('No items found for the search term')) {
+          this.categeoryerror = true
+        } else {
           this.categeoryerror = false
         }
       },
-      (      error: any) => {
+      (error: any) => {
         console.error('API Error:', error);
       }
     );
@@ -180,7 +170,7 @@ searchItems() {
     this.search();
   }
   //picture upload integration 
-  public   onSelect(event: any): void {
+  public onSelect(event: any): void {
     const files = event.addedFiles;
     if (files && files.length > 0) {
       const file = files[0]; // Assuming one file is selected
@@ -214,15 +204,15 @@ searchItems() {
     // Create FormData to send the file in the body of the POST request
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
-  
+
     const picUrl = 'http://172.17.12.38:8081/api/users/uploadImageForSearch';
-  
+
     // Sending POST request with FormData containing the image
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });
   }
-  
+
 
   public onImportToExcel() {
     this.files = []
