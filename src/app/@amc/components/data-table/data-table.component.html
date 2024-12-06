@@ -26,7 +26,7 @@
   </mat-menu>
 </div>
 
-<div class="min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col" *ngIf="dataSource.data.length > 0">
   <table mat-table [dataSource]="dataSource" matSort matTableFilter>
     <ng-container class="font-bold" *ngFor="let tableColumn of tableColumns" [matColumnDef]="tableColumn.name">
       <ng-container>
@@ -35,42 +35,36 @@
         </th>
       </ng-container>
       <td mat-cell *matCellDef="let element  let i = index" class="col-data">
-        <!-- <div>
+        <div>
           <div class="column-overflow"
-            *ngIf="tableColumn.type !== 'date' && tableColumn.label !== 'Skill' && tableColumn.name !== 'type'">
+            *ngIf="tableColumn.type !== 'date' && tableColumn.name !== 'image' && tableColumn.label !== 'Status'">
             {{ element | dataPropertyGetter : tableColumn.name }}
           </div>
           <div *ngIf="tableColumn.type === 'date'">
             {{ formatDate(element[tableColumn.name]) }}
           </div>
-          <div *ngIf="tableColumn.name === 'type'" class="truncate ...">
-            <div class="rounded column-overflow px-2 py-1 font-medium text-xs flex-none max-w-fit text-white"
-              [ngStyle]="{'background-color': getColor(element, tableColumn.name)}"
-              matTooltip="{{element | dataPropertyGetter : tableColumn.name}}" appTooltip
-              matTooltipClass="custom-tooltip">
-              {{element | dataPropertyGetter : tableColumn.name}}
-            </div>
+          <div *ngIf="tableColumn.name === 'image'  ">
+            <img [src]="element.image" alt="Item Image" class="item-image"
+              style="max-width: 100px; max-height: 100px;" />
           </div>
-          <div *ngIf="tableColumn.label === 'Skill'">
-            <span class="cursor-pointer" (click)="
-                showSkills(element, i); $event.stopPropagation(); isOpen = !isOpen
-              " type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">{{ formatSkills(element) }}</span>
-            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
-              *ngIf="indexValue === i">
-              <ul class="example-list">
-                {{element | dataPropertyGetter : tableColumn.name }}
-              </ul>
-            </ng-template>
+          <div *ngIf="tableColumn.label === 'Status'  ">
+            <div class="rounded column-overflow px-2 py-1 font-medium text-xs flex-none max-w-fit"
+              [ngStyle]="{'background-color': getColor(element, tableColumn.name)}" matTooltip="{{
+          element | dataPropertyGetter : tableColumn.name
+        }}" appTooltip matTooltipClass="custom-tooltip">
+              {{ element | dataPropertyGetter : tableColumn.name }}
+            </div>
           </div>
           <div *ngIf="tableColumn.name === 'ListActions'">
             <span class="text-[#3E969F] hover:underline">
               Click
             </span>
           </div>
-        </div> -->
-
-        <div class="column-overflow">
-          {{ element | dataPropertyGetter : tableColumn.name }}
+          <div *ngIf="tableColumn.label === 'Action'">
+            <button mat-raised-button color="primary" class="txt-button">
+              UnClaim
+            </button>
+          </div>
         </div>
       </td>
     </ng-container>
@@ -82,8 +76,8 @@
   </mat-paginator>
 </div>
 <div *ngIf="dataSource.data.length === 0" class="relative flex flex-col items-center justify-center">
-  <img src="../../../../assets/NoResult.png" class="absolute w-128 object-contain p-3" alt="Image" />
+  <img src="assets/noresults.png" class="absolute w-56 mt-36  object-contain " alt="Image" />
   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-    No Records Found
+      No Records Found
   </p>
 </div>

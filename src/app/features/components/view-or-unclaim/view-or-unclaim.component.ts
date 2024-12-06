@@ -42,7 +42,7 @@ export default class ViewOrUnclaimComponent {
     {
       label: "Image",
       name: "image",
-      type: "image",
+      type: "text",
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -60,7 +60,7 @@ export default class ViewOrUnclaimComponent {
     {
       label: "claimDate",
       name: "claimDate",
-      type: "text",
+      type: "date",
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -69,7 +69,7 @@ export default class ViewOrUnclaimComponent {
     {
       label: "Action",
       name: "action",
-      type: "action",
+      type: "text",
       isSortable: true,
       position: "left",
       isChecked: true,
