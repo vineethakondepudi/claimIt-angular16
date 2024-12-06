@@ -65,7 +65,7 @@ export class HeaderComponent {
     const currentUrl = this.router.url;
   
     const tabRoutes: { [key: string]: string[] } = {
-      supervisor: ['/claimit/searchAndClaim'],
+      supervisor: ['/claimit/searchAndClaim','/claimit/searchAndClaim'],
     };
   
     if (tabRoutes[tab]) {

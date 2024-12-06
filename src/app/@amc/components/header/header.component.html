@@ -64,10 +64,16 @@
         <span class="text-base md:text-2xl lg:text-2xl font-semibold text-black cursor-pointer flex" >{{applicationName}}</span>
       </div>
       <div class="flex justify-end">
+        <button class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="About">
+          <mat-icon class="mr-1">info</mat-icon>
+        </button>
+        <button class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Contact">
+          <mat-icon class="mr-1">phone</mat-icon>
+        </button>
         <button class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Help">
           <mat-icon class="mr-1">help</mat-icon>
         </button>
-        <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Log out" (click)="logout()">
+        <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Admin Login" (click)="logout()">
           <mat-icon class="ml-1">logout</mat-icon>
         </button>
       </div>
