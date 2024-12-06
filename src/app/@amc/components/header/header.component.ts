@@ -43,12 +43,10 @@ export class HeaderComponent {
   applicationName = APP_NAME
   @Input() hideMenu: boolean | undefined;
 
-  authSuccess: boolean = true;
-  showReports: boolean = false;
-  opened: boolean = true;
-  param: any;
+
 
   authSuccess: boolean = true;
+  showReports: boolean = false;
   opened: boolean = true;
   userRole: string | null = '';
   param: any;
@@ -89,15 +87,15 @@ export class HeaderComponent {
     if (this.userRole === 'admin') {
       return [
         { label: 'Dashboard', icon: 'dashboard', route: '/claimit/dashboard' },
-        { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
+        { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
+        { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' }
       ];
     } else  {
       return [
         { label: 'Dashboard', icon: 'dashboard', route: '/claimit/dashboard' },
-        { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
-        { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
-         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' }
+         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
+         { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
       ];
     }
     
