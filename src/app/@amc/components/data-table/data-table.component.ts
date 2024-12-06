@@ -50,7 +50,7 @@ export class DataTableComponent<T> {
   @Output() rowData: EventEmitter<T> = new EventEmitter();
   indexValue!: number;
   slicedSkills: any;
-  @Input() set tableData(data: T[]) {
+  @Input() set tableData(data: []) {
     this.setTableDataSource(data);
   }
   @Output() unClaim = new EventEmitter()
