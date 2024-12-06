@@ -137,8 +137,14 @@ export class DataTableComponent<T> {
   }
   getColor(element: any, columnName: string): string {
     const value = this.dataPropertyGetter(element, columnName);
-    if (value === 'Inbound') {
+    console.log('value',value,columnName)
+    if (value === 'claimed') {
       return '#219C90'
+    }else if(value === 'pending request'){
+      return '#FEE2E2';
+    }
+    else if(value === 'open'){
+      return '#FEF9C3'
     }
     else {
       return '#EE4E4E';
