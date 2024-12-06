@@ -1,48 +1,28 @@
 <mat-sidenav-container class="flex h-screen" autosize>
-  <!-- added condition for hiding side bar for Non-integrated claim -->
   <mat-sidenav mode="side" opened="true" class="bgcolor" *ngIf="authSuccess && !router.url.includes('login')">
     <div *ngIf="opened === false" class="toolbar-icon" [ngClass]="{'min-[800px]': !opened}">
-      <button mat-icon-button class="bg-[#3e969f] cursor-pointer ml-2 mt-2 " (click)="openMenu()">
+      <button mat-icon-button class="bg-[#3e969f] cursor-pointer ml-2 mt-2" (click)="openMenu()">
         <mat-icon class="iconStyle">menu</mat-icon>
       </button>
     </div>
     <div *ngIf="opened" class="flex flex-row gapy-1 ml-4 mt-6">
-      <span  class="flex flex-row w-15 cursor-pointer">
-      <img class="w-18 mr-2 ml-1 h-8 " src="assets/loginLogo.jpg" />
-      <span class="text-2xl font-semibold text-white flex">{{customerName}}</span>
+      <span class="flex flex-row w-15 cursor-pointer">
+        <img class="w-18 mr-2 ml-1 h-8" src="assets/loginLogo.jpg" />
+        <span class="text-2xl font-semibold text-white flex">{{customerName}}</span>
       </span>
     </div>
     <div class="mt-1 -ml-2">
       <mat-list class="mt-24">
-        <span>
+        <span *ngFor="let item of getMenuItems()">
           <mat-list-item>
-            <span class="flex h-10 rounded cursor-pointer px-2 py-1" (click)="router.navigateByUrl('/claimit/dashboard')"
-              [class.active-button]="isTabActive('dashboard') || isTabActive('dashboard') || isTabActive('dashboard')">
-              <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text  text-white"
-                [class.active-button]="isTabActive('dashboard') || isTabActive('dashboard') || isTabActive('dashboard')"
-                [matTooltip]="opened?'':'Dashboard'" matTooltipPosition="right">dashboard</mat-icon>
+            <span class="flex h-10 rounded cursor-pointer px-2 py-1" (click)="router.navigateByUrl(item.route)"
+              [class.active-button]="isTabActive(item.label)">
+              <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text text-white"
+                [class.active-button]="isTabActive(item.label)" [matTooltip]="opened ? '' : item.label" matTooltipPosition="right">
+                {{item.icon}}
+              </mat-icon>
               <span *ngIf="opened" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text text-base"
-                [class.active-button]="isTabActive('dashboard')|| isTabActive('dashboard') || isTabActive('dashboard')">Dashboard</span>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span class="flex h-10 rounded cursor-pointer px-2 py-1" (click)="router.navigateByUrl('/claimit/searchAndClaim')"
-              [class.active-button]="isTabActive('searchandClaim') || isTabActive('searchandClaim') || isTabActive('searchandClaim')">
-              <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text  text-white"
-                [class.active-button]="isTabActive('searchandClaim') || isTabActive('searchandClaim') || isTabActive('searchandClaim')"
-                [matTooltip]="opened?'':'searchandClaim'" matTooltipPosition="right">search</mat-icon>
-              <span *ngIf="opened" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text text-base"
-                [class.active-button]="isTabActive('searchandClaim')|| isTabActive('searchandClaim') || isTabActive('searchandClaim')">Search And Claim</span>
-            </span>
-          </mat-list-item>
-          <mat-list-item>
-            <span class="flex h-10 rounded cursor-pointer px-2 py-1" (click)="router.navigateByUrl('/claimit/viewOrUnclaim')"
-              [class.active-button]="isTabActive('viewOrUnclaim') || isTabActive('viewOrUnclaim') || isTabActive('viewOrUnclaim')">
-              <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text  text-white"
-                [class.active-button]="isTabActive('viewOrUnclaim') || isTabActive('viewOrUnclaim') || isTabActive('viewOrUnclaim')"
-                [matTooltip]="opened?'':'viewOrUnclaim'" matTooltipPosition="right">visibility</mat-icon>
-              <span *ngIf="opened" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text text-base"
-                [class.active-button]="isTabActive('viewOrUnclaim')|| isTabActive('viewOrUnclaim') || isTabActive('viewOrUnclaim')">View/Unclaim</span>
+                [class.active-button]="isTabActive(item.label)">{{item.label}}</span>
             </span>
           </mat-list-item>
         </span>
@@ -50,18 +30,15 @@
     </div>
   </mat-sidenav>
   <div class="flex-grow">
-    <!-- added condition for hiding Header for Non-integrated claim -->
     <mat-toolbar class="flex justify-between header p-0 shadow-md" *ngIf="!router.url.includes('login')">
       <div *ngIf="opened === true" class="flex flex-row gap-1" [ngClass]="{'min-[800px]': opened}">
         <button mat-icon-button class="cursor-pointer" (click)="openMenu()">
           <mat-icon>menu</mat-icon>
         </button>
-        <!-- add title here for topbar  -->
-        <span class="text-1xl mt-2 font-semibold text-black cursor-pointer flex" >{{applicationName}}</span>
+        <span class="text-1xl mt-2 font-semibold text-black cursor-pointer flex">{{applicationName}}</span>
       </div>
       <div *ngIf="opened === false">
-        <!-- add title here for topbar  -->
-        <span class="text-base md:text-2xl lg:text-2xl font-semibold text-black cursor-pointer flex" >{{applicationName}}</span>
+        <span class="text-base md:text-2xl lg:text-2xl font-semibold text-black cursor-pointer flex">{{applicationName}}</span>
       </div>
       <div class="flex justify-end">
         <button class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="About">
@@ -81,3 +58,6 @@
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>
+
+
+  
