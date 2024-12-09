@@ -46,7 +46,7 @@
           <div *ngIf="tableColumn.label === 'Image Data' || tableColumn.name === 'image' "
             (click)="openPreviewImage(element)">
             <img [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image" class="item-image"
-              style="max-width: 100px; max-height: 100px;" />
+              style="max-width: 100px; max-height: 40px;" />
           </div>
           <div *ngIf="tableColumn.label === 'Status'  ">
             <div class="rounded column-overflow px-2 py-1 font-medium text-xs flex-none max-w-fit"
