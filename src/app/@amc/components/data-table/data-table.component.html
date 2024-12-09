@@ -43,7 +43,8 @@
           <div *ngIf="tableColumn.type === 'date'">
             {{ formatDate(element[tableColumn.name]) }}
           </div>
-          <div *ngIf="tableColumn.label === 'Image Data' || tableColumn.name === 'image' " (click)="openPreviewImage(element)">
+          <div *ngIf="tableColumn.label === 'Image Data' || tableColumn.name === 'image' "
+            (click)="openPreviewImage(element)">
             <img [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image" class="item-image"
               style="max-width: 100px; max-height: 100px;" />
           </div>
@@ -56,13 +57,11 @@
             </div>
           </div>
           <div *ngIf="tableColumn.label === 'Action'">
-            <button *ngIf="element.claimStatus === 'PENDING_PICKUP' " (click)="unClaimItem(element)" mat-raised-button
-              color="primary" class="txt-button">
+            <button *ngIf="element.claimStatus === 'PENDING_PICKUP' && showUnClaim " (click)="unClaimItem(element)"
+              mat-raised-button color="primary" class="txt-button">
               UnClaim
             </button>
-          </div>
-          <div *ngIf="tableColumn.label === 'ActionClaim'">
-            <button (click)="ClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+            <button *ngIf="!showUnClaim" (click)="unClaimItem(element)" mat-raised-button color="primary" class="txt-button">
               Claim
             </button>
           </div>

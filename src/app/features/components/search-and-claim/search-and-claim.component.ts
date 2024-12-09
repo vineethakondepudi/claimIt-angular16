@@ -95,7 +95,7 @@ export default class SearchAndClaimComponent {
       index: 4,
     },
     {
-      label: "ActionClaim",
+      label: "Action",
       name: "action",
       type: "text",
       isSortable: true,

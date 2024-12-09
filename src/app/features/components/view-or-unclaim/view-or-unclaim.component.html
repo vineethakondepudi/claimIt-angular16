@@ -47,7 +47,7 @@
     </div>
 
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table [tableColumns]="displaycoloums" (previewImage)="previewImage($event)" (unClaim)="confirmUnclaim($event)" 
+        <app-data-table [showUnClaim]="true" [tableColumns]="displaycoloums" (previewImage)="previewImage($event)" (unClaim)="confirmUnclaim($event)" 
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
