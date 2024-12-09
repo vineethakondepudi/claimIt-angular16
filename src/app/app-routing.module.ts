@@ -16,6 +16,16 @@ const routes: Routes = [
         loadComponent: () => import('./@amc/components/dashboard/dashboard.component')
       },
       {
+        title:'About | ClaimIT',
+        path:'about',
+        loadComponent:()=>import('./@amc/components/about/about.component')
+      },
+      {
+        title:'About | ClaimIT',
+        path:'contact',
+        loadComponent:()=>import('./@amc/components/contact/contact.component')
+      },
+      {
         title: 'viewOrUnclaim | claimit',
         path: 'viewOrUnclaim',
         loadComponent: () => import('./features/components/view-or-unclaim/view-or-unclaim.component')
