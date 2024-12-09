@@ -10,6 +10,8 @@ import { MatToolbarModule } from '@angular/material/toolbar'
 import { HttpClient } from '@angular/common/http'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 import { SearchResultsDialogComponent } from '../search-results-dialog/search-results-dialog.component'
+import { FooterComponent } from '../footer/footer.component'
+import { FormFooterComponent } from '../form-footer/form-footer.component'
 
 interface CheckIn {
   name: string
@@ -36,6 +38,8 @@ interface Item {
   standalone: true,
   imports: [CommonModule, MatTableModule,MatIconModule,MatCardModule, MatDividerModule, MatToolbarModule,MatDialogModule,
     MatCardModule,
+    FooterComponent,
+    FormFooterComponent,
     MatButtonModule,
     MatInputModule,
     MatIconModule],

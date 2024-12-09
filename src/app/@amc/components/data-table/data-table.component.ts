@@ -146,6 +146,8 @@ export class DataTableComponent<T> {
       return '#FEF9C3'
     } else if (value === 'UNCLAIMED') {
       return '#F87171'
+    }else if (value === 'Archived') {
+      return '#77a36f'
     }
     else {
       return '#EE4E4E';

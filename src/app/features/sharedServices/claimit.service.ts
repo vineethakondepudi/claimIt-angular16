@@ -16,4 +16,14 @@ export class ClaimitService {
 
     return this.http.put(environment.unClaim+'?status='+query.status+'&claimId='+query.claimId,'')
   }
+//List of itetems
+  public listOfItems(query: any) {
+    return this.http.get(environment.listOfItems);
+  }
+
+//Admin login 
+  public adminLogin(email: string, password: string) {
+    const loginData = { email, password };
+    return this.http.post(environment.adminLogin, loginData);
+  }
 }

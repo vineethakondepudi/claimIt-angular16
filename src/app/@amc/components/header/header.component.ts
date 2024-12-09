@@ -71,27 +71,25 @@ export class HeaderComponent {
   public isTabActive(tab: string): boolean {
     const currentUrl = this.router.url;
 
-    const tabRoutes: { [key: string]: string[] } = {
-      supervisor: ['/claimit/searchAndClaim', '/claimit/searchAndClaim'],
-    };
+    const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim']
     if (tabRoutes[tab]) {
-      return tabRoutes[tab].some(route => currentUrl.startsWith(route));
+      return tabRoutes[tab].some((route: string) => currentUrl.startsWith(route));
     }
-    return currentUrl === `/claimit/${tab}`;
+    return currentUrl === tab;
   }
 
   getMenuItems() {
     if (this.userRole === 'admin') {
 
       return [
-        { label: 'Dashboard', icon: 'dashboard', route: '/claimit/dashboard' },
+        { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
         { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' }
       ];
     } else {
       return [
-        { label: 'Dashboard', icon: 'dashboard', route: '/claimit/dashboard' },
+        { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
         { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
       ];
