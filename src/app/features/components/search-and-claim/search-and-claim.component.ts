@@ -17,6 +17,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { FooterComponent } from 'src/app/@amc/components/footer/footer.component';
+import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 interface Item {
   itemId: number;
@@ -42,6 +44,7 @@ interface Item {
     MatIconModule,
     MatTableModule,
     MatCardModule,
+    FormFooterComponent,
     MatExpansionModule,
     MatDialogModule,
     DataTableComponent,
