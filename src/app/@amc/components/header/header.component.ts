@@ -71,13 +71,11 @@ export class HeaderComponent {
   public isTabActive(tab: string): boolean {
     const currentUrl = this.router.url;
 
-    const tabRoutes: { [key: string]: string[] } = {
-      supervisor: ['/claimit/searchAndClaim', '/claimit/searchAndClaim'],
-    };
+    const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim']
     if (tabRoutes[tab]) {
-      return tabRoutes[tab].some(route => currentUrl.startsWith(route));
+      return tabRoutes[tab].some((route: string) => currentUrl.startsWith(route));
     }
-    return currentUrl === `/claimit/${tab}`;
+    return currentUrl === tab;
   }
 
   getMenuItems() {
