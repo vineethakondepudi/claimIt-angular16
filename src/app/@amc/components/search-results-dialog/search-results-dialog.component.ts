@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataTableComponent } from '../data-table/data-table.component';
+import { MatButtonModule } from '@angular/material/button';
 interface Item {
   itemId: number;
   itemName: string;
@@ -20,7 +21,7 @@ interface Item {
 @Component({
   selector: 'app-search-results-dialog',
   standalone: true,
-  imports: [CommonModule,MatDialogModule,DataTableComponent],
+  imports: [CommonModule,MatDialogModule,DataTableComponent,MatButtonModule],
   templateUrl: './search-results-dialog.component.html',
   styleUrls: ['./search-results-dialog.component.scss']
 })
