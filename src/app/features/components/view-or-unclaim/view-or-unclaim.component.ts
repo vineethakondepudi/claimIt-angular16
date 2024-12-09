@@ -17,6 +17,7 @@ import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimitService } from '../../sharedServices/claimit.service';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
+import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 
 @Component({
   selector: 'app-view-or-unclaim',
@@ -34,6 +35,7 @@ import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submi
     FormFooterComponent,
     MatTooltipModule,
     MatFormFieldModule,
+    LoaderComponent,
     MatIconModule,
     FormsModule,],
   templateUrl: './view-or-unclaim.component.html',
@@ -45,6 +47,7 @@ export default class ViewOrUnclaimComponent {
   searchQuery: string = '';
   searchResults: any = [];
   showNoResults: boolean = true;
+  loader:boolean=true;
   displaycoloums: any = [
     {
       label: "Image",
@@ -95,6 +98,7 @@ export default class ViewOrUnclaimComponent {
     this.service.getAllItems(query).subscribe((res: any) => {
       console.log('res', res)
       this.searchResults = res
+      this.loader = false
     })
 
   }
@@ -131,16 +135,19 @@ export default class ViewOrUnclaimComponent {
           status:'UNCLAIMED',
           claimId:event.claimId
         }
+        this.loader = true
         this.service.unClaimItem(params).subscribe((res:any)=>{
-          console.log(res)
+          this.loader = false
           const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
             width: "500px",
             data: {
+              status:'Success',
               msg: 'Item unclaimed successfully',
               btnName: "OK",
             },
           });
           dialogRef.afterClosed().subscribe((result) => {
+            this.loader = true
             this.search()
           });
         })

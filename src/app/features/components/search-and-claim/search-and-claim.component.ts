@@ -91,6 +91,15 @@ export default class SearchAndClaimComponent {
       isChecked: true,
       index: 4,
     },
+    {
+      label: "ActionClaim",
+      name: "action",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
     
   ]
   itemName: string | null = null;
