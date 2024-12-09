@@ -24,6 +24,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DataTableComponent } from './@amc/components/data-table/data-table.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 export function localStorageSyncReducer(
@@ -55,6 +56,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
+    MatSnackBarModule,
   ],
   providers: [
     {
