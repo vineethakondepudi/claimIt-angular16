@@ -85,8 +85,8 @@ export default class AdditemComponent implements OnInit {
     },
   ];
 
-  isOrganizationSelected: boolean = false; // Flag to show image selection after organization is selected
-  selectedOrgId: string = ''; // To store the selected organization ID
+  isOrganizationSelected: boolean = false; 
+  selectedOrgId: string = '';
 
   constructor(private service: ClaimitService, private dialog: MatDialog) {}
 
@@ -105,11 +105,11 @@ export default class AdditemComponent implements OnInit {
         dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
           if (selectedOrgId) {
             console.log('Selected Organization ID:', selectedOrgId);
-            this.selectedOrgId = selectedOrgId; // Store the selected organization ID
-            this.isOrganizationSelected = true; // Show the file input after organization selection
+            this.selectedOrgId = selectedOrgId; 
+            this.isOrganizationSelected = true; 
           } else {
             console.log('Dialog closed without selection.');
-            this.isOrganizationSelected = false; // Hide the file input if no organization is selected
+            this.isOrganizationSelected = false; 
           }
         });
       },
