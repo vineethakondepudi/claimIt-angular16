@@ -25,7 +25,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DataTableComponent } from './@amc/components/data-table/data-table.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -57,6 +57,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     MatToolbarModule,
     MatIconModule,
     MatSnackBarModule,
+    NgxDropzoneModule
   ],
   providers: [
     {

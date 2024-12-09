@@ -37,6 +37,7 @@ export interface TableColumn {
     MatExpansionModule,
     MatCardModule,
     MatDialogModule,
+    LoaderComponent,
   ],
   templateUrl: './remove-or-archive.component.html',
   styleUrls: ['./remove-or-archive.component.scss']
@@ -100,15 +101,22 @@ export default class RemoveOrArchiveComponent implements OnInit {
 
   fetchData(): void {
     const query = this.searchQuery.trim();
-    this.service.listOfItems(query).subscribe((res: any) => {
-      this.searchResults = res;
-      this.tableData = res; 
-      console.log(res,106);
-      
-    },
-    (error) => {
-      console.error('Error fetching data:', error);
-    });
+    this.service.listOfItems(query).subscribe(
+      (res: any) => {
+        if (res?.data) {
+          this.searchResults = res.data;
+          this.tableData = res.data;
+          this.loader = false
+        } else {
+          console.error('Unexpected API response format:', res);
+          this.searchResults = [];
+          this.tableData = [];
+        }
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
 
 
@@ -134,6 +142,8 @@ export default class RemoveOrArchiveComponent implements OnInit {
         this.loader = true;
         this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
           this.loader = false;
+          console.log(145);
+          
           const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
             width: "500px",
             data: {
@@ -142,9 +152,11 @@ export default class RemoveOrArchiveComponent implements OnInit {
               btnName: "OK",
             },
           });
+     
           dialogRef.afterClosed().subscribe(() => {
             // Reset the loader or handle any post-modal actions here
             this.loader = false;
+                 this.fetchData();
           });
         }, (error) => {
           this.loader = false;
@@ -154,5 +166,18 @@ export default class RemoveOrArchiveComponent implements OnInit {
     });
   }
   
+  previewImage(event: any) {
+    console.log(event)
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        requiredData: event,
+        title: 'Preview Image'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    });
+  }
 }
 

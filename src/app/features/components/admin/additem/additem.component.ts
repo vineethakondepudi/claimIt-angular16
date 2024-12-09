@@ -12,7 +12,9 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { MatDialogModule } from '@angular/material/dialog';
 import { OrganizationDialogComponent } from '../organization-dialog/organization-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
+import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 
 export interface TableColumn {
   label: string;
@@ -38,6 +40,8 @@ export interface TableColumn {
     MatExpansionModule,
     MatCardModule,
     MatDialogModule,
+    NgxDropzoneModule,
+    LoaderComponent
   ],
   templateUrl: './additem.component.html',
   styleUrls: ['./additem.component.scss']
@@ -49,6 +53,7 @@ export default class AdditemComponent implements OnInit {
   searchQuery: string = '';
   currentDate: Date = new Date();
   @Input() containerPanelOpened: boolean = false;
+  loader:boolean=true;
 
   displayColumns: TableColumn[] = [
     {
@@ -82,6 +87,7 @@ export default class AdditemComponent implements OnInit {
 
   isOrganizationSelected: boolean = false; 
   selectedOrgId: string = '';
+  files: any[] = []; 
 
   constructor(private service: ClaimitService, private dialog: MatDialog) {}
 
@@ -102,9 +108,12 @@ export default class AdditemComponent implements OnInit {
             console.log('Selected Organization ID:', selectedOrgId);
             this.selectedOrgId = selectedOrgId; 
             this.isOrganizationSelected = true; 
+            
           } else {
             console.log('Dialog closed without selection.');
             this.isOrganizationSelected = false; 
+            this.fetchData();
+            
           }
         });
       },
@@ -116,37 +125,68 @@ export default class AdditemComponent implements OnInit {
 
   fetchData(): void {
     const query = this.searchQuery.trim();
-    this.service.listOfItems(query).subscribe((res: any) => {
-      this.searchResults = res;
-      this.tableData = res; 
-    },
-    (error) => {
-      console.error('Error fetching data:', error);
-    });
+    this.service.listOfItems(query).subscribe(
+      (res: any) => {
+        if (res?.data) {
+          this.searchResults = res.data;
+          this.tableData = res.data;
+          this.loader = false
+        } else {
+          console.error('Unexpected API response format:', res);
+          this.searchResults = [];
+          this.tableData = [];
+        }
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
+  
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-    
-      
+ 
+  
+  
+  
+
+  onUploadImage(): void {
+    if (this.files.length > 0) {
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append('image', this.files[0].file); 
       formData.append('orgId', this.selectedOrgId);
-
-      // Call the service method to upload the file
+  
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
           console.log('File uploaded successfully:', response);
-          // Hide the file input after successful upload
-          this.isOrganizationSelected = false;
+          this.isOrganizationSelected = false; 
+          this.files = []; 
         },
         (error) => {
           console.error('Error uploading file:', error);
         }
       );
+    } else {
+      console.warn('No file selected for upload.');
     }
   }
 
+  onImportToExcel(): void {
+   
+    console.log('Files to upload:', this.files);
+  }
   
+
+  previewImage(event: any) {
+    console.log(event)
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        requiredData: event,
+        title: 'Preview Image'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    });
+  }
 }
