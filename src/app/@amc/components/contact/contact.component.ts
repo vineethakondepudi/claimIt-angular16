@@ -6,12 +6,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormFooterComponent } from '../form-footer/form-footer.component';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
   imports: [CommonModule,
     FormsModule,
+    FormFooterComponent,
     ReactiveFormsModule,
     MatFormFieldModule, // For mat-form-field
     MatInputModule, // For matInput
