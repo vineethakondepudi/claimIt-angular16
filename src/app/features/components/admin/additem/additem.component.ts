@@ -9,6 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { OrganizationDialogComponent } from '../organization-dialog/organization-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface TableData {
   image: string;
@@ -38,20 +41,20 @@ export interface TableColumn {
     FormsModule,
     MatFormFieldModule,
     MatExpansionModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
   ],
   templateUrl: './additem.component.html',
   styleUrls: ['./additem.component.scss']
 })
-export default class AdditemComponent implements OnInit {  apiUrl = 'http://172.17.12.38:8081/api/admin/listOfItems';
+export default class AdditemComponent implements OnInit {  
 
   tableData: any[] = [];
   searchResults: any = [];
   searchQuery: string = '';
-
   currentDate: Date = new Date();
   @Input() containerPanelOpened: boolean = false;
-  // Ensure that 'type' is one of the allowed values from the TableColumn interface
+
   displayColumns: TableColumn[] = [
     {
       label: "Image Data",
@@ -82,29 +85,73 @@ export default class AdditemComponent implements OnInit {  apiUrl = 'http://172.
     },
   ];
 
-  constructor(private service: ClaimitService) {}
+  isOrganizationSelected: boolean = false; 
+  selectedOrgId: string = '';
+
+  constructor(private service: ClaimitService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.fetchData();
   }
 
-  fetchData(): void {
-const query = this.searchQuery.trim();
-    this.service.listOfItems(query).subscribe((res: any) => {
-      console.log('res', res)
-      this.searchResults = res
-      this.tableData = res; 
+  onAddItemClick(): void {
+    this.service.organizationList().subscribe(
+      (res: any) => {
+        const dialogRef = this.dialog.open(OrganizationDialogComponent, {
+          width: '400px',
+          data: { organizationList: res },
+        });
 
+        dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
+          if (selectedOrgId) {
+            console.log('Selected Organization ID:', selectedOrgId);
+            this.selectedOrgId = selectedOrgId; 
+            this.isOrganizationSelected = true; 
+          } else {
+            console.log('Dialog closed without selection.');
+            this.isOrganizationSelected = false; 
+          }
+        });
+      },
+      (error) => {
+        console.error('Error fetching organizations:', error);
+      }
+    );
+  }
+
+  fetchData(): void {
+    const query = this.searchQuery.trim();
+    this.service.listOfItems(query).subscribe((res: any) => {
+      this.searchResults = res;
+      this.tableData = res; 
     },
     (error) => {
       console.error('Error fetching data:', error);
-    })
+    });
   }
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log('Selected file:', file.name);
+    
+      
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('orgId', this.selectedOrgId);
+
+      // Call the service method to upload the file
+      this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
+        (response) => {
+          console.log('File uploaded successfully:', response);
+          // Hide the file input after successful upload
+          this.isOrganizationSelected = false;
+        },
+        (error) => {
+          console.error('Error uploading file:', error);
+        }
+      );
     }
   }
+
+  
 }

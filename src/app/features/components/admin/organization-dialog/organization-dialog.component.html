@@ -1,0 +1,11 @@
+<h2 class="text-lg font-semibold mb-4">Select an Organization</h2>
+<div *ngIf="organizationList.length > 0; else noData">
+  <ul class="list-disc pl-5">
+    <li *ngFor="let org of organizationList" (click)="onOrganizationSelect(org.orgId)" class="cursor-pointer hover:text-blue-600">
+      {{ org.orgName }}
+    </li>
+  </ul>
+</div>
+<ng-template #noData>
+  <p>No organizations available.</p>
+</ng-template>
