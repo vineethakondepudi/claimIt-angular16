@@ -65,6 +65,11 @@
               Claim
             </button>
           </div>
+          <div *ngIf="tableColumn.label === 'Remove'">
+            <button (click)="removeItem(element)" mat-raised-button color="primary" class="txt-button">
+              Remove
+            </button>
+          </div>
         </div>
       </td>
     </ng-container>

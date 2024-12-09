@@ -46,22 +46,21 @@ export default class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
-      // Call the API method to authenticate the user
       this.service.adminLogin(email, password).subscribe(
         (response: any) => {
-          // Check if the API returns a successful login with admin role
+        
           if (response.isAdmin) {
             localStorage.setItem('isLogin', 'true');
             localStorage.setItem('role', 'admin');
             this.router.navigate(['/claimit/dashboard']);
           } else {
-            // Display the error message from the API response
+            
             this.itemFamilyRequiredError = true;
             this.itemFamilyRequiredErrorMessage = response.message || 'Unauthorized access. Please try again.';
           }
         },
         (error) => {
-          // Handle any network errors or other issues
+      
           this.itemFamilyRequiredError = true;
           this.itemFamilyRequiredErrorMessage = 'Something went wrong. Please try again later.';
         }
