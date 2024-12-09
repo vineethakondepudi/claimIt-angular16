@@ -71,7 +71,7 @@ export class HeaderComponent {
   public isTabActive(tab: string): boolean {
     const currentUrl = this.router.url;
 
-    const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim']
+    const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim','/claimit/about','/claimit/contact']
     if (tabRoutes[tab]) {
       return tabRoutes[tab].some((route: string) => currentUrl.startsWith(route));
     }

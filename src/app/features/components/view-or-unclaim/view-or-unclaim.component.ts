@@ -68,7 +68,7 @@ export default class ViewOrUnclaimComponent {
       index: 1,
     },
     {
-      label: "claimDate",
+      label: "claim Date",
       name: "claimDate",
       type: "date",
       isSortable: true,

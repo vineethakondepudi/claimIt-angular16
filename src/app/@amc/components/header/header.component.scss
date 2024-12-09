@@ -37,20 +37,26 @@
 }
 
 .active-link {
-  background-color: #748f81;
+  background-color: #32a27f;
   color: white;
 }
 
 .active {
-  background: #748f81;
+  background: #32a27f;
   color: white;
 }
 
 .active-button {
-  background-color: #748f81;
+  background-color: #32a27f;
   color: #FFFFFF;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   padding-right: 4px !important;
+}
+.active-top-button{
+  background-color: #00897B;
+  color: #FFFFFF;
+  font-weight: 500 !important;
+  padding-right: 11px !important;
 }
 
 .menu {
@@ -59,7 +65,7 @@
 }
 
 .bgcolor {
-  background-color: #435d50;
+  background-color: #00897B;
 }
 
 .header {

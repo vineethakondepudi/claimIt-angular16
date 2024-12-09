@@ -6,26 +6,27 @@
 
     <div class="mt-12 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow">
         <h2 class="text-3xl font-semibold text-center mb-6">Contact Us</h2>
-        <form>
+        <form [formGroup]="contactForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <mat-form-field class="w-full" appearance="outline">
                     <mat-label>Your Name</mat-label>
-                    <input matInput type="text" placeholder="Enter your name" />
+                    <input formControlName="name" matInput type="text" placeholder="Enter your name" />
                 </mat-form-field>
 
                 <mat-form-field class="w-full" appearance="outline">
                     <mat-label>Email Address</mat-label>
-                    <input matInput type="email" placeholder="Enter your email" />
+                    <input formControlName="email" matInput type="email" placeholder="Enter your email" />
+                    <mat-error *ngIf="email?.touched && email?.hasError('pattern')">Please enter a valid email address.</mat-error>
                 </mat-form-field>
             </div>
 
             <mat-form-field class="w-full mt-6" appearance="outline">
                 <mat-label>Message</mat-label>
-                <textarea matInput rows="5" placeholder="Write your message"></textarea>
+                <textarea formControlName="message" matInput rows="5" placeholder="Write your message"></textarea>
             </mat-form-field>
 
             <div class="text-center mt-6">
-                <button mat-raised-button color="primary" class="px-8 py-2 text-lg">Submit</button>
+                <button [disabled]="enableSave" mat-raised-button color="primary" class="px-8 py-2 text-lg" (click)="contactUs()">Submit</button>
             </div>
         </form>
     </div>
@@ -46,8 +47,11 @@
             <div class="text-center p-6 bg-white shadow rounded-lg">
                 <mat-icon class="text-teal-500 text-5xl mb-4">email</mat-icon>
                 <h3 class="text-xl font-semibold mb-2">Email</h3>
-                <p>{{email}}</p>
+                <p>{{supportEmail}}</p>
             </div>
         </div>
     </div>
+</div>
+<div class="flex-none">
+    <app-form-footer></app-form-footer>
 </div>
