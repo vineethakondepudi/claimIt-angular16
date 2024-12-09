@@ -14,7 +14,7 @@
                   >
                     <mat-expansion-panel-header>
                       <mat-panel-title class="text-lg">
-                        <h3 class="font-semibold">Item Type Search</h3>
+                        <span class="text-2xl mt-1">Filters</span>
                       </mat-panel-title>
                       <mat-icon>{{
                         containerPanelOpened ? 'expand_less' : 'expand_more'
@@ -84,7 +84,7 @@
                     (closed)="containerPanelOpened = false">
                     <mat-expansion-panel-header>
                       <mat-panel-title class="text-lg">
-                        <h3 class="font-semibold">Picture Search</h3>
+                        <span class="text-2xl mt-1">Filters</span>
                       </mat-panel-title>
                       <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
                     </mat-expansion-panel-header>
@@ -126,8 +126,11 @@
               <mat-expansion-panel hideToggle [expanded]="false" (opened)="containerPanelOpened = true"
                 (closed)="containerPanelOpened = false">
                 <mat-expansion-panel-header>
-                  <mat-panel-title class="text-lg font-semibold">
-                    Category Search
+                  <mat-panel-title >
+                    <span class="text-2xl mt-1">
+                      Filters
+                    </span>
+                    
                   </mat-panel-title>
                   <mat-icon class="text-blue-500">
                     {{ containerPanelOpened ? 'expand_less' : 'expand_more' }}
