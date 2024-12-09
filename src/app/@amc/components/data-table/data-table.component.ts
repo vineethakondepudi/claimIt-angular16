@@ -55,6 +55,7 @@ export class DataTableComponent<T> {
   }
   @Output() unClaim = new EventEmitter()
   @Output() Claim = new EventEmitter()
+  @Output() remove = new EventEmitter()
   @Output() previewImage = new EventEmitter()
   searchKeyword!: string;
   enableFilter = false;
@@ -161,6 +162,9 @@ export class DataTableComponent<T> {
   }
   ClaimItem(data: any) {
     this.Claim.emit(data)
+}
+removeItem(data: any) {
+  this.remove.emit(data)
 }
 openPreviewImage(data:any){
   this.previewImage.emit(data)

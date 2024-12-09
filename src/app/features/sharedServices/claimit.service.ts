@@ -37,4 +37,14 @@ export class ClaimitService {
   public adminUploadItem(orgId: string, formData: FormData): Observable<any> {
     return this.http.post(`${environment.adminUploadItem}`, formData);
   }
+
+  //Admin remove item 
+  public adminRemoveItem(itemId: number): Observable<any> {
+    const url = `${environment.adminRemoveItem}?itemId=${itemId}`;
+    console.log('ItemId being sent in the request:', itemId); 
+    return this.http.put(url, {}); 
+  }
+  
+  
+  
 }

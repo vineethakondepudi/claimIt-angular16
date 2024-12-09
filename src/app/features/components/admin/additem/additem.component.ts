@@ -13,11 +13,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { OrganizationDialogComponent } from '../organization-dialog/organization-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
-interface TableData {
-  image: string;
-  foundDate: string;
-  status: string;
-}
 
 export interface TableColumn {
   label: string;
