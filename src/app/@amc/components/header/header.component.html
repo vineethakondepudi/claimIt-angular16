@@ -41,11 +41,11 @@
         <span class="text-base md:text-2xl lg:text-2xl font-semibold text-black cursor-pointer flex">{{applicationName}}</span>
       </div>
       <div class="flex justify-end">
-        <button [routerLink]="'/claimit/about'" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="About">
-          <mat-icon class="mr-1" [routerLink]="'/claimit/about'">info</mat-icon>
+        <button  [routerLink]="'/claimit/about'" [class.active-top-button]="isTabActive('/claimit/about')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="About">
+          <mat-icon class="mr-1" [routerLink]="'/claimit/about'" [class.active-top-button]="isTabActive('/claimit/about')">info</mat-icon>
         </button>
-        <button [routerLink]="'/claimit/contact'" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Contact">
-          <mat-icon class="mr-1">phone</mat-icon>
+        <button [routerLink]="'/claimit/contact'" [class.active-top-button]="isTabActive('/claimit/contact')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Contact">
+          <mat-icon class="mr-1" [class.active-top-button]="isTabActive('/claimit/contact')">phone</mat-icon>
         </button>
         <button class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Help">
           <mat-icon class="mr-1">help</mat-icon>

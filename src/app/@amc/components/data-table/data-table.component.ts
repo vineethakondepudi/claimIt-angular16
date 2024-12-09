@@ -53,6 +53,7 @@ export class DataTableComponent<T> {
   @Input() set tableData(data: []) {
     this.setTableDataSource(data);
   }
+  @Input() showUnClaim:boolean = false
   @Output() unClaim = new EventEmitter()
   @Output() Claim = new EventEmitter()
   @Output() remove = new EventEmitter()
@@ -73,6 +74,7 @@ export class DataTableComponent<T> {
   isOpen = false;
   constructor(public readonly router: Router, private datePipe: DatePipe) { }
   ngOnInit() {
+    console.log('showUnClaim',this.showUnClaim)
     this.displayedColumns = this.tableColumns.map((col) => col.name);
 
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
