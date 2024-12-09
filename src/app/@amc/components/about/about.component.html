@@ -27,22 +27,19 @@
   
     <div class="mt-12">
       <h2 class="text-3xl font-semibold text-center mb-6">Success Stories</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-6 shadow rounded-lg">
-          <p>"I found my lost wallet in just two days! Amazing service."</p>
-          <span class="block mt-4 text-right font-semibold text-teal-500">- Poonam Gupta</span>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" *ngFor="let p of slides">
+            <div class="text-center p-6 bg-white shadow rounded-lg w-72">
+              <p>{{p.para}}</p>
+              <span class="block mt-4 text-right font-semibold text-teal-500">- {{p.name}}</span>
+            </div>
+          </div>
         </div>
-        <div class="bg-white p-6 shadow rounded-lg">
-          <p>"The donation process is seamless and meaningful. Great job!"</p>
-          <span class="block mt-4 text-right font-semibold text-teal-500">- Santosh Soni</span>
-        </div>
-        <div class="bg-white p-6 shadow rounded-lg">
-          <p>"Quick and efficient. I highly recommend this app!"</p>
-          <span class="block mt-4 text-right font-semibold text-teal-500">- Narayya Guptha</span>
-        </div>
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
       </div>
     </div>
-  </div>
   <div class="flex-none">
     <app-form-footer></app-form-footer>
 </div>

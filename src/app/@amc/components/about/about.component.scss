@@ -8,4 +8,19 @@
   mat-icon {
     @apply text-6xl overflow-visible leading-none;
   }
-  
+  .swiper-container {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    }
+    
+    .swiper-wrapper {
+    display: flex;
+    }
+    
+    .swiper-slide {
+    width: auto;
+    scroll-snap-align: start;
+    }
