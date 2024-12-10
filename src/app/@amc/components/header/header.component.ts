@@ -48,12 +48,14 @@ export class HeaderComponent {
   opened: boolean = true;
   param: any;
   userRole: string | null = '';
+  menuItems: any[] = [];
 
   constructor(public router: Router, private route: ActivatedRoute) {
     this.userRole = localStorage.getItem('role');
     this.route.queryParamMap.subscribe((params) => {
       this.param = params.get('type');
     });
+    window.addEventListener('storage', this.onStorageChange.bind(this));
   }
   ngOnInit() {
     this.getMenuItems()
@@ -70,7 +72,7 @@ export class HeaderComponent {
 
   public isTabActive(tab: string): boolean {
     const currentUrl = this.router.url;
-
+    this.getMenuItems();
     const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim','/claimit/about','/claimit/contact']
     if (tabRoutes[tab]) {
       return tabRoutes[tab].some((route: string) => currentUrl.startsWith(route));
@@ -79,6 +81,7 @@ export class HeaderComponent {
   }
 
   getMenuItems() {
+    this.userRole = localStorage.getItem('role');
     if (this.userRole === 'admin') {
 
       return [
@@ -100,5 +103,12 @@ export class HeaderComponent {
   logout() {
     localStorage.removeItem('role')
     this.router.navigateByUrl('/login')
+  }
+
+
+  onStorageChange(event: StorageEvent) {
+    if (event.key === 'role') {
+      this.getMenuItems(); 
+    }
   }
 }

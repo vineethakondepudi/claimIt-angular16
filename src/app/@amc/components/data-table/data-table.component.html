@@ -64,7 +64,7 @@
             <button *ngIf="showUnClaim" (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
               Claim
             </button>
-            <button *ngIf="remoceArchive " (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
+            <button *ngIf="element.status != 'PENDING_PICKUP' && !showUnClaim " (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
               Remove
             </button>
           </div>
