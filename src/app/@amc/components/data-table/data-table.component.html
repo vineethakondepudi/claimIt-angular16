@@ -57,14 +57,18 @@
             </div>
           </div>
           <div *ngIf="tableColumn.label === 'Action'">
-            <button *ngIf="element.claimStatus === 'PENDING_PICKUP' && !showUnClaim " (click)="unClaimItem(element)"
-              mat-raised-button color="primary" class="txt-button">
+            <button *ngIf="!showUnClaim " (click)="unClaimItem(element)"
+              [disabled]="element.claimStatus !== 'PENDING_PICKUP'" mat-raised-button color="primary"
+              class="txt-button">
               UnClaim
             </button>
-            <button *ngIf="showUnClaim" (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
-              Claim
+            <button [disabled]="element.status !== 'UNCLAIMED'" *ngIf="showUnClaim"
+              (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+              Claim 
             </button>
-            <button *ngIf="element.status != 'PENDING_PICKUP' && !showUnClaim " (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
+          </div>
+          <div *ngIf="tableColumn.label === 'Remove'">
+            <button (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
               Remove
             </button>
           </div>

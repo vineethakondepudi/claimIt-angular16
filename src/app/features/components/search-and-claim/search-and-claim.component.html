@@ -62,7 +62,7 @@
               </mat-card>
             </div>
             <div class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto">
-              <app-data-table (ClaimItem)="claimItem($event)" 
+              <app-data-table (ClaimItem)="claimItem($event)"  (previewImage)="previewImage($event)" 
               [showUnClaim]="true"
                 [tableColumns]="displaycoloums"
                 [isPageable]="true"
@@ -111,7 +111,7 @@
               </mat-card>
             </div>
             <div class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto">
-              <app-data-table (ClaimItem)="claimItem($event)"  [tableColumns]="displaycoloums" [showUnClaim]="true"
+              <app-data-table  (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)"  [tableColumns]="displaycoloums" [showUnClaim]="true"
               [isPageable]="true" [tableData]="matchedItems" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
               </app-data-table>
             </div>
@@ -179,7 +179,7 @@
           </mat-card>
         </div>
         <div class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto">
-          <app-data-table (ClaimItem)="claimItem($event)"  [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="categerorydata"
+          <app-data-table  (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)"  [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="categerorydata"
             [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
           </app-data-table>
         </div>

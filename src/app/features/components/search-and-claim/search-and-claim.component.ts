@@ -23,6 +23,7 @@ import { CreateClaimComponent } from '../create-claim/create-claim.component';
 import { ClaimitService } from '../../sharedServices/claimit.service';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
+import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 interface Item {
   itemId: number;
@@ -290,6 +291,19 @@ export default class SearchAndClaimComponent {
           }
         })
       }
+    });
+  }
+  previewImage(event: any) {
+    console.log(event)
+    const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        requiredData: event,
+        title: 'Preview Image'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
     });
   }
 }
