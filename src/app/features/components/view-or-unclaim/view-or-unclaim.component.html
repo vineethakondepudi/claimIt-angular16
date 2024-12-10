@@ -12,7 +12,7 @@
                         (closed)="containerPanelOpened = false">
                         <mat-expansion-panel-header>
                             <mat-panel-title class="text-lg">
-                                <h3 class="font-semibold">Search</h3>
+                                <span class="font-semibold">Search</span>
                             </mat-panel-title>
                             <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
                         </mat-expansion-panel-header>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table [tableColumns]="displaycoloums" [showUnClaim]="false" (unClaim)="confirmUnclaim($event)" 
+        <app-data-table [tableColumns]="displaycoloums" (previewImage)="previewImage($event)" [showUnClaim]="false" (unClaim)="confirmUnclaim($event)" 
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
