@@ -66,12 +66,13 @@
               (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
               Claim 
             </button>
-          </div>
-          <div *ngIf="tableColumn.label === 'Remove'">
-            <button (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
+            <button  *ngIf="!removeArchive" (click)="removeItem(element)"
+            [disabled]="element.status === 'PENDING_PICKUP'" mat-raised-button color="warn" 
+            class="txt-button">
               Remove
             </button>
           </div>
+        
         </div>
       </td>
     </ng-container>

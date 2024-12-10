@@ -54,7 +54,7 @@ export class DataTableComponent<T> {
     this.setTableDataSource(data);
   }
   @Input() showUnClaim:boolean = false
-  @Input() remoceArchive:boolean = false
+  @Input() removeArchive:boolean = false
   @Output() unClaim = new EventEmitter()
   @Output() ClaimItem = new EventEmitter()
   @Output() remove = new EventEmitter()
