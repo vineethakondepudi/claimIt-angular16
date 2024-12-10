@@ -7,11 +7,13 @@ import {MatCardModule} from '@angular/material/card';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatCardModule, NgxDropzoneModule, MatIconModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
@@ -49,6 +51,32 @@ export class OrganizationDialogComponent {
   }
 
   onUploadImage(): void {
+    if (this.files.length > 0 && this.selectedOrgId) {
+      const formData = new FormData();
+      formData.append('image', this.files[0].file);
+      formData.append('orgId', this.selectedOrgId);
+  
+      this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
+        (response) => {
+          console.log('File uploaded successfully:', response);
+          this.isOrganizationSelected = false;
+          this.files = [];
+          
+          // Close the dialog after successful upload
+          this.dialogRef.close();  // This will close the dialog
+        },
+        (error) => {
+          console.error('Error uploading file:', error);
+        }
+      );
+    } else {
+      console.warn('No file selected for upload.');
+    }
+    
+  }
+
+
+  submit(): void {
     if (this.files.length > 0 && this.selectedOrgId) {
       const formData = new FormData();
       formData.append('image', this.files[0].file);

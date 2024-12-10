@@ -80,7 +80,7 @@ export default class RemoveOrArchiveComponent implements OnInit {
       index: 1,
     },
     {
-      label: "Remove",
+      label: "Action",
       name: "remove",
       type: "text",
       isSortable: true,

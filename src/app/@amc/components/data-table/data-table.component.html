@@ -64,9 +64,7 @@
             <button *ngIf="!showUnClaim" (click)="unClaimItem(element)" mat-raised-button color="primary" class="txt-button">
               Claim
             </button>
-          </div>
-          <div *ngIf="tableColumn.label === 'Remove'">
-            <button  (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
+            <button *ngIf="remoceArchive " (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
               Remove
             </button>
           </div>
