@@ -47,11 +47,14 @@
     </div>
 
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table [tableColumns]="displaycoloums" (unClaim)="confirmUnclaim($event)" 
+        <app-data-table [tableColumns]="displaycoloums" [showUnClaim]="false" (unClaim)="confirmUnclaim($event)" 
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
     <div class="flex-none">
         <app-form-footer></app-form-footer>
     </div>
+</div>
+<div *ngIf="loader">
+    <app-loader></app-loader>
 </div>

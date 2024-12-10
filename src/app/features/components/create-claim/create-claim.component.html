@@ -1,0 +1,31 @@
+<div class="flex flex-row items-center justify-between content-center px-3 py-1 bg-transparent">
+    <span class="px-2 text-2xl">
+        {{ data.title }}
+    </span>
+    <button mat-icon-button type="button" (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content align="start" class="mt-2">
+    <form [formGroup]="claimForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Your Name</mat-label>
+                <input formControlName="name" matInput type="text" placeholder="Enter your name" />
+            </mat-form-field>
+
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Email Address</mat-label>
+                <input formControlName="email" matInput type="email" placeholder="Enter your email" />
+                <mat-error *ngIf="email?.touched && email?.hasError('pattern')">Please enter a valid email address.</mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="m-2" *ngIf="data.message !== 'Preview Image' ">
+    <button mat-stroked-button color="warn" class="cancel-button" (click)="onCancel()">
+        cancel
+    </button>
+    <button [disabled]="enableSave" mat-flat-button color="primary" (click)="onSubmit()">Save</button>
+</mat-dialog-actions>
