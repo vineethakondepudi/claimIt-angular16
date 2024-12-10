@@ -89,7 +89,6 @@ export class HeaderComponent {
         { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
         { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
-        { label: 'Charts', route:'/claimt/charts'}
       ];
     } else {
       return [
