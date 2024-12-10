@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormFooterComponent } from '../form-footer/form-footer.component';
+import { FormSubmissionModalComponent } from '../form-submission-modal/form-submission-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contact',
@@ -15,10 +17,11 @@ import { FormFooterComponent } from '../form-footer/form-footer.component';
     FormsModule,
     FormFooterComponent,
     ReactiveFormsModule,
-    MatFormFieldModule, // For mat-form-field
-    MatInputModule, // For matInput
-    MatIconModule, // For mat-icon
-    MatButtonModule, // For mat-raised-button
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
@@ -28,7 +31,7 @@ export default class ContactComponent {
   contactForm!: FormGroup;
   enableSave: boolean = true
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public dialog: MatDialog,) {
 
   }
   ngOnInit() {
@@ -50,7 +53,7 @@ export default class ContactComponent {
         Validators.required,
         Validators.pattern(this.emailRegex),
       ]),
-       message: this.fb.control("")
+      message: this.fb.control("")
     })
   }
   get email() {
@@ -58,5 +61,21 @@ export default class ContactComponent {
   }
   contactUs() {
     console.log(this.contactForm)
+    const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
+      width: "500px",
+      data: {
+        status: 'Success',
+        msg: 'Thank you! Our team will reach out to you shortly.',
+        btnName: "OK",
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.contactForm.reset({
+        name: '',   
+        email: '',   
+        message: ''  
+      });
+      
+    });
   }
 }

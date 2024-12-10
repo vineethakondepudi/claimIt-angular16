@@ -103,12 +103,12 @@ export default class ViewOrUnclaimComponent {
 
   }
   clearResultsIfEmpty() {
-    if (!this.searchQuery.trim()) {
-      this.searchResults = [];
-      this.showNoResults = false;
-    } else {
-      this.search()
-    }
+    // if (!this.searchQuery.trim()) {
+    //   this.searchResults = [];
+    //   this.showNoResults = false;
+    // } else {
+    //   this.search()
+    // }
   }
   SearchAndClear(type: any) {
     if (type === 'clear') {

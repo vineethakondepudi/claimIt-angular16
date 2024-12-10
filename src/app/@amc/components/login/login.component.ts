@@ -8,13 +8,14 @@ import { MatInputModule } from '@angular/material/input';
 import { HeaderComponent } from '../header/header.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule, MatFormFieldModule, HeaderComponent, MatInputModule, MatButtonModule, RouterModule, ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule, MatSnackBarModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -22,8 +23,7 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 export default class LoginComponent {
   loginForm!: FormGroup;
   errMsg: any;
-  itemFamilyRequiredError: boolean = false;
-  itemFamilyRequiredErrorMessage: string = '';
+
   
   constructor(private router: Router, private fb: FormBuilder, private service: ClaimitService) { }
 
@@ -53,17 +53,13 @@ export default class LoginComponent {
             localStorage.setItem('isLogin', 'true');
             localStorage.setItem('role', 'admin');
             this.router.navigate(['/claimit/dashboard']);
-          } else {
+            console.log(response.message,55);
             
-            this.itemFamilyRequiredError = true;
-            this.itemFamilyRequiredErrorMessage = response.message || 'Unauthorized access. Please try again.';
+          } else {
+            console.log(response.message,58);
+           
           }
         },
-        (error) => {
-      
-          this.itemFamilyRequiredError = true;
-          this.itemFamilyRequiredErrorMessage = 'Something went wrong. Please try again later.';
-        }
       );
     }
   }

@@ -10,6 +10,7 @@ export class ClaimitService {
 
   constructor(private http: HttpClient) { }
   public getAllItems(query: any) {
+    // +'?email='+query
     return this.http.get(environment.getAllItems);
   }
   public unClaimItem(query: any) {
@@ -45,6 +46,8 @@ export class ClaimitService {
     return this.http.put(url, {}); 
   }
   
-  
+  public createClaimRequest(REQBODY:any){
+    return this.http.post(environment.createClaimRequest,REQBODY)
+  }
   
 }

@@ -54,8 +54,9 @@ export class DataTableComponent<T> {
     this.setTableDataSource(data);
   }
   @Input() showUnClaim:boolean = false
+  @Input() remoceArchive:boolean = false
   @Output() unClaim = new EventEmitter()
-  @Output() Claim = new EventEmitter()
+  @Output() ClaimItem = new EventEmitter()
   @Output() remove = new EventEmitter()
   @Output() previewImage = new EventEmitter()
   searchKeyword!: string;
@@ -74,7 +75,7 @@ export class DataTableComponent<T> {
   isOpen = false;
   constructor(public readonly router: Router, private datePipe: DatePipe) { }
   ngOnInit() {
-    console.log('showUnClaim',this.showUnClaim)
+    console.log('showUnClaim', this.showUnClaim)
     this.displayedColumns = this.tableColumns.map((col) => col.name);
 
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
@@ -149,7 +150,7 @@ export class DataTableComponent<T> {
       return '#FEF9C3'
     } else if (value === 'UNCLAIMED') {
       return '#F87171'
-    }else if (value === 'Archived') {
+    } else if (value === 'Archived') {
       return '#77a36f'
     }
     else {
@@ -162,13 +163,13 @@ export class DataTableComponent<T> {
   unClaimItem(data: any) {
     this.unClaim.emit(data)
   }
-  ClaimItem(data: any) {
-    this.Claim.emit(data)
-}
-removeItem(data: any) {
-  this.remove.emit(data)
-}
-openPreviewImage(data:any){
-  this.previewImage.emit(data)
-}
+  createClaimItem(data: any) {
+    this.ClaimItem.emit(data)
+  }
+  removeItem(data: any) {
+    this.remove.emit(data)
+  }
+  openPreviewImage(data: any) {
+    this.previewImage.emit(data)
+  }
 }

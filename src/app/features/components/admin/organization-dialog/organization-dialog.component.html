@@ -1,52 +1,54 @@
-<mat-card appearance="outlined">
+<mat-card class="w-full max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
     <mat-card-content>
-      <h2 class="text-lg font-semibold mb-4">Add an Item</h2>
-      <div *ngIf="organizationList.length > 0; else noData">
-        <div class="flex space-x-4">
-          <!-- Dropdown -->
-          <mat-form-field class="flex-1">
-            <mat-label>Select an Organization</mat-label>
-            <mat-select [(value)]="selected" (selectionChange)="onOrganizationSelect($event.value)">
-              <mat-option value="" disabled>Select an option</mat-option>
-              <mat-option *ngFor="let org of organizationList" [value]="org.orgId">
-                {{ org.orgName }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+      <!-- Header Section -->
+      <h2 class="text-xl font-semibold mb-6 text-gray-800">Add an Item</h2>
+      
+      <!-- Divider between Header and Body -->
+      <mat-divider></mat-divider>
   
-          <!-- Drag and Drop -->
-          <ngx-dropzone 
-            class="flex-1 border-dashed border-2 border-gray-300 rounded-md p-4 bg-gray-100"
-            (change)="onSelectFile($event)" 
-            [multiple]="false" 
-            accept="image/*"
-          >
-            <ngx-dropzone-label class="text-gray-500 text-center">
-              Drag and drop image here or click to upload
-            </ngx-dropzone-label>
-            <ngx-dropzone-preview 
-              ngProjectAs="ngx-dropzone-preview" 
-              [removable]="true" 
-              *ngFor="let f of files"
-              [file]="f" 
-              (removed)="onRemove(f)">
-            </ngx-dropzone-preview>
-          </ngx-dropzone>
-        </div>  
-        <button 
-          mat-raised-button 
-          color="primary" 
-          class="mt-4 w-full max-w-sm"
-          [disabled]="!selected || files.length === 0"
-          (click)="onUploadImage()"
-        >
-          <mat-icon>upload</mat-icon>
-          Upload Image
-        </button>
+      <!-- Space between divider and dropdown -->
+      <div class="mt-4">
+        <!-- Body Section -->
+        <div *ngIf="organizationList.length > 0; else noData">
+          <div class="flex flex-col space-y-4">
+            
+            <!-- Dropdown Section -->
+            <div class="w-full">
+                <mat-form-field class="w-full">
+                  <mat-label>Select an Organization</mat-label>
+                  <mat-select [(value)]="selected" [disabled]="true">
+                    <mat-option value="{{ selected }}" disabled>{{ organizationList[0]?.orgName }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+            <!-- Drag-and-Drop Section -->
+            <div class="w-full">
+              <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
+                <ngx-dropzone-label class="text-gray-500 text-center">
+                  Drag and drop an image here or click to upload
+                </ngx-dropzone-label>
+                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f" (removed)="onRemove(f)">
+                </ngx-dropzone-preview>
+              </ngx-dropzone>
+            </div>
+  
+            <!-- Submit Button -->
+            <div class="w-full">
+              <button mat-raised-button color="primary" class="mt-6 w-full" [disabled]="!selected || files.length === 0" (click)="onUploadImage()">
+                <mat-icon>upload</mat-icon>
+                Submit
+              </button>
+            </div>
+            
+          </div>
+        </div>
+  
+        <!-- No Data Template -->
+        <ng-template #noData>
+          <p class="text-gray-500 text-center">No organizations available.</p>
+        </ng-template>
       </div>
-      <ng-template #noData>
-        <p class="text-gray-500">No organizations available.</p>
-      </ng-template>
     </mat-card-content>
   </mat-card>
   
