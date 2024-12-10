@@ -15,6 +15,8 @@ import { FormFooterComponent } from '../form-footer/form-footer.component'
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartType, ChartEvent, Chart, ChartData } from 'chart.js';
 import { MatSelectModule } from '@angular/material/select';
+import Swiper from 'swiper';
+import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 interface CheckIn {
   name: string
   type: string
@@ -54,14 +56,15 @@ export default class DashboardComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   @ViewChild(BaseChartDirective) piechart: BaseChartDirective | undefined;
   role:any
-  constructor(private http: HttpClient, private dialog: MatDialog) {
-    this.role = localStorage.getItem('role');
+  constructor(private http: HttpClient, private dialog: MatDialog, private service: ClaimitService) {
+    this.role =  localStorage.getItem('role');
   }
   public pieChartType: ChartType = 'pie';
   public barChartType: ChartType = 'bar';
   lineChartType: ChartType = 'line';
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
+  swiper: Swiper | undefined;
   searchResults: any= [];
   pieChartLabels = ['Electronics', 'Accessories', 'Documents'];
   pieChartData = {
@@ -69,7 +72,7 @@ export default class DashboardComponent {
     datasets: [
       {
         data: [50, 25, 25],
-        backgroundColor: ['#FF5733', '#33FF57', '#3357FF'], // Customize colors if needed
+        backgroundColor: ['#FF5733', '#33FF57', '#3357FF'], 
       },
     ],
   };
@@ -121,8 +124,13 @@ export default class DashboardComponent {
     ],
   };
   doughnutChartLabels = this.doughnutChartData.labels;
+  countdownTimers: any[] = []; 
   ngOnInit(): void {
     this.startCountdown();
+    this.fetchSlides();
+  }
+  ngOnDestroy(): void {
+    this.countdownTimers.forEach(timer => clearInterval(timer));
   }
   startCountdown() {
     setInterval(() => {
@@ -137,6 +145,44 @@ export default class DashboardComponent {
         }
       });
     }, 1000);
+  }
+
+  startCountdown1(item: any): void {
+    item.remainingTime = this.calculateTimeRemaining(item.foundDate);
+    const timer = setInterval(() => {
+      item.remainingTime = this.calculateTimeRemaining(item.foundDate);
+      if (item.remainingTime === 'Expired') {
+        clearInterval(timer);
+      }
+    }, 1000); 
+    this.countdownTimers.push(timer);
+  }
+  
+
+  ngAfterViewInit() {
+    this.swiper = new Swiper('.swiper-container', {
+      slidesPerView: 3,
+      spaceBetween: 15,
+
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 10,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 15,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+      },
+    });
   }
   formatTime(ms: number): string {
     const days = Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -163,20 +209,64 @@ export default class DashboardComponent {
       description: 'Indian passport with the name John Doe. Misplaced at the airport.'
     }
   ];
+  slides: Array<{ title: string; date: string; description: string; image: string; foundDate:string; remainingTime:any}> = [];
   charityPartners = [
     { name: 'Charity A', description: 'Focus: Education support for underprivileged children.' },
     { name: 'Charity B', description: 'Focus: Food distribution to homeless communities.' },
     { name: 'Charity C', description: 'Focus: Disaster relief and medical aid.' },
   ];
   pendingDonations = [
-    { title: 'Unclaimed Wallet', createdAt: new Date('2024-11-10').getTime(), remainingTime: '' },
+    { title: 'Unclaimed Wallet', createdAt: new Date('2024-11-19').getTime(), remainingTime: '' },
     { title: 'Lost Watch', createdAt: new Date('2024-11-15').getTime(), remainingTime: '' },
   ];
   onSearchInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchQuery = input.value; 
   }
-
+  fetchSlides(): void {
+    const apiUrl = 'http://172.17.12.38:8081/api/users/search';
+    this.http.get<any[]>(apiUrl).subscribe({
+      next: (data) => {
+        this.slides = data.map((item) => {
+          const remainingTime = this.calculateTimeRemaining(item.foundDate);
+  
+          return {
+            title: item.title || 'Untitled',
+            date: item.date || 'Unknown Date',
+            description: item.description || 'No Description',
+            image: item.image || 'https://via.placeholder.com/150',
+            foundDate: item.foundDate || 'Unknown Date',
+            remainingTime: remainingTime
+          };
+        });
+        this.slides.forEach(item => this.startCountdown1(item));
+      },
+      error: (err) => {
+        console.error('Error fetching slides:', err);
+      }
+    });
+  }
+  
+  calculateTimeRemaining(foundedDate: string): string {
+    const foundDate = new Date(foundedDate);
+    const targetDate = new Date(foundDate);
+    targetDate.setDate(foundDate.getDate() + 30); 
+  
+    const now = new Date();
+    const timeDiff = targetDate.getTime() - now.getTime();
+  
+    if (timeDiff <= 0) {
+      return 'Expired';
+    }
+  
+    const days = Math.floor(timeDiff / (1000 * 3600 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 3600 * 24)) / (1000 * 3600));
+    const minutes = Math.floor((timeDiff % (1000 * 3600)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+  
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+  
   openDialog(charity: any): void {
     this.dialog.open(SearchResultsDialogComponent, {
       width: '400px',
