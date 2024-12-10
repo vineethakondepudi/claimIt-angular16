@@ -26,6 +26,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { DataTableComponent } from './@amc/components/data-table/data-table.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { NgChartsModule } from 'ng2-charts';
+
+
+
+
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -57,7 +62,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     MatToolbarModule,
     MatIconModule,
     MatSnackBarModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    NgChartsModule
   ],
   providers: [
     {
@@ -69,3 +75,4 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
