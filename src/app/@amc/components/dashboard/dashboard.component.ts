@@ -12,7 +12,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog'
 import { SearchResultsDialogComponent } from '../search-results-dialog/search-results-dialog.component'
 import { FooterComponent } from '../footer/footer.component'
 import { FormFooterComponent } from '../form-footer/form-footer.component'
-import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartType, ChartEvent, Chart, ChartData } from 'chart.js';
 import { MatSelectModule } from '@angular/material/select';
 interface CheckIn {
@@ -40,7 +40,6 @@ interface Item {
   standalone: true,
   imports: [CommonModule, MatTableModule,MatIconModule,MatCardModule, MatDividerModule, MatToolbarModule,MatDialogModule,
     MatCardModule,
-    NgChartsModule,
     FooterComponent,
     FormFooterComponent,
     MatSelectModule,

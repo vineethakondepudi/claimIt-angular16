@@ -113,6 +113,7 @@ export default class AdditemComponent implements OnInit {
             console.log('Dialog closed without selection.');
             this.isOrganizationSelected = false; 
             this.fetchData();
+            this.loader = true;
             
           }
         });
