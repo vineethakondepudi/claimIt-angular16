@@ -45,6 +45,8 @@ export class ClaimitService {
     return this.http.put(url, {}); 
   }
   
-  
+  public createClaimRequest(REQBODY:any){
+    return this.http.post(environment.createClaimRequest,REQBODY)
+  }
   
 }

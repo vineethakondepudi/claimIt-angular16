@@ -12,13 +12,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { FooterComponent } from 'src/app/@amc/components/footer/footer.component';
 import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
+import { CreateClaimComponent } from '../create-claim/create-claim.component';
+import { ClaimitService } from '../../sharedServices/claimit.service';
+import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
+import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 interface Item {
   itemId: number;
@@ -48,6 +52,8 @@ interface Item {
     MatExpansionModule,
     MatDialogModule,
     DataTableComponent,
+    LoaderComponent,
+    CreateClaimComponent,
     MatProgressSpinnerModule,
     MatExpansionModule,
     NgxDropzoneModule, MatSelectModule, FormsModule, HttpClientModule],
@@ -55,7 +61,6 @@ interface Item {
   styleUrls: ['./search-and-claim.component.scss']
 })
 export default class SearchAndClaimComponent {
-  constructor(private http: HttpClient,private route: ActivatedRoute) {}
   @Input() containerPanelOpened: boolean = false;
   displaycoloums: any[] = [
     {
@@ -103,12 +108,13 @@ export default class SearchAndClaimComponent {
       isChecked: true,
       index: 1,
     },
-    
+
   ]
   itemName: string | null = null;
   files: File[] = [];
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
+  loader:boolean = false
   items: any[] = [];
   searchResults: any = [];
   categeoryerror: boolean = false
@@ -124,6 +130,8 @@ export default class SearchAndClaimComponent {
   categerorydata: any = [];
 
   selectedCategory: string = '';
+  constructor(private http: HttpClient, private route: ActivatedRoute, private matDialog: MatDialog,private claimService:ClaimitService) { }
+
   ngOnInit() {
     // Check if there's an itemId in the query parameters
     this.route.queryParams.subscribe(params => {
@@ -158,10 +166,13 @@ export default class SearchAndClaimComponent {
 
   //categeory integration
   search(): void {
+    this.loader = true
+
     const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${this.selectedCategory}`;
     this.http.get<any[]>(apiUrl).subscribe(
       (data: any) => {
         this.categerorydata = data; // Directly set if it's an array
+        this.loader = false
         console.log(this.categerorydata, 'categerorydata')
         if (this.categerorydata.message.includes('No items found for the search term')) {
           this.categeoryerror = true
@@ -240,5 +251,45 @@ export default class SearchAndClaimComponent {
 
   public onImportToExcel() {
     this.files = []
+  }
+  claimItem(item: Item) {
+    console.log('item', item)
+    const dialogRef = this.matDialog.open(CreateClaimComponent, {
+      width: "500px",
+      height:'250px',
+      data: {
+        requiredData: item,
+        title: 'Request Claim'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      console.log(data,'datadata')
+      if(data){
+        const REQBODY = {
+          userName:data.value.name,
+          userEmail:data.value.email,
+          itemId:item.itemId
+        }
+        this.loader = true
+        this.claimService.createClaimRequest(REQBODY).subscribe((Res:any)=>{
+          console.log(Res)
+          if(Res){
+            const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
+              width: "500px",
+              data: {
+                status:'Success',
+                msg: 'Claim Request Created successfully',
+                btnName: "OK",
+              },
+            });
+            dialogRef.afterClosed().subscribe((result) => {
+              this.loader = true
+              this.search()
+            });
+          }
+        })
+      }
+    });
   }
 }
