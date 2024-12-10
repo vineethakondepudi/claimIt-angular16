@@ -10,7 +10,8 @@ export class ClaimitService {
 
   constructor(private http: HttpClient) { }
   public getAllItems(query: any) {
-    return this.http.get(environment.getAllItems+'?email='+query);
+    // +'?email='+query
+    return this.http.get(environment.getAllItems);
   }
   public unClaimItem(query: any) {
     let filterQuery = Object.fromEntries(Object.entries(query).filter(([k, v]) => v != '' && v != null))
