@@ -141,25 +141,11 @@ export default class RemoveOrArchiveComponent implements OnInit {
   
         this.loader = true;
         this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
-          this.loader = false;
+         
           console.log(145);
-          
-          const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
-            width: "500px",
-            data: {
-              status: 'Success',
-              msg: 'Item unclaimed successfully',
-              btnName: "OK",
-            },
-          });
-     
-          dialogRef.afterClosed().subscribe(() => {
-            // Reset the loader or handle any post-modal actions here
-            this.loader = false;
-                 this.fetchData();
-          });
-        }, (error) => {
+          this.fetchData();
           this.loader = false;
+        }, (error) => {
           console.error('Error removing item:', error);
         });
       }

@@ -8,12 +8,12 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatDividerModule } from "@angular/material/divider";
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
@@ -30,6 +30,10 @@ export class OrganizationDialogComponent {
     private service: ClaimitService
   ) {
     this.organizationList = data.organizationList;
+    if (this.organizationList.length > 0) {
+      this.selected = this.organizationList[0].orgId;
+      this.selectedOrgId = this.selected; 
+    }
   }
 
   onOrganizationSelect(orgId: string): void {
