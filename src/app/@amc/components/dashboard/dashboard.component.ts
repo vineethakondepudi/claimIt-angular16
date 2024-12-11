@@ -18,6 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 import Swiper from 'swiper'
 import { LoaderComponent } from '../loader/loader.component'
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 interface CheckIn {
   name: string
   type: string
@@ -48,6 +50,7 @@ interface Item {
     FormFooterComponent,
     MatSelectModule,
     LoaderComponent,
+    MatTooltipModule,
     MatButtonModule,
     MatInputModule,
     MatIconModule],

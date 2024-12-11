@@ -128,18 +128,18 @@
     <h2 class="text-xl font-bold text-gray-700 mb-4">Recently Reported Items</h2>
     <div class="swiper-wrapper">
       <div class="swiper-slide p-4 flex justify-center items-center" *ngFor="let item of slides">
-        <mat-card class="w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white">
+        <mat-card class="w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer">
           <mat-card-header>
-            <mat-card-title class="text-lg font-semibold text-gray-800">
-              {{ item.title }}
+            <mat-card-title class=" cursor-pointer text-lg font-semibold text-gray-800" matTooltip="{{item.title}}">
+              {{ item.title.slice(0,15) }} <span *ngIf="item.title.length>15">....</span>
             </mat-card-title>
-            <mat-card-subtitle class="text-sm text-gray-500">
+            <mat-card-subtitle class="text-sm text-gray-500 cursor-pointer">
               Reported on: {{ item.foundDate | date: 'MM/dd/yyyy' }}
             </mat-card-subtitle>
             
           </mat-card-header>
           <mat-card-content>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center cursor-pointer">
               <img
                 [src]="'data:image/jpeg;base64,' + item.image"
                 alt="{{ item.title }}"
