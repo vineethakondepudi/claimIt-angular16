@@ -16,6 +16,8 @@ import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartType, ChartEvent, Chart, ChartData } from 'chart.js';
 import { MatSelectModule } from '@angular/material/select';
 import Swiper from 'swiper'
+import { LoaderComponent } from '../loader/loader.component'
+import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 interface CheckIn {
   name: string
   type: string
@@ -45,6 +47,7 @@ interface Item {
     FooterComponent,
     FormFooterComponent,
     MatSelectModule,
+    LoaderComponent,
     MatButtonModule,
     MatInputModule,
     MatIconModule],
@@ -55,7 +58,7 @@ export default class DashboardComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   @ViewChild(BaseChartDirective) piechart: BaseChartDirective | undefined;
   role:any
-  constructor(private http: HttpClient, private dialog: MatDialog) {
+  constructor(private claimService: ClaimitService,private http:HttpClient, private dialog: MatDialog) {
     this.role = localStorage.getItem('role');
   }
   public pieChartType: ChartType = 'pie';
@@ -64,6 +67,8 @@ export default class DashboardComponent {
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
   swiper: Swiper | undefined;
+  loader:boolean=false;
+
   searchResults: any= [];
   pieChartLabels = ['Electronics', 'Accessories', 'Documents'];
   pieChartData = {
@@ -208,8 +213,8 @@ export default class DashboardComponent {
       description: 'Indian passport with the name John Doe. Misplaced at the airport.'
     }
   ];
-  slides: Array<{ title: string; date: string; description: string; image: string; foundDate:string; remainingTime:any}> = [];
-  charityPartners = [
+  slides: any;
+   charityPartners = [
     { name: 'Charity A', description: 'Focus: Education support for underprivileged children.' },
     { name: 'Charity B', description: 'Focus: Food distribution to homeless communities.' },
     { name: 'Charity C', description: 'Focus: Disaster relief and medical aid.' },
@@ -223,10 +228,11 @@ export default class DashboardComponent {
     this.searchQuery = input.value; 
   }
   fetchSlides(): void {
+    this.loader = true
     const apiUrl = 'http://172.17.12.38:8081/api/users/search';
-    this.http.get<any[]>(apiUrl).subscribe({
-      next: (data) => {
-        this.slides = data.map((item) => {
+    this.claimService.getUSerSlides().subscribe({
+      next: (data:any) => {
+        this.slides = data.map((item:any) => {
           const remainingTime = this.calculateTimeRemaining(item.foundDate);
   
           return {
@@ -238,7 +244,8 @@ export default class DashboardComponent {
             remainingTime: remainingTime
           };
         });
-        this.slides.forEach(item => this.startCountdown1(item));
+        this.slides.forEach((item:any) => this.startCountdown1(item));
+        this.loader = false
       },
       error: (err) => {
         console.error('Error fetching slides:', err);

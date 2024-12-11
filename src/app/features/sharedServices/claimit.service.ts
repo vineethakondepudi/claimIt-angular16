@@ -51,5 +51,7 @@ export class ClaimitService {
   public createClaimRequest(REQBODY: any) {
     return this.http.post(environment.createClaimRequest, REQBODY)
   }
-
+  public getUSerSlides() {
+    return this.http.get(environment.userSlides)
+  }
 }
