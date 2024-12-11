@@ -30,10 +30,11 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         console.log('url ', request.url);
-        
+        console.log('Intercepted Error:', error); 
         let errorMessage = "";
         if (error.error instanceof ErrorEvent) {
           console.log("This is client side error");
@@ -75,7 +76,7 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
               errorMessage = STATUS_503;
               break;
             default:
-              errorMessage = STATUS_UNkNOWN;
+              errorMessage = `Server-side Error: ${error.message}`;
               break;
           }
         }
