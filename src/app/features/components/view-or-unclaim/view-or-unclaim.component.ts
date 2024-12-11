@@ -60,7 +60,7 @@ export default class ViewOrUnclaimComponent {
     },
     {
       label: "Status",
-      name: "claimStatus",
+      name: "status",
       type: "text",
       isSortable: true,
       position: "left",
@@ -97,7 +97,7 @@ export default class ViewOrUnclaimComponent {
     const query = this.searchQuery.trim();
     this.service.getAllItems(query).subscribe((res: any) => {
       console.log('res', res)
-      this.searchResults = res.claimHistory
+      this.searchResults = res.claimHistory.concat(res.itemRequests)
       this.loader = false
     })
 
