@@ -9,13 +9,14 @@ import { HeaderComponent } from '../header/header.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule, MatFormFieldModule, HeaderComponent, MatInputModule, MatButtonModule, RouterModule, ReactiveFormsModule,
-    MatCheckboxModule, MatSnackBarModule
+    MatCheckboxModule, MatSnackBarModule, MatIconModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -23,6 +24,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 export default class LoginComponent {
   loginForm!: FormGroup;
   errMsg: any;
+  hidePassword = true;
 
   
   constructor(private router: Router, private fb: FormBuilder, private service: ClaimitService) { }
@@ -42,6 +44,9 @@ export default class LoginComponent {
     return this.loginForm.get('password');
   }
 
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+  }
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
