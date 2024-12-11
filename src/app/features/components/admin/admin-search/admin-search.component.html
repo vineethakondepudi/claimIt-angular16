@@ -1,0 +1,85 @@
+<div class="min-h-screen flex flex-col">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] ">
+        <div @fadeInRight class="flex flex-row justify-between px-5">
+            <div class="flex flex-col">
+                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
+            </div>
+        </div>
+        <div class="flex-grow px-5">
+            <mat-card class="w-full">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle [expanded]="false" (opened)="containerPanelOpened = true"
+                        (closed)="containerPanelOpened = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="text-lg">
+                                <span class="font-semibold">Search</span>
+                            </mat-panel-title>
+                            <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
+                        </mat-expansion-panel-header>
+                        <div class="flex flex-wrap items-center gap-5">
+                            <!-- Input Field -->
+                            <mat-form-field appearance="outline" class="flex-auto">
+                                <mat-label>Email</mat-label>
+                                <input matInput type="text" placeholder="Email" [(ngModel)]="searchQuery"
+                                    (keyup.enter)="search()" (input)="clearResultsIfEmpty()" />
+                                <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="flex-auto">
+                                <mat-label>From</mat-label>
+                                <input matInput required [matDatepicker]="fromPicker" (dateChange)="dateFilter($event)"/>
+                                <mat-datepicker-toggle
+                                  matIconSuffix
+                                  [for]="fromPicker"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #fromPicker></mat-datepicker>
+                              </mat-form-field>
+                              <mat-form-field appearance="outline" class="flex-auto">
+                                <mat-label>To</mat-label>
+                                <input matInput required [matDatepicker]="toPicker" (dateChange)="dateFilter($event)"/>
+                                <mat-datepicker-toggle
+                                  matIconSuffix
+                                  [for]="toPicker"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                              </mat-form-field>
+                            <mat-form-field appearance="outline" class="flex-auto">
+                                <mat-label>Status</mat-label>
+                                <mat-select class="custom-mat-input">
+                                    <mat-option *ngFor="let options of statusDropDown"
+                                        [value]="options.value">{{ options.value }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!-- Buttons Container -->
+                            <div class="flex flex-row justify-end gap-2 ml-auto">
+                                <button mat-button color="warn" (click)="SearchAndClear('clear')"
+                                    class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
+                                    Clear
+                                </button>
+                                <button mat-flat-button color="primary" (click)="SearchAndClear('search')"
+                                    class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-card>
+        </div>
+    </div>
+
+    <div class="flex-grow mt-14 mx-3">
+        <app-data-table [tableColumns]="displaycoloums" (previewImage)="previewImage($event)" [showUnClaim]="false"
+            [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        </app-data-table>
+    </div>
+    <div class="flex-none">
+        <app-form-footer></app-form-footer>
+    </div>
+</div>
+<div *ngIf="loader">
+    <app-loader></app-loader>
+</div>

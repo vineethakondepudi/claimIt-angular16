@@ -45,6 +45,11 @@ const routes: Routes = [
         path: 'removeOrArchive',
         loadComponent: () => import('./features/components/admin/remove-or-archive/remove-or-archive.component')
       },
+      {
+        title:'admin search | claimit',
+        path:'search',
+        loadComponent:()=> import('./features/components/admin/admin-search/admin-search.component')
+      }
     ]
   },
 
