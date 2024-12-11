@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -26,6 +26,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatCardModule,
     MatIconModule,
     MatSelectModule,
+    ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
     DataTableComponent,
@@ -49,8 +50,18 @@ export default class AdminSearchComponent {
   searchQuery: string = '';
   searchResults: any = [];
   showNoResults: boolean = true;
+  adminSearch!:FormGroup
   loader: boolean = true;
   displaycoloums: any = [
+    {
+      label: "Item Id",
+      name: "itemId",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
     {
       label: "Image",
       name: "image",
@@ -70,8 +81,8 @@ export default class AdminSearchComponent {
       index: 1,
     },
     {
-      label: "claim Date",
-      name: "claimDate",
+      label: "Found Date",
+      name: "foundDate",
       type: "date",
       isSortable: true,
       position: "left",
@@ -79,31 +90,48 @@ export default class AdminSearchComponent {
       index: 1,
     },
     {
-      label: "Action",
-      name: "action",
-      type: "text",
+      label: "Received Date",
+      name: "receivedDate",
+      type: "date",
       isSortable: true,
       position: "left",
       isChecked: true,
       index: 1,
-    },
+    }
   ]
   public statusDropDown: any = [
     { label: 'PENDING_PICKUP', value: 'PENDING PICKUP' },
     { label: 'CLAIMED', value: 'CLAIMED' },
     { label: 'UNCLAIMED', value: 'UNCLAIMED' },
   ]
-  constructor(public dialog: MatDialog, private service: ClaimitService) {
+  constructor(public dialog: MatDialog, private service: ClaimitService,private fb:FormBuilder,private dp:DatePipe) {
 
   }
   ngOnInit() {
+    this.initializeAdminForm()
     this.search()
   }
+  initializeAdminForm(){
+    this.adminSearch= this.fb.group({
+      email:(''),
+      from:(''),
+      to:(''),
+      status:('')
+    })
+  }
   search() {
-    const query = this.searchQuery.trim();
-    this.service.getAllItems(query).subscribe((res: any) => {
+    this.loader = true
+    const reqbody = {
+      mail:this.adminSearch.value.email ?this.adminSearch.value.email:'',
+      status:this.adminSearch.value.status?this.adminSearch.value.status:'',
+      to:this.adminSearch.value.to?this.dp.transform(this.adminSearch.value.to,'yyyy-m-dd'):'',
+      from:this.adminSearch.value.from?this.dp.transform(this.adminSearch.value.from,'yyyy-m-dd') :''
+    }     
+
+    console.log('reqbody',reqbody)
+    this.service.adminSearch(reqbody).subscribe((res: any) => {
       console.log('res', res)
-      this.searchResults = res.claimHistory.concat(res.itemRequests)
+      this.searchResults = res
       this.loader = false
     })
 
@@ -112,8 +140,12 @@ export default class AdminSearchComponent {
 
   SearchAndClear(type: any) {
     if (type === 'clear') {
+      this.loader = true
       this.searchResults = [];
       this.showNoResults = false;
+      this.adminSearch.reset()
+      this.search()
+
     } else {
       this.search()
     }
