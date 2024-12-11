@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,7 +10,7 @@ import { FormFooterComponent } from '../form-footer/form-footer.component';
 @Component({
   selector: 'app-help-center',
   standalone: true,
-  imports: [CommonModule, FormFooterComponent, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule],
+  imports: [CommonModule, FormFooterComponent, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule],
   templateUrl: './help-center.component.html',
   styleUrls: ['./help-center.component.scss']
 })
