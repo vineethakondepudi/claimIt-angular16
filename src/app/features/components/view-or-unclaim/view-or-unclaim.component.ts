@@ -97,7 +97,7 @@ export default class ViewOrUnclaimComponent {
     const query = this.searchQuery.trim();
     this.service.getAllItems(query).subscribe((res: any) => {
       console.log('res', res)
-      this.searchResults = res
+      this.searchResults = res.claimHistory
       this.loader = false
     })
 
