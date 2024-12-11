@@ -151,7 +151,7 @@ export default class SearchAndClaimComponent {
   }
   //itemsearch integration code 
   searchItems() {
-    if (this.searchQuery.trim()) {
+    if (this.searchQuery.trim() !== '') {
       const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
 
       this.http.get<Item[]>(apiUrl).subscribe(
@@ -161,7 +161,6 @@ export default class SearchAndClaimComponent {
         (error: any) => {
         }
       );
-    } else {
     }
   }
 
@@ -188,6 +187,7 @@ export default class SearchAndClaimComponent {
   }
   SearchAndClear(type: any) {
     if (type === 'clear') {
+      this.searchQuery = '';
       this.searchResults = [];
     } else {
 

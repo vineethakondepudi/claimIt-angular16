@@ -66,8 +66,8 @@ export class OrganizationDialogComponent {
           this.isOrganizationSelected = false;
           this.files = [];
           
-          // Close the dialog after successful upload
-          this.dialogRef.close();  // This will close the dialog
+         
+          this.dialogRef.close();  
         },
         (error) => {
           console.error('Error uploading file:', error);
@@ -91,9 +91,7 @@ export class OrganizationDialogComponent {
           console.log('File uploaded successfully:', response);
           this.isOrganizationSelected = false;
           this.files = [];
-          
-          // Close the dialog after successful upload
-          this.dialogRef.close();  // This will close the dialog
+          this.dialogRef.close();  
         },
         (error) => {
           console.error('Error uploading file:', error);
