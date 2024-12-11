@@ -64,7 +64,7 @@ export class SearchResultsDialogComponent {
       index: 4,
     },
     {
-      label: "ActionClaim",
+      label: "Action",
       name: "action",
       type: "text",
       isSortable: true,
