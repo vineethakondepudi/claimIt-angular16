@@ -1,0 +1,50 @@
+<div class="bg-gray-50 p-6 md:p-12">
+    <div class="text-center bg-teal-600 text-white py-12 rounded-lg shadow-md">
+      <h1 class="text-4xl font-bold mb-4">Need Help?</h1>
+      <p class="text-lg">We're here to assist you! Find answers or submit a request for further help.</p>
+    </div>
+    <div class="mt-12">
+      <h2 class="text-3xl font-semibold text-center mb-6">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="p-6 bg-white shadow rounded-lg">
+          <h2 class="text-xl font-semibold mb-2">How do I claim my lost items?</h2>
+          <p>To claim your lost items, search for them on our platform, and provide necessary details and proof.</p>
+        </div>
+        <div class="p-6 bg-white shadow rounded-lg">
+          <h2 class="text-xl font-semibold mb-2">What happens if my lost item is unclaimed?</h2>
+          <p>If your lost item is not claimed within a certain period, it will be donated to charity.</p>
+        </div>
+      </div>
+    </div>
+    <div class="mt-12 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow">
+      <h2 class="text-3xl font-semibold text-center mb-6">Submit a Request</h2>
+      <form >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Your Name</mat-label>
+            <input formControlName="name" matInput type="text" placeholder="Enter your name" />
+          </mat-form-field>
+  
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input formControlName="email" matInput type="email" placeholder="Enter your email" />
+            <mat-error *ngIf="email?.touched && email?.hasError('pattern')">Please enter a valid email address.</mat-error>
+          </mat-form-field>
+        </div>
+  
+        <mat-form-field class="w-full mt-6" appearance="outline">
+          <mat-label>Your Request</mat-label>
+          <textarea formControlName="request" matInput rows="5" placeholder="Describe your issue or request"></textarea>
+        </mat-form-field>
+  
+        <div class="text-center mt-6">
+          <button [disabled]="enableSave" mat-raised-button color="primary" class="px-8 py-2 text-lg" (click)="submitRequest()">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="flex-none">
+    <app-form-footer></app-form-footer>
+  </div>
+  

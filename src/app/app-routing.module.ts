@@ -26,6 +26,11 @@ const routes: Routes = [
         loadComponent:()=>import('./@amc/components/contact/contact.component')
       },
       {
+        title:'About | ClaimIT',
+        path:'help',
+        loadComponent:()=>import('./@amc/components/help-center/help-center.component')
+      },
+      {
         title: 'viewOrUnclaim | claimit',
         path: 'viewOrUnclaim',
         loadComponent: () => import('./features/components/view-or-unclaim/view-or-unclaim.component')
