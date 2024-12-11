@@ -18,6 +18,9 @@ import { MatSelectModule } from '@angular/material/select';
 import Swiper from 'swiper'
 import { LoaderComponent } from '../loader/loader.component'
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
+import { FormsModule } from '@angular/forms'
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 interface CheckIn {
   name: string
   type: string
@@ -48,7 +51,9 @@ interface Item {
     FormFooterComponent,
     MatSelectModule,
     LoaderComponent,
+    MatTooltipModule,
     MatButtonModule,
+    FormsModule,
     MatInputModule,
     MatIconModule],
   templateUrl: './dashboard.component.html',
@@ -80,7 +85,20 @@ export default class DashboardComponent {
       },
     ],
   };
+  donationHistory = [
+    { item: 'Lost Wallet', donationDate: new Date('2024-12-15'), charity: 'ABC Charity' },
+    { item: 'Found Phone', donationDate: new Date('2024-12-18'), charity: 'XYZ Charity' },
+    { item: 'Lost Jacket', donationDate: new Date('2024-12-22'), charity: 'DEF Charity' },
+  ];
+  newExperience = {
+    text: '',
+    author: ''
+  };
 
+  experiences = [
+    { text: 'I lost my wallet at a park and found it thanks to this platform. A lifesaver!', author: 'Poonam Gupta' },
+    { text: 'I was able to return a found phone to its owner. Amazing experience!', author: 'Krishna Vedantam' }
+  ];
   barChartData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
@@ -135,6 +153,13 @@ export default class DashboardComponent {
   }
   ngOnDestroy(): void {
     this.countdownTimers.forEach(timer => clearInterval(timer));
+  }
+  addExperience() {
+    if (this.newExperience.text && this.newExperience.author) {
+      this.experiences.push({ ...this.newExperience });
+      this.newExperience.text = '';
+      this.newExperience.author = '';
+    }
   }
   startCountdown() {
     setInterval(() => {
