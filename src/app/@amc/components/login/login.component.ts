@@ -70,6 +70,7 @@ export default class LoginComponent {
             localStorage.setItem('isLogin', 'true');
             localStorage.setItem('role', 'admin');
             this.router.navigate(['/claimit/dashboard']);
+            this.service.loginResponse.next(true)
           } else {
             console.log('Failure:', response.message, 77);
             this.showToast(response.message);
@@ -87,6 +88,9 @@ export default class LoginComponent {
     localStorage.setItem('isLogin', 'true');
     localStorage.setItem('role', 'user');
     this.router.navigate(['/claimit/dashboard']);
+    console.log('user');
+    
+    this.service.loginResponse.next(true)
   }
   
 }

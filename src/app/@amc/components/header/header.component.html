@@ -13,7 +13,7 @@
     </div>
     <div class="mt-1 -ml-2">
       <mat-list class="mt-24">
-        <span *ngFor="let item of getMenuItems()">
+        <span *ngFor="let item of menuItems">
           <mat-list-item (click)="router.navigateByUrl(item.route)">
             <span class="flex h-10 rounded cursor-pointer px-2 py-1" (click)="router.navigateByUrl(item.route)"
               [class.active-button]="isTabActive(item.route)">

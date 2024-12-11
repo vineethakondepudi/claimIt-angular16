@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { APP_NAME, OWNER_NAME } from '../../constants/application.details';
+import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -42,7 +43,6 @@ export class HeaderComponent {
   customerName = OWNER_NAME
   applicationName = APP_NAME
   @Input() hideMenu: boolean | undefined;
-
   authSuccess: boolean = true;
   showReports: boolean = false;
   opened: boolean = true;
@@ -50,15 +50,19 @@ export class HeaderComponent {
   userRole: string | null = '';
   menuItems: any[] = [];
 
-  constructor(public router: Router, private route: ActivatedRoute) {
-    this.userRole = localStorage.getItem('role');
+  constructor(public router: Router, private route: ActivatedRoute,private service:ClaimitService) {
+    this.service.loginResponse_Triggered.subscribe((res:any)=>{
+      console.log(res)
+      this.userRole = localStorage.getItem('role');
+      this.getMenuItems()
+
+    })
     this.route.queryParamMap.subscribe((params) => {
       this.param = params.get('type');
     });
     window.addEventListener('storage', this.onStorageChange.bind(this));
   }
   ngOnInit() {
-    this.getMenuItems()
   }
 
   @HostListener('window:resize', ['$event'])
@@ -72,7 +76,6 @@ export class HeaderComponent {
 
   public isTabActive(tab: string): boolean {
     const currentUrl = this.router.url;
-    this.getMenuItems();
     const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim','/claimit/about','/claimit/contact']
     if (tabRoutes[tab]) {
       return tabRoutes[tab].some((route: string) => currentUrl.startsWith(route));
@@ -81,17 +84,19 @@ export class HeaderComponent {
   }
 
   getMenuItems() {
-    this.userRole = localStorage.getItem('role');
+    // this.userRole = localStorage.getItem('role');
+    console.log('menuuuuuu');
+    
     if (this.userRole === 'admin') {
 
-      return [
+     this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
         { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
       ];
     } else {
-      return [
+      this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
         { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
