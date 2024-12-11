@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,9 @@ export default class LoginComponent {
   hidePassword = true;
 
   
-  constructor(private router: Router, private fb: FormBuilder, private service: ClaimitService) { }
+  constructor(private router: Router, private fb: FormBuilder, private service: ClaimitService,
+              private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -47,27 +50,39 @@ export default class LoginComponent {
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
   }
-  onSubmit() {
+
+  showToast(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000, 
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+  
+  onSubmit() { 
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-
+  
       this.service.adminLogin(email, password).subscribe(
         (response: any) => {
-        
+          console.log('API Response:', response, 69);
           if (response.isAdmin) {
             localStorage.setItem('isLogin', 'true');
             localStorage.setItem('role', 'admin');
             this.router.navigate(['/claimit/dashboard']);
-            console.log(response.message,55);
-            
           } else {
-            console.log(response.message,58);
-           
+            console.log('Failure:', response.message, 77);
+            this.showToast(response.message);
           }
         },
+        (error: any) => {
+          this.showToast(error.message || 'An unexpected error occurred.');
+        }
       );
     }
   }
+  
+  
   userNavigate(){
     localStorage.setItem('isLogin', 'true');
     localStorage.setItem('role', 'user');
