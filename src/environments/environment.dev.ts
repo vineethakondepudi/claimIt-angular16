@@ -7,5 +7,6 @@ export const environment = {
     organizationList:'http://172.17.12.38:8081/api/admin/listOfOrganisation',
     adminUploadItem:'http://172.17.12.38:8081/api/admin/upload',
     adminRemoveItem:'http://172.17.12.38:8081/api/admin/archive-expired-items',
-    createClaimRequest:'http://172.17.12.38:8081/api/admin/popup-claim'
+    createClaimRequest:'http://172.17.12.38:8081/api/admin/popup-claim',
+    userSlides:'http://172.17.12.38:8081/api/users/search'
   };
