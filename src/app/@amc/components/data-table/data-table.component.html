@@ -58,7 +58,7 @@
           </div>
           <div *ngIf="tableColumn.label === 'Action'">
             <button *ngIf="!removeArchive && !showUnClaim" (click)="unClaimItem(element)"
-              [disabled]="element.claimStatus !== 'PENDING_PICKUP'" mat-raised-button color="primary"
+              [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary"
               class="txt-button">
               UnClaim
             </button>
