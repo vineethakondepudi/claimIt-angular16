@@ -47,7 +47,7 @@
         <button [routerLink]="'/claimit/contact'" [class.active-top-button]="isTabActive('/claimit/contact')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Contact">
           <mat-icon class="mr-1" [class.active-top-button]="isTabActive('/claimit/contact')">phone</mat-icon>
         </button>
-        <button class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Help">
+        <button [routerLink]="'/claimit/help'" [class.active-top-button]="isTabActive('/claimit/help')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Help">
           <mat-icon class="mr-1">help</mat-icon>
         </button>
         <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Admin Login" (click)="logout()">
