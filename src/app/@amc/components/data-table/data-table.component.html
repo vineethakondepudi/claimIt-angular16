@@ -57,21 +57,22 @@
             </div>
           </div>
           <div *ngIf="tableColumn.label === 'Action'">
-            <button *ngIf="!showUnClaim " (click)="unClaimItem(element)"
+            <button *ngIf="!removeArchive && !showUnClaim" (click)="unClaimItem(element)"
               [disabled]="element.claimStatus !== 'PENDING_PICKUP'" mat-raised-button color="primary"
               class="txt-button">
               UnClaim
             </button>
-            <button [disabled]="element.status !== 'UNCLAIMED'" *ngIf="showUnClaim"
+            <button [disabled]="element.status !== 'UNCLAIMED'"   *ngIf="!removeArchive && showUnClaim"
               (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
               Claim 
             </button>
-          </div>
-          <div *ngIf="tableColumn.label === 'Remove'">
-            <button (click)="removeItem(element)" mat-raised-button color="warn" class="txt-button">
+            <button  *ngIf="removeArchive" (click)="removeItem(element)"
+            [disabled]="element.status === 'PENDING_PICKUP'" mat-raised-button color="warn" 
+            class="txt-button">
               Remove
             </button>
           </div>
+        
         </div>
       </td>
     </ng-container>
