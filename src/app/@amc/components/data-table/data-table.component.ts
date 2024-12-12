@@ -60,6 +60,8 @@ export class DataTableComponent<T> {
   @Output() ClaimItem = new EventEmitter()
   @Output() remove = new EventEmitter()
   @Output() previewImage = new EventEmitter()
+  @Output() approveClaim = new EventEmitter()
+  @Output() rejectClaim = new EventEmitter()
   searchKeyword!: string;
   enableFilter = false;
   dataSource: any; // Variable to hold JSON data
@@ -169,6 +171,12 @@ export class DataTableComponent<T> {
   }
   removeItem(data: any) {
     this.remove.emit(data)
+  }
+  approveClaimReq(data:any){
+    this.approveClaim.emit(data)
+  }
+  rejectClaimReq(data:any){
+    this.rejectClaim.emit(data)
   }
   openPreviewImage(data: any) {
     this.previewImage.emit(data)
