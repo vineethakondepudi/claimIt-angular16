@@ -81,18 +81,19 @@ export default class AdminSearchComponent {
       index: 1,
     },
     {
-      label: "Found Date",
-      name: "foundDate",
+      label: "Received Date",
+      name: "receivedDate",
       type: "date",
       isSortable: true,
       position: "left",
       isChecked: true,
       index: 1,
-    },
+    }
+    ,
     {
-      label: "Received Date",
-      name: "receivedDate",
-      type: "date",
+      label: "Action",
+      name: "action",
+      type: "text",
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -128,9 +129,7 @@ export default class AdminSearchComponent {
       from:this.adminSearch.value.from?this.dp.transform(this.adminSearch.value.from,'yyyy-m-dd') :''
     }     
 
-    console.log('reqbody',reqbody)
     this.service.adminSearch(reqbody).subscribe((res: any) => {
-      console.log('res', res)
       this.searchResults = res
       this.loader = false
     })
@@ -152,7 +151,6 @@ export default class AdminSearchComponent {
 
   }
   previewImage(event: any) {
-    console.log(event)
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
@@ -168,5 +166,83 @@ export default class AdminSearchComponent {
 
   }
   public dateFilter(date: any) {
+  }
+  confirmRemove(event: any) {
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        message: 'Are you sure you want to remove this item?',
+        title: 'Remove'
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      if (confirmed === 'yes') {
+        // Use itemId here instead of claimId
+        const params = {
+          itemId: event.itemId // Pass itemId to the service
+        };
+  
+        this.loader = true;
+        this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
+          this.search();
+          this.loader = false;
+        }, (error) => {
+          console.error('Error removing item:', error);
+        });
+      }
+    });
+  }
+  approveClaim(event:any){
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        message: 'Are you sure you want to approve this claim?',
+        title: 'Approve Claim'
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      if (confirmed === 'yes') {
+        // Use itemId here instead of claimId
+        const params = {
+          itemId: event.itemId // Pass itemId to the service
+        };
+  
+        // this.loader = true;
+        // this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
+        //   this.search();
+        //   this.loader = false;
+        // }, (error) => {
+        //   console.error('Error removing item:', error);
+        // });
+      }
+    });
+  }
+  rejectClaim(event:any){
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        message: 'Are you sure you want to reject this claim?',
+        title: 'Reject Claim'
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      if (confirmed === 'yes') {
+        // Use itemId here instead of claimId
+        const params = {
+          itemId: event.itemId // Pass itemId to the service
+        };
+  
+        // this.loader = true;
+        // this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
+        //   this.search();
+        //   this.loader = false;
+        // }, (error) => {
+        //   console.error('Error removing item:', error);
+        // });
+      }
+    });
   }
 }
