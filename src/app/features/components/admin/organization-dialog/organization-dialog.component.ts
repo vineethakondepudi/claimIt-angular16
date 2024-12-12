@@ -101,5 +101,10 @@ export class OrganizationDialogComponent {
       console.warn('No file selected for upload.');
     }
   }
+
+  onCloseDialog(): void {
+    this.dialogRef.close();
+  }
+  
   
 }

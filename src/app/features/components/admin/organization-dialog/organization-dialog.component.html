@@ -1,4 +1,10 @@
-<mat-card class="w-full max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+<mat-card class="w-full max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+  <button
+  class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center border border-red-500 rounded-full text-red-500 hover:bg-red-100 focus:outline-none"
+  (click)="onCloseDialog()"
+>
+  <mat-icon>close</mat-icon>
+</button>
     <mat-card-content>
       <h2 class="text-xl font-semibold mb-6 text-gray-800">Add an Item</h2>
       <mat-divider></mat-divider>
