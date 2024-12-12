@@ -57,22 +57,31 @@
             </div>
           </div>
           <div *ngIf="tableColumn.label === 'Action'">
-            <button *ngIf="!removeArchive && !showUnClaim" (click)="unClaimItem(element)"
-              [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary"
-              class="txt-button">
+            <button *ngIf="!removeArchive && !showUnClaim && !adminActions" (click)="unClaimItem(element)"
+              [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary" class="txt-button">
               UnClaim
             </button>
-            <button [disabled]="element.status !== 'UNCLAIMED'"   *ngIf="!removeArchive && showUnClaim"
+            <button [disabled]="element.status !== 'UNCLAIMED'" *ngIf="!removeArchive && showUnClaim"
               (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
-              Claim 
+              Claim
             </button>
-            <button  *ngIf="removeArchive" (click)="removeItem(element)"
-            [disabled]="element.status === 'PENDING_PICKUP'" mat-raised-button color="warn" 
-            class="txt-button">
+            <button *ngIf="removeArchive" (click)="removeItem(element)" [disabled]="element.status === 'PENDING_PICKUP'"
+              mat-raised-button color="warn" class="txt-button">
               Remove
             </button>
+            <div *ngIf="adminActions">
+              <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" matTooltip=""
+                matTooltipHideDelay="100">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+               <mat-menu #menu="matMenu" (click)="$event.stopPropagation()">
+                <span>Approve</span>
+                <span>Reject</span>
+                <span *ngIf="element.status === 'PENDING_PICKUP'">Remove</span>
+              </mat-menu>
+            </div>
           </div>
-        
+
         </div>
       </td>
     </ng-container>

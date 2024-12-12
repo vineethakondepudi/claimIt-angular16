@@ -55,6 +55,7 @@ export class DataTableComponent<T> {
   }
   @Input() showUnClaim:boolean = false
   @Input() removeArchive:boolean = false
+  @Input() adminActions:boolean = false
   @Output() unClaim = new EventEmitter()
   @Output() ClaimItem = new EventEmitter()
   @Output() remove = new EventEmitter()
