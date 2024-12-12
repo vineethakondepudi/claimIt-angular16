@@ -178,21 +178,23 @@ export default class AdminSearchComponent {
   
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
-        // Use itemId here instead of claimId
-        const params = {
-          itemId: event.itemId // Pass itemId to the service
-        };
-  
+        const itemId = event.itemId; // Ensure itemId is correctly extracted
+        console.log('ItemId being removed:', itemId); // Debug log for itemId
         this.loader = true;
-        this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
-          this.search();
-          this.loader = false;
-        }, (error) => {
-          console.error('Error removing item:', error);
-        });
+        this.service.adminRemoveItem(itemId).subscribe(
+          (res: any) => {
+            console.log('Remove success response:', res); // Debug success
+            this.search(); // Refresh the data table
+            this.loader = false;
+          },
+          (error) => {
+            console.error('Error removing item:', error); // Debug API error
+          }
+        );
       }
     });
   }
+  
   approveClaim(event:any){
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",

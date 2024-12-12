@@ -81,7 +81,7 @@
                 <button mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
                   Reject
                 </button><br><br>
-                <button [disabled]="element.status === 'PENDING_PICKUP'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
+                <button [disabled]="element.status !== 'UNCLAIMED'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
                   Remove
                 </button>
               </mat-menu>
