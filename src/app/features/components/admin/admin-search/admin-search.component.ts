@@ -50,7 +50,7 @@ export default class AdminSearchComponent {
   searchQuery: string = '';
   searchResults: any = [];
   showNoResults: boolean = true;
-  adminSearch!:FormGroup
+  adminSearch!: FormGroup
   loader: boolean = true;
   displaycoloums: any = [
     {
@@ -101,36 +101,39 @@ export default class AdminSearchComponent {
     }
   ]
   public statusDropDown: any = [
+    { label: 'REJECTED', value: 'REJECTED' },
+    { label: 'PENDING_APPROVAL', value: 'PENDING APPROVAL' },
     { label: 'PENDING_PICKUP', value: 'PENDING PICKUP' },
     { label: 'CLAIMED', value: 'CLAIMED' },
     { label: 'UNCLAIMED', value: 'UNCLAIMED' },
   ]
-  constructor(public dialog: MatDialog, private service: ClaimitService,private fb:FormBuilder,private dp:DatePipe) {
+  constructor(public dialog: MatDialog, private service: ClaimitService, private fb: FormBuilder, private dp: DatePipe) {
 
   }
   ngOnInit() {
     this.initializeAdminForm()
     this.search()
   }
-  initializeAdminForm(){
-    this.adminSearch= this.fb.group({
-      email:(''),
-      from:(''),
-      to:(''),
-      status:('')
+  initializeAdminForm() {
+    this.adminSearch = this.fb.group({
+      email: (''),
+      from: (''),
+      to: (''),
+      status: ('')
     })
   }
   search() {
     this.loader = true
     const reqbody = {
-      mail:this.adminSearch.value.email ?this.adminSearch.value.email:'',
-      status:this.adminSearch.value.status?this.adminSearch.value.status:'',
-      to:this.adminSearch.value.to?this.dp.transform(this.adminSearch.value.to,'yyyy-m-dd'):'',
-      from:this.adminSearch.value.from?this.dp.transform(this.adminSearch.value.from,'yyyy-m-dd') :''
-    }     
+      mail: this.adminSearch.value.email ? this.adminSearch.value.email : '',
+      status: this.adminSearch.value.status ? this.adminSearch.value.status : '',
+      to: this.adminSearch.value.to ? this.dp.transform(this.adminSearch.value.to, 'yyyy-m-dd') : '',
+      from: this.adminSearch.value.from ? this.dp.transform(this.adminSearch.value.from, 'yyyy-m-dd') : ''
+    }
 
     this.service.adminSearch(reqbody).subscribe((res: any) => {
-      this.searchResults = res
+      console.log('res',res)
+      this.searchResults = res.data
       this.loader = false
     })
 
@@ -175,7 +178,7 @@ export default class AdminSearchComponent {
         title: 'Remove'
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
         const itemId = event.itemId; // Ensure itemId is correctly extracted
@@ -194,8 +197,8 @@ export default class AdminSearchComponent {
       }
     });
   }
-  
-  approveClaim(event:any){
+
+  approveClaim(event: any) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
@@ -203,25 +206,34 @@ export default class AdminSearchComponent {
         title: 'Approve Claim'
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
-        // Use itemId here instead of claimId
+
         const params = {
-          itemId: event.itemId // Pass itemId to the service
+          itemId: event.itemId ,
+          "status": "PENDING_PICKUP",
         };
-  
-        // this.loader = true;
-        // this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
-        //   this.search();
-        //   this.loader = false;
-        // }, (error) => {
-        //   console.error('Error removing item:', error);
-        // });
+        this.loader = true;
+        this.service.approveOrRejectClaim(params).subscribe((res: any) => {
+          const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+            width: "500px",
+            data: {
+              message: 'Claim Request Approved Successfully',
+              title: 'Success!!'
+            },
+          });
+      
+          dialogRef.afterClosed().subscribe((confirmed: any) => {
+            this.search();
+          });
+          this.loader = false;
+        }, (error) => {
+        });
       }
     });
   }
-  rejectClaim(event:any){
+  rejectClaim(event: any) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
@@ -229,17 +241,65 @@ export default class AdminSearchComponent {
         title: 'Reject Claim'
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
-        // Use itemId here instead of claimId
+
         const params = {
-          itemId: event.itemId // Pass itemId to the service
+          itemId: event.itemId ,
+          "status": "REJECTED",
         };
-  
+
+        this.loader = true;
+        this.service.approveOrRejectClaim(params).subscribe((res: any) => {
+          const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+            width: "500px",
+            data: {
+              message: 'Claim Request Rejected Successfully',
+              title: 'Success!!'
+            },
+          });
+      
+          dialogRef.afterClosed().subscribe((confirmed: any) => {
+            this.search();
+          });
+          this.loader = false;
+        }, (error) => {
+          console.error('Error removing item:', error);
+        });
+      }
+    });
+  }
+  markClaimed(event: any) {
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        message: 'Are you sure you want mark this item as Claimed',
+        title: 'Mark as Claimed'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      if (confirmed === 'yes') {
+
+        const params = {
+          itemId: event.itemId ,
+          "status": "REJECTED",
+        };
+
         // this.loader = true;
-        // this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
-        //   this.search();
+        // this.service.approveOrRejectClaim(params).subscribe((res: any) => {
+          const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+            width: "500px",
+            data: {
+              message: 'Item Claimed Successfuly',
+              title: 'Success!!'
+            },
+          });
+      
+          dialogRef.afterClosed().subscribe((confirmed: any) => {
+            this.search();
+          });
         //   this.loader = false;
         // }, (error) => {
         //   console.error('Error removing item:', error);

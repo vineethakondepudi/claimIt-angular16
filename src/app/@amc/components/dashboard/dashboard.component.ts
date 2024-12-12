@@ -75,7 +75,7 @@ export default class DashboardComponent {
   loader:boolean=false;
 
   searchResults: any= [];
-  pieChartLabels = ['Electronics', 'Accessories', 'Documents'];
+  pieChartLabels = ['Electronics', 'Footwear', 'Miscellaneous'];
   pieChartData = {
     labels: this.pieChartLabels,
     datasets: [
@@ -108,12 +108,12 @@ export default class DashboardComponent {
         backgroundColor: '#FF5733',
       },
       {
-        label: 'Accessories',
+        label: 'Footwear',
         data: [28, 48, 40, 19, 86, 27, 90],
         backgroundColor: '#33FF57',
       },
       {
-        label: 'Documents',
+        label: 'Miscellaneous',
         data: [18, 48, 77, 9, 100, 27, 40],
         backgroundColor: '#3357FF',
       },
@@ -127,21 +127,24 @@ export default class DashboardComponent {
       {
         label: 'Claimed Items',
         data: [65, 59, 80, 81, 56, 55, 40],
+        backgroundColor: ['green'], 
       },
       {
         label: 'Unclaimed Items',
         data: [28, 48, 40, 19, 86, 27, 90],
+        backgroundColor: ['yellow'], 
       },
     ],
+    
   };
   lineChartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
   doughnutChartData = {
-    labels: ['Claimed', 'Unclaimed'],
+    labels: ['Claimed', 'Unclaimed','Donated'],
     datasets: [
       {
-        data: [70, 30],
-        backgroundColor: ['#FF5733', '#33FF57'], 
+        data: [200, 100,50],
+        backgroundColor: ['green', 'yellow','red'], 
       },
     ],
   };

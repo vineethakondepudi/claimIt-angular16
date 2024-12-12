@@ -70,7 +70,7 @@
     </div>
 
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table (rejectClaim)="rejectClaim($event)" (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)" [tableColumns]="displaycoloums" [adminActions]="true" (previewImage)="previewImage($event)" [showUnClaim]="false"
+        <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)" (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)" [tableColumns]="displaycoloums" [adminActions]="true" (previewImage)="previewImage($event)" [showUnClaim]="false"
             [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
