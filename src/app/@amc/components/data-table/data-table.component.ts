@@ -62,6 +62,7 @@ export class DataTableComponent<T> {
   @Output() previewImage = new EventEmitter()
   @Output() approveClaim = new EventEmitter()
   @Output() rejectClaim = new EventEmitter()
+  @Output() markClaimed = new EventEmitter()
   searchKeyword!: string;
   enableFilter = false;
   dataSource: any; // Variable to hold JSON data
@@ -156,6 +157,12 @@ export class DataTableComponent<T> {
     } else if (value === 'Archived') {
       return '#77a36f'
     }
+    else if (value === 'PENDING_APPROVAL') {
+      return '#f5f3cb'
+    }
+    else if (value === 'REJCTED') {
+      return 'Red'
+    }
     else {
       return '#EE4E4E';
     }
@@ -177,6 +184,9 @@ export class DataTableComponent<T> {
   }
   rejectClaimReq(data:any){
     this.rejectClaim.emit(data)
+  }
+  markAsClaimed(data:any){
+    this.markClaimed.emit(data)
   }
   openPreviewImage(data: any) {
     this.previewImage.emit(data)

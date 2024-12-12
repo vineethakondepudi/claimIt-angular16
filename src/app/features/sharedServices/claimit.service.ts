@@ -58,4 +58,7 @@ export class ClaimitService {
     console.log('params',params)
     return this.http.get(environment.adminSearch+'?mail='+params.mail+'&status='+params.status+'&to='+params.to+'&from='+params.from)
   }
+  public approveOrRejectClaim(reqbody:any){
+    return this.http.put(environment.approveOrRejectClaim+'?itemId='+reqbody.itemId+'&status='+reqbody.status,'')
+  }
 }
