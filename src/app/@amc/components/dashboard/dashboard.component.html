@@ -1,4 +1,7 @@
 <div  *ngIf="role === 'admin'" class="min-h-screen bg-gray-50 p-6">
+  <h2 class="flex flex-wrap lg:flex-row md:flex-row font-semibold text-lg items-center">
+    <span class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto">Report for the month of <span class="italic font-semibold">December</span></span>
+  </h2>
   <h1 class="text-3xl font-semibold font-extrabold text-center mb-8">Lost & Found Admin Dashboard</h1>
 
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -97,9 +100,6 @@
             <strong>Donation Date:</strong> {{ history.donationDate | date }}<br />
             <strong>Charity:</strong> {{ history.charity }}
           </p>
-        </div>
-        <div class="px-6 pt-4 pb-2">
-          <span class="text-xs text-gray-500">Donation History</span>
         </div>
       </div>
     </div>
