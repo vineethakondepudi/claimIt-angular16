@@ -112,9 +112,10 @@ export default class ViewOrUnclaimComponent {
   }
   SearchAndClear(type: any) {
     if (type === 'clear') {
+      this.searchQuery = ''; 
       this.searchResults = [];
-      this.showNoResults = false;
-    } else {
+      this.showNoResults = true;
+    } else if (type === 'search') {
       this.search()
     }
 
