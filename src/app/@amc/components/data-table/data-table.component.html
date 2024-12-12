@@ -82,7 +82,7 @@
                 <button   [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'"  mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
                   Reject
                 </button><br><br>
-                <button [disabled]="element.status !== 'REJECTED' && element.status !== 'CLAIMED'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
+                <button [disabled]="element.status !== 'REJECTED' && element.status !== 'UNCLAIMED'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
                   Remove
                 </button><br><br>
                 <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)" mat-stroked-button color="primary" class="cancel-button">
