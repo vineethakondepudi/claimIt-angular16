@@ -75,14 +75,18 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu"  class="px-4 py-2" (click)="$event.stopPropagation()" style="width: 150px;">
-                <button mat-stroked-button color="primary" class="cancel-button" (click)="approveClaimReq(element)">
+                <button   [disabled]="element.status !== 'PENDING_APPROVAL'" 
+                mat-stroked-button color="primary" class="cancel-button" (click)="approveClaimReq(element)">
                   Approve
                 </button><br><br>
-                <button mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
+                <button   [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'"  mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
                   Reject
                 </button><br><br>
-                <button [disabled]="element.status === 'PENDING_PICKUP'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
+                <button [disabled]="element.status !== 'REJECTED' && element.status !== 'CLAIMED'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
                   Remove
+                </button><br><br>
+                <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)" mat-stroked-button color="primary" class="cancel-button">
+                 Claimed
                 </button>
               </mat-menu>
             </div>
