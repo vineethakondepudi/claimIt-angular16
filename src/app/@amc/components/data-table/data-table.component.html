@@ -74,7 +74,7 @@
                 matTooltipHideDelay="100">
                 <mat-icon>more_vert</mat-icon>
               </button>
-              <mat-menu #menu="matMenu" (click)="$event.stopPropagation()" style="width: 150px;">
+              <mat-menu #menu="matMenu"  class="px-4 py-2" (click)="$event.stopPropagation()" style="width: 150px;">
                 <button mat-stroked-button color="primary" class="cancel-button" (click)="approveClaimReq(element)">
                   Approve
                 </button><br><br>
