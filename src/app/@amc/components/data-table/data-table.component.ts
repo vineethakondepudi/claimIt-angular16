@@ -66,10 +66,14 @@ export class DataTableComponent<T> {
   searchKeyword!: string;
   enableFilter = false;
   dataSource: any; // Variable to hold JSON data
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
     this.dataSource.paginator = value;
+  }
+  @ViewChild(MatSort) set matSort(sort: MatSort) {
+    if (!this.dataSource.sort) {
+      this.dataSource.sort = sort
+    }
   }
   @Input() pageSizeOptions: number[] = [5, 10, 15];
   @Input() tableColumns: Array<TableColumn> = [];
@@ -93,8 +97,8 @@ export class DataTableComponent<T> {
 
   setTableDataSource(data: T[]) {
     this.dataSource = new MatTableDataSource<T>(data);
-    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.matSort
   }
   setPagination(tableData: T[] | undefined) {
     this.dataSource = new MatTableDataSource<T>(tableData);

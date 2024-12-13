@@ -100,6 +100,12 @@ export default class AdminSearchComponent {
       index: 1,
     }
   ]
+  private defaultSearchQuery = {
+    limit: 15,
+    offset: 0,
+    sortBy: "desc",
+    sortId: "foundDate",
+  };
   public statusDropDown: any = [
     { label: 'REJECTED', value: 'REJECTED' },
     { label: 'PENDING_APPROVAL', value: 'PENDING APPROVAL' },
@@ -122,6 +128,11 @@ export default class AdminSearchComponent {
       status: ('')
     })
   }
+  public handleSort(sortParams: any) {
+    this.defaultSearchQuery.sortBy = sortParams.direction;
+    this.defaultSearchQuery.sortId = sortParams.active;
+  }
+  
   search() {
     this.loader = true
     const reqbody = {

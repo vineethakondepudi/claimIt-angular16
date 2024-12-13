@@ -27,7 +27,7 @@
 </div>
 
 <div class="flex flex-col" *ngIf="dataSource.data.length > 0">
-  <table mat-table [dataSource]="dataSource" matSort matTableFilter>
+  <table mat-table [dataSource]="dataSource" matSort    matSortDirection="asc" matTableFilter>
     <ng-container class="font-bold" *ngFor="let tableColumn of tableColumns" [matColumnDef]="tableColumn.name">
       <ng-container>
         <th mat-header-cell *matHeaderCellDef [mat-sort-header]="tableColumn.name" disableClear>

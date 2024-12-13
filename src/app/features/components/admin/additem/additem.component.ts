@@ -84,7 +84,13 @@ export default class AdditemComponent implements OnInit {
       index: 1,
     },
   ];
-
+  public sortField: string = "foundDate";
+  private defaultSearchQuery = {
+    limit: 15,
+    offset: 0,
+    sortBy: "desc",
+    sortId: "foundDate",
+  };
   isOrganizationSelected: boolean = false; 
   selectedOrgId: string = '';
   files: any[] = []; 
@@ -94,7 +100,11 @@ export default class AdditemComponent implements OnInit {
   ngOnInit(): void {
     this.fetchData();
   }
-
+  public handleSort(sortParams: any) {
+    this.defaultSearchQuery.sortBy = sortParams.direction;
+    this.defaultSearchQuery.sortId = sortParams.active;
+  }
+  
   onAddItemClick(): void {
     this.service.organizationList().subscribe(
       (res: any) => {
