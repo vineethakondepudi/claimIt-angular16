@@ -66,13 +66,22 @@ export default class AdditemComponent implements OnInit {
       index: 1,
     },
     {
-      label: 'Found Date',
-      name: 'foundDate',
+      label: 'Received Date',
+      name: 'receivedDate',
       type: 'date',  
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 2,
+    },
+    {
+      label: 'Category',
+      name: 'name',
+      type: 'text',  
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 3,
     },
     {
       label: 'Status',
@@ -81,7 +90,7 @@ export default class AdditemComponent implements OnInit {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 4,
     },
   ];
   public sortField: string = "foundDate";

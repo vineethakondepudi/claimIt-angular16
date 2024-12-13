@@ -31,6 +31,7 @@ interface Item {
   itemName: string;
   status: string;
   foundDate: string;
+  name: string;
   subcatgeoryId: number;
   categoryId: number;
   expirationDate: string | null;
