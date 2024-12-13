@@ -1,193 +1,59 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component'; 
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatCardModule } from '@angular/material/card';
-import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
-import { MatDialogModule } from '@angular/material/dialog';
-import { OrganizationDialogComponent } from '../organization-dialog/organization-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { NgxDropzoneModule } from 'ngx-dropzone';
-import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
-import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
-
-export interface TableColumn {
-  label: string;
-  name: string;
-  type: 'text' | 'number' | 'boolean' | 'date' | 'image' | 'action';  // Constrained type values
-  isSortable?: boolean;
-  position?: 'right' | 'left';
-  isChecked: boolean;
-  index: number;
-}
-
-@Component({
-  selector: 'app-additem',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DataTableComponent, 
-    MatButtonModule,
-    MatIconModule,
-    FormFooterComponent,
-    FormsModule,
-    MatFormFieldModule,
-    MatExpansionModule,
-    MatCardModule,
-    MatDialogModule,
-    NgxDropzoneModule,
-    LoaderComponent
-  ],
-  templateUrl: './additem.component.html',
-  styleUrls: ['./additem.component.scss']
-})
-export default class AdditemComponent implements OnInit {  
-
-  tableData: any[] = [];
-  searchResults: any = [];
-  searchQuery: string = '';
-  currentDate: Date = new Date();
-  @Input() containerPanelOpened: boolean = false;
-  loader:boolean=true;
-
-  displayColumns: TableColumn[] = [
-    {
-      label: "Image Data",
-      name: "image",
-      type: "image", 
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 1,
-    },
-    {
-      label: 'Found Date',
-      name: 'foundDate',
-      type: 'date',  
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 1,
-    },
-    {
-      label: 'Status',
-      name: 'status',
-      type: 'text',  
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 1,
-    },
-  ];
-
-  isOrganizationSelected: boolean = false; 
-  selectedOrgId: string = '';
-  files: any[] = []; 
-
-  constructor(private service: ClaimitService, private dialog: MatDialog) {}
-
-  ngOnInit(): void {
-    this.fetchData();
-  }
-
-  onAddItemClick(): void {
-    this.service.organizationList().subscribe(
-      (res: any) => {
-        const dialogRef = this.dialog.open(OrganizationDialogComponent, {
-          width: '400px',
-          data: { organizationList: res },
-        });
-
-        dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
-          if (selectedOrgId) {
-            console.log('Selected Organization ID:', selectedOrgId);
-            this.selectedOrgId = selectedOrgId; 
-            this.isOrganizationSelected = true; 
-            
-          } else {
-            console.log('Dialog closed without selection.');
-            this.isOrganizationSelected = false; 
-            this.fetchData();
-            this.loader = true;
-            
-          }
-        });
-      },
-      (error) => {
-        console.error('Error fetching organizations:', error);
-      }
-    );
-  }
-
-  fetchData(): void {
-    const query = this.searchQuery.trim();
-    this.service.listOfItems(query).subscribe(
-      (res: any) => {
-        if (res?.data) {
-          this.searchResults = res.data;
-          this.tableData = res.data;
-          this.loader = false
-        } else {
-          console.error('Unexpected API response format:', res);
-          this.searchResults = [];
-          this.tableData = [];
-        }
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
-  }
-  
-
- 
-  
-  
-  
-
-  onUploadImage(): void {
-    if (this.files.length > 0) {
-      const formData = new FormData();
-      formData.append('image', this.files[0].file); 
-      formData.append('orgId', this.selectedOrgId);
-  
-      this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
-        (response) => {
-          console.log('File uploaded successfully:', response);
-          this.isOrganizationSelected = false; 
-          this.files = []; 
-        },
-        (error) => {
-          console.error('Error uploading file:', error);
-        }
-      );
-    } else {
-      console.warn('No file selected for upload.');
-    }
-  }
-
-  onImportToExcel(): void {
-   
-    console.log('Files to upload:', this.files);
-  }
-  
-
-  previewImage(event: any) {
-    console.log(event)
-    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-      width: "500px",
-      data: {
-        requiredData: event,
-        title: 'Preview Image'
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-    });
-  }
-}
+<div class="min-h-screen flex flex-col">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3]">
+        <div @fadeInRight class="flex flex-row justify-between px-5">
+            <div class="flex flex-col">
+                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Add-Item</h1>
+            </div>
+        </div>
+        <div class="flex-grow px-5">
+            <div class="flex items-center justify-between shadow">
+                <p class="text-gray-600 text-sm">{{ currentDate | date: 'dd MMMM yyyy' }}</p>
+                <button mat-raised-button color="primary" (click)="onAddItemClick()"
+                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600">
+                    <mat-icon>add</mat-icon>
+                    <span class="text-sm font-medium">Add Item</span>
+                </button>
+            </div>
+            <div *ngIf="isOrganizationSelected" class="flex flex-col items-center lablestyle space-y-4">            
+            </div>
+        </div>
+    </div>
+    <div class="flex-grow mt-14 mx-3">
+        <app-data-table [tableColumns]="displayColumns" [isPageable]="true" [tableData]="searchResults"
+            [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        </app-data-table>
+    </div>
+    <div class="flex-none">
+        <app-form-footer></app-form-footer>
+    </div>
+    <app-loader *ngIf="loader"></app-loader>
+</div><div class="min-h-screen flex flex-col">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3]">
+        <div @fadeInRight class="flex flex-row justify-between px-5">
+            <div class="flex flex-col">
+                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Add-Item</h1>
+            </div>
+        </div>
+        <div class="flex-grow px-5">
+            <div class="flex items-center justify-between shadow">
+                <p class="text-gray-600 text-sm">{{ currentDate | date: 'dd MMMM yyyy' }}</p>
+                <button mat-raised-button color="primary" (click)="onAddItemClick()"
+                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600">
+                    <mat-icon>add</mat-icon>
+                    <span class="text-sm font-medium">Add Item</span>
+                </button>
+            </div>
+            <div *ngIf="isOrganizationSelected" class="flex flex-col items-center lablestyle space-y-4">            
+            </div>
+        </div>
+    </div>
+    <div class="flex-grow mt-14 mx-3">
+        <app-data-table [tableColumns]="displayColumns" [isPageable]="true" [tableData]="searchResults"
+            [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        </app-data-table>
+    </div>
+    <div class="flex-none">
+        <app-form-footer></app-form-footer>
+    </div>
+    <app-loader *ngIf="loader"></app-loader>
+</div>
