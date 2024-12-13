@@ -128,16 +128,20 @@ export default class DashboardComponent {
       {
         label: 'Claimed Items',
         data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: ['green'], 
+        backgroundColor: 'rgba(0, 128, 0, 0.5)', // Green with transparency
+        borderColor: 'green', // Line color
+        fill: false, // Fills the area under the line
       },
       {
         label: 'Unclaimed Items',
         data: [28, 48, 40, 19, 86, 27, 90],
-        backgroundColor: ['yellow'], 
+        backgroundColor: 'rgba(255, 255, 0, 0.5)', // Yellow with transparency
+        borderColor: 'yellow', // Line color
+        fill: false, // Fills the area under the line
       },
     ],
-    
   };
+  
   lineChartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
   doughnutChartData = {
