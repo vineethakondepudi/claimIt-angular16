@@ -129,7 +129,12 @@ export default class SearchAndClaimComponent {
   displayedColumns: string[] = ['itemId', 'itemName', 'status', 'foundDate', 'categoryId', 'actions'];
   dataSource: any = [];
   categerorydata: any = [];
-
+  private defaultSearchQuery = {
+    limit: 15,
+    offset: 0,
+    sortBy: "desc",
+    sortId: "foundDate",
+  };
   selectedCategory: string = '';
   constructor(private http: HttpClient, private route: ActivatedRoute, private matDialog: MatDialog,private claimService:ClaimitService) { }
 
@@ -163,7 +168,10 @@ export default class SearchAndClaimComponent {
       );
     }
   }
-
+  public handleSort(sortParams: any) {
+    this.defaultSearchQuery.sortBy = sortParams.direction;
+    this.defaultSearchQuery.sortId = sortParams.active;
+  }
   //categeory integration
   search(): void {
     this.loader = true
