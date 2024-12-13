@@ -76,7 +76,7 @@ export default class DashboardComponent {
   loader:boolean=false;
 
   searchResults: any= [];
-  pieChartLabels = ['Electronics', 'Footwear', 'Miscellaneous'];
+  pieChartLabels = ['Apparel', 'Footwear', 'Miscellaneous'];
   pieChartData = {
     labels: this.pieChartLabels,
     datasets: [
@@ -104,7 +104,7 @@ export default class DashboardComponent {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
       {
-        label: 'Electronics',
+        label: 'Apparel',
         data: [65, 59, 80, 81, 56, 55, 40],
         backgroundColor: '#FF5733',
       },
