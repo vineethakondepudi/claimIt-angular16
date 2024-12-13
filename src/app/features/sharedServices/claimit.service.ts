@@ -61,4 +61,8 @@ export class ClaimitService {
   public approveOrRejectClaim(reqbody:any){
     return this.http.put(environment.approveOrRejectClaim+'?itemId='+reqbody.itemId+'&status='+reqbody.status,'')
   }
+  public markASClaimed(reqbody:any){
+    return this.http.put(environment.markASClaimed,reqbody)
+  }
+  
 }
