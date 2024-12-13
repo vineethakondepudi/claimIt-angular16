@@ -93,7 +93,7 @@ export class HeaderComponent {
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
         // { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
-        { label: 'Search And Claim', icon: 'search', route: '/claimit/search' },
+        { label: 'Approve / Reject Claim', icon: 'search', route: '/claimit/search' },
       ];
     } else {
       this.menuItems = [
