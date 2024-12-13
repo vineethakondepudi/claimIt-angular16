@@ -21,10 +21,15 @@
                             <form [formGroup]="adminSearch" class="flex flex-wrap items-center gap-5">
                                 <mat-form-field appearance="outline" class="flex-auto">
                                     <mat-label>Email</mat-label>
-                                    <input formControlName="email" matInput type="text" placeholder="Email" [(ngModel)]="searchQuery"
-                                        (keyup.enter)="search()" (input)="clearResultsIfEmpty()" />
+                                    <input formControlName="email" matInput type="text" placeholder="Email" />
                                     <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
-                                        <mat-icon>search</mat-icon>
+                                        <!-- <mat-icon>search</mat-icon> -->
+                                    </button>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" class="flex-auto">
+                                    <mat-label>Name</mat-label>
+                                    <input formControlName="name" matInput type="text" placeholder="Name" />
+                                    <button mat-icon-button matSuffix aria-label="Search">
                                     </button>
                                 </mat-form-field>
                                 <!-- <mat-form-field appearance="outline" class="flex-auto">
@@ -70,8 +75,11 @@
     </div>
 
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)" (sort)="handleSort($event)"  (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)" [tableColumns]="displaycoloums" [adminActions]="true" (previewImage)="previewImage($event)" [showUnClaim]="false"
-            [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)"
+            (sort)="handleSort($event)" (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)"
+            [tableColumns]="displaycoloums" [adminActions]="true" (previewImage)="previewImage($event)"
+            [showUnClaim]="false" [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]"
+            [defaultPageSize]="15">
         </app-data-table>
     </div>
     <div class="flex-none">

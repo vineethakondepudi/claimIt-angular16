@@ -72,6 +72,24 @@ export default class AdminSearchComponent {
       index: 1,
     },
     {
+      label: "Name",
+      name: "name",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
+    {
+      label: "Email",
+      name: "email",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
+    {
       label: "Status",
       name: "status",
       type: "text",
@@ -125,7 +143,8 @@ export default class AdminSearchComponent {
       email: (''),
       from: (''),
       to: (''),
-      status: ('')
+      status: (''),
+      name:('')
     })
   }
   public handleSort(sortParams: any) {
