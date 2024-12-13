@@ -295,11 +295,12 @@ export default class AdminSearchComponent {
 
         const params = {
           itemId: event.itemId ,
-          "status": "REJECTED",
+          "status": "CLAIMED",
+          userId:event.userId
         };
 
-        // this.loader = true;
-        // this.service.approveOrRejectClaim(params).subscribe((res: any) => {
+        this.loader = true;
+        this.service.markASClaimed(params).subscribe((res: any) => {
           const dialogRef = this.dialog.open(ConfirmationModalComponent, {
             width: "500px",
             data: {
@@ -311,10 +312,10 @@ export default class AdminSearchComponent {
           dialogRef.afterClosed().subscribe((confirmed: any) => {
             this.search();
           });
-        //   this.loader = false;
-        // }, (error) => {
-        //   console.error('Error removing item:', error);
-        // });
+          this.loader = false;
+        }, (error) => {
+          console.error('Error removing item:', error);
+        });
       }
     });
   }

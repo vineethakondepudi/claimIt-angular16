@@ -10,5 +10,6 @@ export const environment = {
     createClaimRequest:'http://172.17.12.38:8081/api/admin/popup-claim',
     userSlides:'http://172.17.12.38:8081/api/users/search',
     adminSearch:'http://172.17.12.38:8081/api/admin/search',
-    approveOrRejectClaim:'http://172.17.12.38:8081/api/admin/approved-rejected'
+    approveOrRejectClaim:'http://172.17.12.38:8081/api/admin/approved-rejected',
+    markASClaimed:'http://172.17.12.38:8081/api/admin/history'
   };
