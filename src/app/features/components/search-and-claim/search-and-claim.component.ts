@@ -74,8 +74,8 @@ export default class SearchAndClaimComponent {
       index: 1,
     },
     {
-      label: "Status",
-      name: "status",
+      label: "Name",
+      name: "name",
       type: "text",
       isSortable: true,
       position: "left",
@@ -83,13 +83,31 @@ export default class SearchAndClaimComponent {
       index: 2,
     },
     {
-      label: "FoundDate",
-      name: "foundDate",
-      type: "date",
+      label: "Email",
+      name: "email",
+      type: "text",
       isSortable: true,
       position: "left",
       isChecked: true,
       index: 3,
+    },
+    {
+      label: "Category",
+      name: "categoryName",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 4,
+    },
+    {
+      label: "Status",
+      name: "status",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 5,
     },
     {
       label: "ReceivedDate",
@@ -98,7 +116,7 @@ export default class SearchAndClaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 4,
+      index: 6,
     },
     {
       label: "Action",
@@ -107,7 +125,7 @@ export default class SearchAndClaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 7,
     },
 
   ]
