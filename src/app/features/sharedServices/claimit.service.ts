@@ -59,7 +59,7 @@ export class ClaimitService {
     return this.http.get(environment.adminSearch+'?mail='+params.mail+'&status='+params.status+'&to='+params.to+'&from='+params.from)
   }
   public approveOrRejectClaim(reqbody:any){
-    return this.http.put(environment.approveOrRejectClaim+'?itemId='+reqbody.itemId+'&status='+reqbody.status,'')
+    return this.http.put(environment.approveOrRejectClaim+'?itemId='+reqbody.itemId+'&status='+reqbody.status+'&rejectedReason='+reqbody.reasonForReject,'')
   }
   public markASClaimed(reqbody:any){
     return this.http.put(environment.markASClaimed,reqbody)

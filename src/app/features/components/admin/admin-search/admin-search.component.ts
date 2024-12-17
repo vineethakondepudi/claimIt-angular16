@@ -17,6 +17,7 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RejectClaimComponent } from '../reject-claim/reject-claim.component';
 
 @Component({
   selector: 'app-admin-search',
@@ -264,7 +265,7 @@ export default class AdminSearchComponent {
     });
   }
   rejectClaim(event: any) {
-    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+    const dialogRef = this.dialog.open(RejectClaimComponent, {
       width: "500px",
       data: {
         message: 'Are you sure you want to reject this claim?',
@@ -273,11 +274,12 @@ export default class AdminSearchComponent {
     });
 
     dialogRef.afterClosed().subscribe((confirmed: any) => {
-      if (confirmed === 'yes') {
+      if (confirmed !== undefined || confirmed!== '' || confirmed!== null) {
 
         const params = {
           itemId: event.itemId ,
           "status": "REJECTED",
+          reasonForReject:confirmed
         };
 
         this.loader = true;

@@ -1,0 +1,25 @@
+<div class="flex flex-row items-center justify-between content-center px-3 py-1 bg-transparent">
+    <span class="font-semibold px-2 text-xl">
+        {{ data.title }}
+    </span>
+    <button mat-icon-button type="button" (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content align="start" class="mt-2">
+    <div class="mt-12 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow">
+        
+        <mat-form-field class="w-full mt-6" appearance="outline" >
+            <mat-label>Reject Reason</mat-label>
+            <textarea [(ngModel)]="rejectReason" matInput type="text" placeholder="Reject Reason"></textarea>
+        </mat-form-field>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="m-2" *ngIf="data.title !== 'Preview Image' ">
+    <button mat-stroked-button color="warn" class="cancel-button" (click)="onCancel()">
+        No
+    </button>
+    <button mat-flat-button color="primary" (click)="onSubmit()">Yes</button>
+</mat-dialog-actions>

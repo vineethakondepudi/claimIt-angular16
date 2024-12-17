@@ -152,6 +152,7 @@ export default class AdditemComponent implements OnInit {
           this.tableData = res.data;
           this.loader = false
         } else {
+          this.loader = false
           console.error('Unexpected API response format:', res);
           this.searchResults = [];
           this.tableData = [];
