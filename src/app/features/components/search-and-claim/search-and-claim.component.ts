@@ -267,7 +267,7 @@ export default class SearchAndClaimComponent {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
 
-    const picUrl = 'http://172.17.12.38:8081/api/users/uploadImageForSearch';
+    const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
 
     // Sending POST request with FormData containing the image
     return this.http.post(picUrl, formData, {
