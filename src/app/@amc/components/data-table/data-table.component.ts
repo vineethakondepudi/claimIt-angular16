@@ -17,6 +17,7 @@ import { fadeInUp400ms } from '../../animations/fade-in-up.animation';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { TooltipDirective } from '../../directives/tooltip.directive';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { QRCodeModule } from 'angularx-qrcode';
 @Component({
   selector: 'app-data-table',
   standalone: true,
@@ -26,6 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatFormFieldModule,
     DataPropertyGetterPipe,
     CommonModule,
+    QRCodeModule,
     HttpClientModule,
     MatSortModule,
     MatIconModule,
@@ -107,6 +109,14 @@ export class DataTableComponent<T> {
 
   handlePage(params: PageEvent) {
   }
+  generateQrCodeData(element: any): string {
+    return JSON.stringify({
+      id: element.itemId,
+      name: element.name,
+      // description: element.description,
+    });
+  }
+
 
   applyFilter() {
     this.dataSource.filter = this.searchKeyword.trim().toLowerCase();

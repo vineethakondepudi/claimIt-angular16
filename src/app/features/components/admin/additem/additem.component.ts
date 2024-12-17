@@ -19,7 +19,7 @@ import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation
 export interface TableColumn {
   label: string;
   name: string;
-  type: 'text' | 'number' | 'boolean' | 'date' | 'image' | 'action';  // Constrained type values
+  type: 'text' | 'number' | 'boolean' | 'date' | 'image' | 'action'| 'qrcode';   // Constrained type values
   isSortable?: boolean;
   position?: 'right' | 'left';
   isChecked: boolean;
@@ -87,6 +87,15 @@ export default class AdditemComponent implements OnInit {
       label: 'Status',
       name: 'status',
       type: 'text',  
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 4,
+    },
+    {
+      label: 'QR Code',
+      name: 'qrcode',
+      type: 'qrcode',  
       isSortable: true,
       position: "left",
       isChecked: true,
