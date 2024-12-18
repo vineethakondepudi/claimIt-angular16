@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
@@ -23,15 +23,32 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['./reject-claim.component.scss']
 })
 export class RejectClaimComponent {
-  rejectReason: any
-  constructor(
+  rejectClaimForm!:FormGroup
+  enableSave: boolean = true;
+  constructor(private fb:FormBuilder,
     public dialogRef: MatDialogRef<FormSubmissionModalComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { title: string; message: string; }
   ) { }
+ngOnInit(){
+  this.initalizeRejectForm()
+  this.rejectClaimForm.statusChanges.subscribe((res: any) => {
+    console.log('res', res)
+    if (res === 'VALID') {
+      this.enableSave = false
+    } else {
+      this.enableSave = true
 
+    }
+  })
+}
+initalizeRejectForm(){
+this.rejectClaimForm = this.fb.group({
+  rejectReason:('')
+})
+}
   onSubmit() {
-    this.dialogRef.close(this.rejectReason);
+    this.dialogRef.close(this.rejectClaimForm.value.rejectReason);
   }
   onCancel() {
     this.dialogRef.close(undefined);

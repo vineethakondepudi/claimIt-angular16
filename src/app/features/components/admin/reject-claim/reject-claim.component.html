@@ -9,11 +9,12 @@
 <mat-divider></mat-divider>
 <mat-dialog-content align="start" class="mt-2">
     <div class="mt-12 max-w-4xl mx-auto bg-white p-8 rounded-lg shadow">
-        
-        <mat-form-field class="w-full mt-6" appearance="outline" >
-            <mat-label>Reject Reason</mat-label>
-            <textarea [(ngModel)]="rejectReason" matInput type="text" placeholder="Reject Reason"></textarea>
-        </mat-form-field>
+        <form [formGroup]="rejectClaimForm">
+            <mat-form-field class="w-full mt-6" appearance="outline" >
+                <mat-label>Reject Reason</mat-label>
+                <textarea formControlName="rejectReason" matInput type="text" placeholder="Reject Reason"></textarea>
+            </mat-form-field>
+        </form>
     </div>
 
 </mat-dialog-content>
@@ -21,5 +22,5 @@
     <button mat-stroked-button color="warn" class="cancel-button" (click)="onCancel()">
         No
     </button>
-    <button mat-flat-button color="primary" (click)="onSubmit()">Yes</button>
+    <button [disabled]="enableSave" mat-flat-button color="primary" (click)="onSubmit()">Yes</button>
 </mat-dialog-actions>
