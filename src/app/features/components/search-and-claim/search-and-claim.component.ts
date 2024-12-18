@@ -74,8 +74,8 @@ export default class SearchAndClaimComponent {
       index: 1,
     },
     {
-      label: "Name",
-      name: "name",
+      label: "Status",
+      name: "status",
       type: "text",
       isSortable: true,
       position: "left",
@@ -83,31 +83,13 @@ export default class SearchAndClaimComponent {
       index: 2,
     },
     {
-      label: "Email",
-      name: "email",
-      type: "text",
+      label: "FoundDate",
+      name: "foundDate",
+      type: "date",
       isSortable: true,
       position: "left",
       isChecked: true,
       index: 3,
-    },
-    {
-      label: "Category",
-      name: "categoryName",
-      type: "text",
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 4,
-    },
-    {
-      label: "Status",
-      name: "status",
-      type: "text",
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 5,
     },
     {
       label: "ReceivedDate",
@@ -116,7 +98,7 @@ export default class SearchAndClaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 6,
+      index: 4,
     },
     {
       label: "Action",
@@ -125,24 +107,31 @@ export default class SearchAndClaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 7,
+      index: 1,
     },
 
   ]
   itemName: string | null = null;
-  files: File[] = [];
+  files: { file: File, preview: string }[] = [];
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
   loader:boolean = false
   items: any[] = [];
   searchResults: any = [];
   categeoryerror: boolean = false
-  searchQuery: string = '';
-  foods = [
-    { value: 'Apparel', viewValue: 'Apparel' },
-    { value: 'Footwear', viewValue: 'Footwear' },
-    { value: 'Miscellaneous ', viewValue: 'Miscellaneous' },
-    { value: 'Others', viewValue: 'Others' }
+  searchQuery: string = ''; // Current search query
+  savedSearches: string[] = []; // List of saved searches
+  selectedSavedSearch: string | null = null; // Currently selected saved search
+
+  categories = [
+    { value: 'Electronics', viewValue: 'Electronics' },
+    { value: 'Personal Accessories', viewValue: 'Personal Accessories' },
+    { value: 'Clothes & Accessories', viewValue: 'Clothes & Accessories' },
+    { value: 'Work Tools', viewValue: 'Work Tools' },
+    { value: 'Storage Items', viewValue: 'Storage Items' },
+    { value: 'Other Items', viewValue: 'Other Items' },
+    { value: 'Expensive Items', viewValue: 'Expensive Items' },
+    { value: 'Unlabeled Items', viewValue: 'Unlabeled Items' }
   ];
   displayedColumns: string[] = ['itemId', 'itemName', 'status', 'foundDate', 'categoryId', 'actions'];
   dataSource: any = [];
@@ -154,34 +143,36 @@ export default class SearchAndClaimComponent {
     sortId: "foundDate",
   };
   selectedCategory: string = '';
-  constructor(private http: HttpClient, private route: ActivatedRoute, private matDialog: MatDialog,private claimService:ClaimitService) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, private matDialog: MatDialog,private claimService:ClaimitService) {
+    this.loadSavedSearches(); 
+   }
 
   ngOnInit() {
-    // Check if there's an itemId in the query parameters
     this.route.queryParams.subscribe(params => {
-      this.itemName = params['id']; // Get the item ID from the query parameters
+      this.itemName = params['id']; 
       if (this.itemName) {
-        this.searchQuery = this.itemName.toString(); // Use the itemId as the search query
-        this.searchItems(); // Call searchItems method when the itemId is present
+        this.searchQuery = this.itemName.toString();
+        this.searchItems(); 
       }
     });
   }
-  public onRemove(event: any) {
-    this.uplodedfilesdata.splice(this.uplodedfilesdata.indexOf(event), 1)
-    if (this.files.length > 0) {
-      this.files.splice(this.files.indexOf(event), 1)
+  public  onRemove(fileToRemove: any): void {
+    this.uplodedfilesdata.splice(this.uplodedfilesdata.indexOf(fileToRemove), 1);
+    const index = this.files.findIndex(f => f.file === fileToRemove);
+    if (index >= 0) {
+      this.files.splice(index, 1); 
     }
   }
-  //itemsearch integration code 
   searchItems() {
     if (this.searchQuery.trim() !== '') {
       const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
 
-      this.http.get<Item[]>(apiUrl).subscribe(
-        (response: Item[]) => {
+      this.http.get<any[]>(apiUrl).subscribe(
+        (response) => {
           this.searchResults = response;
         },
-        (error: any) => {
+        (error) => {
+          console.error('Error fetching search results:', error);
         }
       );
     }
@@ -197,7 +188,7 @@ export default class SearchAndClaimComponent {
     const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${this.selectedCategory}`;
     this.http.get<any[]>(apiUrl).subscribe(
       (data: any) => {
-        this.categerorydata = data; // Directly set if it's an array
+        this.categerorydata = data; 
         this.loader = false
         console.log(this.categerorydata, 'categerorydata')
         if (this.categerorydata.message.includes('No items found for the search term')) {
@@ -210,6 +201,35 @@ export default class SearchAndClaimComponent {
         console.error('API Error:', error);
       }
     );
+  }
+  saveSearch() {
+    if (this.searchQuery.trim() !== '') {
+      if (!this.savedSearches.includes(this.searchQuery)) {
+        this.savedSearches.push(this.searchQuery);
+        localStorage.setItem('savedSearches', JSON.stringify(this.savedSearches));
+        alert('Search saved successfully!');
+      } else {
+        alert('This search is already saved.');
+      }
+    } else {
+      alert('Search query cannot be empty.');
+    }
+  }
+  applySavedSearch() {
+    if (this.selectedSavedSearch) {
+      this.searchQuery = this.selectedSavedSearch;
+      this.searchItems();
+    }
+  }
+  clearSearch() {
+    this.searchQuery = '';
+    this.searchResults = [];
+  }
+  loadSavedSearches() {
+    const storedSearches = localStorage.getItem('savedSearches');
+    if (storedSearches) {
+      this.savedSearches = JSON.parse(storedSearches);
+    }
   }
   SearchAndClear(type: any) {
     if (type === 'clear') {
@@ -231,16 +251,22 @@ export default class SearchAndClaimComponent {
     this.selectedCategory = category;
     this.search();
   }
-  //picture upload integration 
-  public onSelect(event: any): void {
+  public  onSelect(event: any): void {
     const files = event.addedFiles;
     if (files && files.length > 0) {
-      const file = files[0]; // Assuming one file is selected
-
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.files.push({
+          file: file,
+          preview: reader.result as string  
+        });
+      };
+      reader.readAsDataURL(file);  
       this.uploadImage(file).subscribe(
         (response) => {
           console.log('Image uploaded successfully:', response.message);
-          this.matchedItems = response.matchedItems; // Store the matched items
+          this.matchedItems = response.matchedItems; 
         },
         (error) => {
           console.error('Error uploading image:', error);
@@ -250,26 +276,31 @@ export default class SearchAndClaimComponent {
   }
   getCategoryIcon(value: string): string {
     switch (value) {
-      case 'Apparel':
-        return 'checkroom'; // Icon for Apparel
-      case 'Footwear':
-        return 'sports_handball'; // Icon for Footwear
-      case 'Miscellaneous':
-        return 'category'; // Icon for Miscellaneous
-      case 'Others':
-        return 'more_horiz'; // Icon for Others
+      case 'Electronics':
+        return 'devices';
+      case 'Personal Accessories':
+        return 'watch';
+      case 'Clothes & Accessories':
+        return 'checkroom';
+      case 'Work Tools':
+        return 'build';
+      case 'Storage Items':
+        return 'inventory';
+      case 'Other Items':
+        return 'category';
+      case 'Expensive Items':
+        return 'attach_money';
+      case 'Unlabeled Items':
+        return 'help';
       default:
         return 'help';
     }
   }
   uploadImage(file: File): Observable<any> {
-    // Create FormData to send the file in the body of the POST request
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
 
-    const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
-
-    // Sending POST request with FormData containing the image
+    const picUrl = 'http://172.17.12.38:8081/api/users/uploadImageForSearch';
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });
