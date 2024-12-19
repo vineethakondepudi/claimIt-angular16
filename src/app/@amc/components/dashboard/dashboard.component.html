@@ -1,27 +1,38 @@
 <div  *ngIf="role === 'admin'" class="min-h-screen bg-gray-50 p-6">
   <h2 class="flex flex-wrap lg:flex-row md:flex-row font-semibold text-lg items-center">
-    <span class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto">Report for the month of <span class="italic font-semibold">December</span></span>
+    <span
+    class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto cursor-pointer relative"
+    (click)="openCalendarDialog()"
+  >
+    Report for the month of
+    <span
+    class="italic font-semibold"
+    style="color: #007BFF; text-decoration: underline; cursor: pointer;"
+  >
+      {{ selectedMonth | date: 'MMMM' }}
+    </span>
+  </span>
   </h2>
   <h1 class="text-3xl font-semibold font-extrabold text-center mb-8">Lost & Found Admin Dashboard</h1>
-
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-white shadow p-4 text-center rounded">
       <h2 class="text-xl font-semibold">Total Items</h2>
-      <p class="text-2xl font-bold text-teal-500">350</p>
+      <p class="text-2xl font-bold text-teal-500">{{ currentMonthData?.totalItems || 0 }}</p>
     </div>
     <div class="bg-white shadow p-4 text-center rounded">
       <h2 class="text-xl font-semibold">Claimed</h2>
-      <p class="text-2xl font-bold text-green-500">200</p>
+      <p class="text-2xl font-bold text-green-500">{{ currentMonthData?.claimed || 0 }}</p>
     </div>
     <div class="bg-white shadow p-4 text-center rounded">
       <h2 class="text-xl font-semibold">Unclaimed</h2>
-      <p class="text-2xl font-bold text-yellow-500">100</p>
+      <p class="text-2xl font-bold text-yellow-500">{{ currentMonthData?.unclaimed || 0 }}</p>
     </div>
     <div class="bg-white shadow p-4 text-center rounded">
       <h2 class="text-xl font-semibold">Donated</h2>
-      <p class="text-2xl font-bold text-red-500">50</p>
+      <p class="text-2xl font-bold text-red-500">{{ currentMonthData?.donated || 0 }}</p>
     </div>
   </div>
+  
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     <div class="bg-white p-6 shadow rounded">
       <canvas baseChart
