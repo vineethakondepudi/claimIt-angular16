@@ -86,6 +86,7 @@ export default class DashboardComponent {
     pendingPickup: 0,
     rejected: 0,
   };
+
   categoryData: any[] = [];
   searchResults: any= [];
   pieChartLabels = ['Apparel', 'Footwear', 'Miscellaneous'];
@@ -409,6 +410,16 @@ export default class DashboardComponent {
 
     
   }
+
+  categoryItems(month: number, year: number):void{
+    this.claimService.categoryItems(month.toString(), year).subscribe({
+      next: (res: any) => {
+        console.log('categoryItems Response:', res);
+        
+      }
+    })
+      }
+
   updateDoughnutChartData(): void {
     this.doughnutChartData = {
       labels: ['Claimed', 'Unclaimed','Donated'],
@@ -424,6 +435,8 @@ export default class DashboardComponent {
       ],
     };
 
+
+    
     this.lineChartData = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
@@ -448,22 +461,6 @@ export default class DashboardComponent {
 
  
  
-  categoryItems(month: number, year: number):void{
-this.claimService.categoryItems(month.toString(), year).subscribe({
-  next: (res: any) => {
-    console.log('categoryItems Response:', res);
-    if (res && res.length > 0) {
-      res.forEach((category: any) => {
-        console.log(`Category ID: ${category.categoryName}, Item Count: ${category.itemCount}`);
-      });
-    } else {
-      console.log('No category data available');
-    }
-  },
-  error: (err) => {
-    console.error('Error fetching status count:', err);
-  },
-})
-  }
+
  
 }
