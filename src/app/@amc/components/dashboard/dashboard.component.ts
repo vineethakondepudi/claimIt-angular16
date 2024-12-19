@@ -20,6 +20,8 @@ import { LoaderComponent } from '../loader/loader.component'
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { FormsModule } from '@angular/forms'
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component'
+import { ChangeDetectorRef } from '@angular/core';
 
 interface CheckIn {
   name: string
@@ -64,7 +66,7 @@ export default class DashboardComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   @ViewChild(BaseChartDirective) piechart: BaseChartDirective | undefined;
   role:any
-  constructor(private claimService: ClaimitService,private http:HttpClient, private dialog: MatDialog) {
+  constructor(private claimService: ClaimitService,private http:HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
     this.role = localStorage.getItem('role');
   }
   public pieChartType: ChartType = 'pie';
@@ -74,7 +76,17 @@ export default class DashboardComponent {
   searchQuery: string = '';
   swiper: Swiper | undefined;
   loader:boolean=false;
-
+  selectedMonth: Date = new Date();
+  currentMonthData: any = {
+    totalItems: 0,
+    claimed: 0,
+    unclaimed: 0,
+    donated: 0,
+    pendingApproval: 0,
+    pendingPickup: 0,
+    rejected: 0,
+  };
+  categoryData: any[] = [];
   searchResults: any= [];
   pieChartLabels = ['Apparel', 'Footwear', 'Miscellaneous'];
   pieChartData = {
@@ -127,28 +139,28 @@ export default class DashboardComponent {
     datasets: [
       {
         label: 'Claimed Items',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [0,0,0,0,0],
         backgroundColor: 'rgba(0, 128, 0, 0.5)', // Green with transparency
         borderColor: 'green', // Line color
         fill: false, // Fills the area under the line
       },
       {
         label: 'Unclaimed Items',
-        data: [28, 48, 40, 19, 86, 27, 90],
-        backgroundColor: 'rgba(255, 255, 0, 0.5)', // Yellow with transparency
-        borderColor: 'yellow', // Line color
-        fill: false, // Fills the area under the line
+        data: [0,0,0,0,0],
+        backgroundColor: 'rgba(255, 255, 0, 0.5)', 
+        borderColor: 'yellow', 
+        fill: false, 
       },
     ],
   };
   
-  lineChartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  lineChartLabels = this.lineChartData.labels;
 
   doughnutChartData = {
     labels: ['Claimed', 'Unclaimed','Donated'],
     datasets: [
       {
-        data: [200, 100,50],
+        data: [0, 0, 0],
         backgroundColor: ['green', 'yellow','red'], 
       },
     ],
@@ -158,6 +170,10 @@ export default class DashboardComponent {
   ngOnInit(): void {
     this.startCountdown();
     this.fetchSlides();
+    const currentMonth = this.selectedMonth.getMonth() + 1; 
+    const currentYear = this.selectedMonth.getFullYear();
+    this.statusCount(currentMonth, currentYear);
+    this.categoryItems(currentMonth, currentYear);
   }
   ngOnDestroy(): void {
     this.countdownTimers.forEach(timer => clearInterval(timer));
@@ -337,5 +353,117 @@ export default class DashboardComponent {
   }
 
   
+
+  openCalendarDialog(): void {
+    const dialogRef = this.dialog.open(CalendarDialogComponent, {
+      width: '400px',
+      data: { selectedDate: this.selectedMonth },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const { month, year } = result;
+        console.log('Selected Month:', month);
+        console.log('Selected Year:', year);
+
+        this.selectedMonth = new Date(year, month - 1);
+        this.statusCount(month, year);
   
+  
+      }
+    });
+  }
+
+  statusCount(month: number, year: number): void {
+    this.claimService.statusCount(month.toString(), year).subscribe({
+      next: (res: any) => {
+        console.log('Status Count Response:', res);
+        if (res && res.length > 0) {
+        
+          const data = res[0];
+          this.currentMonthData.totalItems = data.totalItems;
+          this.currentMonthData.claimed = data.claimed;
+          this.currentMonthData.unclaimed = data.unclaimed;
+
+          this.currentMonthData.donated = this.currentMonthData.totalItems - 
+            (this.currentMonthData.claimed + this.currentMonthData.unclaimed);
+            this.updateDoughnutChartData();
+        } else {
+      
+          this.currentMonthData = {
+            totalItems: 0,
+            claimed: 0,
+            unclaimed: 0,
+            donated: 0,
+            pendingApproval: 0,
+            pendingPickup: 0,
+            rejected: 0,
+          };
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching status count:', err);
+      },
+    });
+
+
+    
+  }
+  updateDoughnutChartData(): void {
+    this.doughnutChartData = {
+      labels: ['Claimed', 'Unclaimed','Donated'],
+      datasets: [
+        {
+          data:  [
+            this.currentMonthData.claimed,
+            this.currentMonthData.unclaimed,
+            this.currentMonthData.donated,
+          ],
+          backgroundColor: ['green', 'yellow','red'], 
+        },
+      ],
+    };
+
+    this.lineChartData = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label: 'Claimed Items',
+          data: [this.currentMonthData.claimed,],
+          backgroundColor: 'rgba(0, 128, 0, 0.5)', 
+          borderColor: 'green', 
+          fill: false, 
+        },
+        {
+          label: 'Unclaimed Items',
+          data: [this.currentMonthData.unclaimed],
+          backgroundColor: 'rgba(255, 255, 0, 0.5)', 
+          borderColor: 'yellow', 
+          fill: false, 
+        },
+      ],
+    };
+    this.cdr.detectChanges();
+  }
+
+ 
+ 
+  categoryItems(month: number, year: number):void{
+this.claimService.categoryItems(month.toString(), year).subscribe({
+  next: (res: any) => {
+    console.log('categoryItems Response:', res);
+    if (res && res.length > 0) {
+      res.forEach((category: any) => {
+        console.log(`Category ID: ${category.categoryName}, Item Count: ${category.itemCount}`);
+      });
+    } else {
+      console.log('No category data available');
+    }
+  },
+  error: (err) => {
+    console.error('Error fetching status count:', err);
+  },
+})
+  }
+ 
 }
