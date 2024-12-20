@@ -11,7 +11,6 @@
       <div class="mt-4">
         <div *ngIf="organizationList.length > 0; else noData">
           <div class="flex flex-col space-y-4">
-            
             <div class="w-full">
                 <mat-form-field class="w-full">
                   <mat-label>Select an Organization</mat-label>
@@ -20,13 +19,14 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-  
+
             <div class="w-full">
               <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
                 <ngx-dropzone-label class="text-gray-500 text-center">
                   Drag and drop an image here or click to upload
                 </ngx-dropzone-label>
-                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f" (removed)="onRemove(f)">
+                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" (removed)="onRemove(f)">
+                  <img [src]="f.preview" alt="Image Preview" class="w-32 h-32 object-cover rounded-md" />
                 </ngx-dropzone-preview>
               </ngx-dropzone>
             </div>

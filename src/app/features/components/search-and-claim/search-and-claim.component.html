@@ -84,8 +84,6 @@
                         </button>
                       </div>
                     </div>
-                    
-                    
                   </mat-expansion-panel>
                 </mat-accordion>
               </mat-card>
@@ -149,7 +147,7 @@
                             Drag and drop image here or click to upload
                           </ngx-dropzone-label>
             
-                          <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f.file" (removed)="onRemove(f)">
+                          <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f.file" >
                             <ngx-dropzone-label class="label">{{ f.file.name }}</ngx-dropzone-label>
                           </ngx-dropzone-preview>
             
@@ -160,10 +158,7 @@
                           Upload Image
                         </button>
                       </div>
-                    
                       </div>
-            
-                     
                     </div>
                   </mat-expansion-panel>
                 </mat-accordion>
