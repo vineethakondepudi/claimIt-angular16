@@ -18,6 +18,9 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { TooltipDirective } from '../../directives/tooltip.directive';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
+import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 @Component({
   selector: 'app-data-table',
   standalone: true,
@@ -83,7 +86,7 @@ export class DataTableComponent<T> {
   @Output() exportData = new EventEmitter();
   displayedColumns: Array<string> = [];
   isOpen = false;
-  constructor(public readonly router: Router, private datePipe: DatePipe) { }
+  constructor(public readonly router: Router, private datePipe: DatePipe, private dialog: MatDialog) { }
   ngOnInit() {
     console.log('showUnClaim', this.showUnClaim)
     this.displayedColumns = this.tableColumns.map((col) => col.name);
@@ -111,13 +114,25 @@ export class DataTableComponent<T> {
   }
   generateQrCodeData(element: any): string {
     return JSON.stringify({
-      id: element.itemId,
+      itemId: element.itemId,
       name: element.name,
       // description: element.description,
     });
   }
 
-
+  openQrDialog(element: any): void {
+    const dialogRef = this.dialog.open(QrcodeDialogComponent, {
+          width: "300px",
+          data: {
+            requiredData:  element,
+            title: 'qrcode'
+          },
+        });
+    
+        dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        });
+      }
+  
   applyFilter() {
     this.dataSource.filter = this.searchKeyword.trim().toLowerCase();
   }

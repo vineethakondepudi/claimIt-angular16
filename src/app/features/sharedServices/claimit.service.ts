@@ -65,4 +65,13 @@ export class ClaimitService {
     return this.http.put(environment.markASClaimed,reqbody)
   }
   
+  public statusCount(month: string, year: number) {
+    const url = `${environment.statusCount}?month=${year}-${month}`;
+    return this.http.get(url);
+  }
+  
+  public categoryItems(month: string, year: number) {
+    const url = `${environment.categoryItems}?month=${year}-${month}`;
+    return this.http.get(url);
+  }
 }
