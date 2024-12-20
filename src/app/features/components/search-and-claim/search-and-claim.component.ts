@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FooterComponent } from 'src/app/@amc/components/footer/footer.component';
 import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
 import { CreateClaimComponent } from '../create-claim/create-claim.component';
@@ -143,7 +144,7 @@ export default class SearchAndClaimComponent {
     sortId: "foundDate",
   };
   selectedCategory: string = '';
-  constructor(private http: HttpClient, private route: ActivatedRoute, private matDialog: MatDialog,private claimService:ClaimitService) {
+  constructor(private http: HttpClient, private route: ActivatedRoute,private snackBar: MatSnackBar, private matDialog: MatDialog,private claimService:ClaimitService) {
     this.loadSavedSearches(); 
    }
 
@@ -166,10 +167,31 @@ export default class SearchAndClaimComponent {
   searchItems() {
     if (this.searchQuery.trim() !== '') {
       const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
-
+  
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
-          this.searchResults = response;
+          if (Array.isArray(response)) {
+            const normalizedQuery = this.searchQuery.trim().toLowerCase();
+            const ignoreWords = ["i", "lost", "my", "missed", "the", "a", "and", "to", "is", "on", "of", "in", "for", "with"];
+            const queryWords = normalizedQuery
+              .split(' ')
+              .filter(word => word && !ignoreWords.includes(word));
+  
+            console.log('Filtered Query Words:', queryWords);  
+  
+            this.searchResults = response.filter(item => {
+              const { dominantColor, title, description, itemName } = item;
+              const isMatch = queryWords.some(queryWord =>
+                (dominantColor && dominantColor.toLowerCase().includes(queryWord)) ||
+                (title && title.toLowerCase().includes(queryWord)) ||
+                (description && description.toLowerCase().includes(queryWord)) ||
+                (itemName && itemName.toLowerCase().includes(queryWord))
+              );
+              return isMatch;
+            });
+          } else {
+            console.error('API response is not an array', response);
+          }
         },
         (error) => {
           console.error('Error fetching search results:', error);
@@ -207,12 +229,24 @@ export default class SearchAndClaimComponent {
       if (!this.savedSearches.includes(this.searchQuery)) {
         this.savedSearches.push(this.searchQuery);
         localStorage.setItem('savedSearches', JSON.stringify(this.savedSearches));
-        alert('Search saved successfully!');
+        this.snackBar.open('Search saved successfully!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right', // Set horizontal position
+          verticalPosition: 'top',    // Set vertical position
+        });
       } else {
-        alert('This search is already saved.');
+        this.snackBar.open('This search is already saved.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
       }
     } else {
-      alert('Search query cannot be empty.');
+      this.snackBar.open('Search query cannot be empty.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
     }
   }
   applySavedSearch() {
@@ -315,7 +349,7 @@ export default class SearchAndClaimComponent {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
 
-    const picUrl = 'http://172.17.12.38:8081/api/users/uploadImageForSearch';
+    const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });

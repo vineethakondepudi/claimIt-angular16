@@ -13,13 +13,13 @@ import { SearchResultsDialogComponent } from '../search-results-dialog/search-re
 import { FooterComponent } from '../footer/footer.component'
 import { FormFooterComponent } from '../form-footer/form-footer.component'
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartType, ChartEvent, Chart, ChartData } from 'chart.js';
+import { ChartConfiguration, ChartType, ChartEvent, Chart, ChartData, ChartOptions } from 'chart.js';
 import { MatSelectModule } from '@angular/material/select';
 import Swiper from 'swiper'
 import { LoaderComponent } from '../loader/loader.component'
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { FormsModule } from '@angular/forms'
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component'
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -47,7 +47,7 @@ interface Item {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, MatTableModule,MatIconModule,MatCardModule, MatDividerModule, MatToolbarModule,MatDialogModule,
+  imports: [CommonModule, MatTableModule, MatIconModule, MatCardModule, MatDividerModule, MatToolbarModule, MatDialogModule,
     MatCardModule,
     NgChartsModule,
     FooterComponent,
@@ -65,8 +65,10 @@ interface Item {
 export default class DashboardComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   @ViewChild(BaseChartDirective) piechart: BaseChartDirective | undefined;
-  role:any
-  constructor(private claimService: ClaimitService,private http:HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
+  role: any
+  pieChart: any = []
+  pieChartLabels: any
+  constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
     this.role = localStorage.getItem('role');
   }
   public pieChartType: ChartType = 'pie';
@@ -75,8 +77,10 @@ export default class DashboardComponent {
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
   swiper: Swiper | undefined;
-  loader:boolean=false;
+  loader: boolean = false;
   selectedMonth: Date = new Date();
+  currentMonth: any = [];
+  monthName: any = [];
   currentMonthData: any = {
     totalItems: 0,
     claimed: 0,
@@ -86,18 +90,11 @@ export default class DashboardComponent {
     pendingPickup: 0,
     rejected: 0,
   };
-  categoryData: any[] = [];
-  searchResults: any= [];
-  pieChartLabels = ['Apparel', 'Footwear', 'Miscellaneous'];
-  pieChartData = {
-    labels: this.pieChartLabels,
-    datasets: [
-      {
-        data: [50, 25, 25],
-        backgroundColor: ['#FF5733', '#33FF57', '#3357FF'], // Customize colors if needed
-      },
-    ],
-  };
+
+  categoryData: Array<{ categoryName: string; itemCount: number }> = [];
+
+  searchResults: any = [];
+
   donationHistory = [
     { item: 'Lost Wallet', donationDate: new Date('2024-12-15'), charity: 'ABC Charity' },
     { item: 'Found Phone', donationDate: new Date('2024-12-18'), charity: 'XYZ Charity' },
@@ -112,68 +109,50 @@ export default class DashboardComponent {
     { text: 'I lost my wallet at a park and found it thanks to this platform. A lifesaver!', author: 'Poonam Gupta' },
     { text: 'I was able to return a found phone to its owner. Amazing experience!', author: 'Krishna Vedantam' }
   ];
-  barChartData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'Apparel',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: '#FF5733',
-      },
-      {
-        label: 'Footwear',
-        data: [28, 48, 40, 19, 86, 27, 90],
-        backgroundColor: '#33FF57',
-      },
-      {
-        label: 'Miscellaneous',
-        data: [18, 48, 77, 9, 100, 27, 40],
-        backgroundColor: '#3357FF',
-      },
-    ],
-  };
-  barChartLabels = this.barChartData.labels;
+
 
   lineChartData: ChartData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: this.monthName == '' ? "dec" : this.monthName,
     datasets: [
       {
         label: 'Claimed Items',
-        data: [0,0,0,0,0],
+        data: [0, 0, 0, 0, 0],
         backgroundColor: 'rgba(0, 128, 0, 0.5)', // Green with transparency
         borderColor: 'green', // Line color
         fill: false, // Fills the area under the line
       },
       {
         label: 'Unclaimed Items',
-        data: [0,0,0,0,0],
-        backgroundColor: 'rgba(255, 255, 0, 0.5)', 
-        borderColor: 'yellow', 
-        fill: false, 
+        data: [0, 0, 0, 0, 0],
+        backgroundColor: 'rgba(255, 255, 0, 0.5)',
+        borderColor: 'yellow',
+        fill: false,
       },
     ],
   };
-  
+
   lineChartLabels = this.lineChartData.labels;
 
   doughnutChartData = {
-    labels: ['Claimed', 'Unclaimed','Donated'],
+    labels: ['Claimed', 'Unclaimed', 'Donated'],
     datasets: [
       {
         data: [0, 0, 0],
-        backgroundColor: ['green', 'yellow','red'], 
+        backgroundColor: ['green', 'yellow', 'red'],
       },
     ],
   };
   doughnutChartLabels = this.doughnutChartData.labels;
-  countdownTimers: any[] = []; 
+  countdownTimers: any[] = [];
+
   ngOnInit(): void {
     this.startCountdown();
     this.fetchSlides();
-    const currentMonth = this.selectedMonth.getMonth() + 1; 
+    this.currentMonth = this.selectedMonth.getMonth() + 1;
     const currentYear = this.selectedMonth.getFullYear();
-    this.statusCount(currentMonth, currentYear);
-    this.categoryItems(currentMonth, currentYear);
+    this.statusCount(this.currentMonth, currentYear);
+    this.categoryItems(this.currentMonth, currentYear);
+    this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
   }
   ngOnDestroy(): void {
     this.countdownTimers.forEach(timer => clearInterval(timer));
@@ -189,7 +168,7 @@ export default class DashboardComponent {
     setInterval(() => {
       this.pendingDonations.forEach((donation) => {
         const currentTime = new Date().getTime();
-        const timeDiff = donation.createdAt + 30 * 24 * 60 * 60 * 1000 - currentTime; 
+        const timeDiff = donation.createdAt + 30 * 24 * 60 * 60 * 1000 - currentTime;
 
         if (timeDiff > 0) {
           donation.remainingTime = this.formatTime(timeDiff);
@@ -207,10 +186,10 @@ export default class DashboardComponent {
       if (item.remainingTime === 'Expired') {
         clearInterval(timer);
       }
-    }, 1000); 
+    }, 1000);
     this.countdownTimers.push(timer);
   }
-  
+
 
   ngAfterViewInit() {
     this.swiper = new Swiper('.swiper-container', {
@@ -263,7 +242,7 @@ export default class DashboardComponent {
     }
   ];
   slides: any;
-   charityPartners = [
+  charityPartners = [
     { name: 'Charity A', description: 'Focus: Education support for underprivileged children.' },
     { name: 'Charity B', description: 'Focus: Food distribution to homeless communities.' },
     { name: 'Charity C', description: 'Focus: Disaster relief and medical aid.' },
@@ -274,16 +253,16 @@ export default class DashboardComponent {
   ];
   onSearchInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.searchQuery = input.value; 
+    this.searchQuery = input.value;
   }
   fetchSlides(): void {
     this.loader = true
     const apiUrl = 'http://172.17.12.38:8081/api/users/search';
     this.claimService.getUSerSlides().subscribe({
-      next: (data:any) => {
-        this.slides = data.map((item:any) => {
+      next: (data: any) => {
+        this.slides = data.map((item: any) => {
           const remainingTime = this.calculateTimeRemaining(item.foundDate);
-  
+
           return {
             title: item.title || 'Untitled',
             date: item.date || 'Unknown Date',
@@ -293,7 +272,7 @@ export default class DashboardComponent {
             remainingTime: remainingTime
           };
         });
-        this.slides.forEach((item:any) => this.startCountdown1(item));
+        this.slides.forEach((item: any) => this.startCountdown1(item));
         this.loader = false
       },
       error: (err) => {
@@ -301,27 +280,27 @@ export default class DashboardComponent {
       }
     });
   }
-  
+
   calculateTimeRemaining(foundedDate: string): string {
     const foundDate = new Date(foundedDate);
     const targetDate = new Date(foundDate);
-    targetDate.setDate(foundDate.getDate() + 30); 
-  
+    targetDate.setDate(foundDate.getDate() + 30);
+
     const now = new Date();
     const timeDiff = targetDate.getTime() - now.getTime();
-  
+
     if (timeDiff <= 0) {
       return 'Expired';
     }
-  
+
     const days = Math.floor(timeDiff / (1000 * 3600 * 24));
     const hours = Math.floor((timeDiff % (1000 * 3600 * 24)) / (1000 * 3600));
     const minutes = Math.floor((timeDiff % (1000 * 3600)) / (1000 * 60));
     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-  
+
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   }
-  
+
   openDialog(charity: any): void {
     this.dialog.open(SearchResultsDialogComponent, {
       width: '400px',
@@ -335,11 +314,10 @@ export default class DashboardComponent {
   searchItems() {
     if (this.searchQuery.trim()) {
       const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
-      
+
       this.http.get<Item[]>(apiUrl).subscribe(
         (response: Item[]) => {
           this.searchResults = response;
-          console.log('Search results:', response);
           this.dialog.open(SearchResultsDialogComponent, {
             data: this.searchResults
           });
@@ -351,9 +329,6 @@ export default class DashboardComponent {
     } else {
     }
   }
-
-  
-
   openCalendarDialog(): void {
     const dialogRef = this.dialog.open(CalendarDialogComponent, {
       width: '400px',
@@ -363,13 +338,10 @@ export default class DashboardComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const { month, year } = result;
-        console.log('Selected Month:', month);
-        console.log('Selected Year:', year);
-
         this.selectedMonth = new Date(year, month - 1);
         this.statusCount(month, year);
-  
-  
+        this.categoryItems(month, year);
+        this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' })
       }
     });
   }
@@ -377,19 +349,19 @@ export default class DashboardComponent {
   statusCount(month: number, year: number): void {
     this.claimService.statusCount(month.toString(), year).subscribe({
       next: (res: any) => {
-        console.log('Status Count Response:', res);
         if (res && res.length > 0) {
-        
+
           const data = res[0];
           this.currentMonthData.totalItems = data.totalItems;
           this.currentMonthData.claimed = data.claimed;
           this.currentMonthData.unclaimed = data.unclaimed;
+          console.log(this.currentMonthData.claimed);
 
-          this.currentMonthData.donated = this.currentMonthData.totalItems - 
+          this.currentMonthData.donated = this.currentMonthData.totalItems -
             (this.currentMonthData.claimed + this.currentMonthData.unclaimed);
-            this.updateDoughnutChartData();
+          this.updateDoughnutChartData();
         } else {
-      
+
           this.currentMonthData = {
             totalItems: 0,
             claimed: 0,
@@ -405,65 +377,88 @@ export default class DashboardComponent {
         console.error('Error fetching status count:', err);
       },
     });
-
-
-    
   }
+
+  PieChartData: any = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [],
+      },
+    ],
+  };
+  chartOptions: ChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+
+  updatedPieChartData(labels: string[], dataPoints: number[]): void {
+    console.log('Updating chart data:', labels, dataPoints);
+
+    this.PieChartData.labels = [...labels];
+    this.PieChartData.datasets[0].data = [...dataPoints];
+    this.PieChartData.datasets[0].backgroundColor = labels.map(() =>
+      `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
+    );
+
+
+    this.PieChartData = { ...this.PieChartData };
+  }
+
+  categoryItems(month: number, year: number): void {
+    console.log('Fetching data for month:', month, 'year:', year);
+
+    this.claimService.categoryItems(month.toString(), year).subscribe((res: any) => {
+      const labels = res.map((item: any) => item.categoryName);
+      const dataPoints = res.map((item: any) => item.itemCount);
+
+      console.log('Labels:', labels, 'Data Points:', dataPoints);
+      this.updatedPieChartData(labels, dataPoints);
+    });
+  }
+
   updateDoughnutChartData(): void {
     this.doughnutChartData = {
-      labels: ['Claimed', 'Unclaimed','Donated'],
+      labels: ['Claimed', 'Unclaimed', 'Donated'],
       datasets: [
         {
-          data:  [
+          data: [
             this.currentMonthData.claimed,
             this.currentMonthData.unclaimed,
             this.currentMonthData.donated,
           ],
-          backgroundColor: ['green', 'yellow','red'], 
+          backgroundColor: ['green', 'yellow', 'red'],
         },
       ],
     };
 
+
+
     this.lineChartData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: [this.monthName],
       datasets: [
         {
           label: 'Claimed Items',
           data: [this.currentMonthData.claimed,],
-          backgroundColor: 'rgba(0, 128, 0, 0.5)', 
-          borderColor: 'green', 
-          fill: false, 
+          backgroundColor: 'rgba(0, 128, 0, 0.5)',
+          borderColor: 'green',
+          fill: false,
         },
         {
           label: 'Unclaimed Items',
           data: [this.currentMonthData.unclaimed],
-          backgroundColor: 'rgba(255, 255, 0, 0.5)', 
-          borderColor: 'yellow', 
-          fill: false, 
+          backgroundColor: 'rgba(255, 255, 0, 0.5)',
+          borderColor: 'yellow',
+          fill: false,
         },
       ],
     };
     this.cdr.detectChanges();
   }
 
- 
- 
-  categoryItems(month: number, year: number):void{
-this.claimService.categoryItems(month.toString(), year).subscribe({
-  next: (res: any) => {
-    console.log('categoryItems Response:', res);
-    if (res && res.length > 0) {
-      res.forEach((category: any) => {
-        console.log(`Category ID: ${category.categoryName}, Item Count: ${category.itemCount}`);
-      });
-    } else {
-      console.log('No category data available');
-    }
-  },
-  error: (err) => {
-    console.error('Error fetching status count:', err);
-  },
-})
-  }
- 
+
+
+
+
 }

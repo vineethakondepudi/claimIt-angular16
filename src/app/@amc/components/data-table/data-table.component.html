@@ -44,9 +44,9 @@
             {{ formatDate(element[tableColumn.name]) }}
           </div>
           <div *ngIf="tableColumn.label === 'QR Code' || tableColumn.name === 'qrCode'">
-              <qrcode [qrdata]="generateQrCodeData(element)" [width]="100" [errorCorrectionLevel]="'M'">
-              </qrcode>
-            </div>
+            <a (click)="openQrDialog(element)" class="underline hover:text-blue-500">View QR Code</a>
+          </div>
+          
           <div *ngIf="tableColumn.label === 'Image Data' || tableColumn.name === 'image' "
             (click)="openPreviewImage(element)">
             <img [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image" class="item-image"
