@@ -32,7 +32,6 @@ interface Item {
   itemId: number;
   itemName: string;
   status: string;
-  foundDate: string;
   name: string;
   subcatgeoryId: number;
   categoryId: number;
@@ -58,7 +57,7 @@ interface Item {
     MatButtonModule,
     FormsModule,
     MatInputModule,
-    MatIconModule],
+    MatIconModule,],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
@@ -74,6 +73,7 @@ export default class DashboardComponent {
   public pieChartType: ChartType = 'pie';
   public barChartType: ChartType = 'bar';
   lineChartType: ChartType = 'line';
+  showMore = false;
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
   swiper: Swiper | undefined;
@@ -164,6 +164,9 @@ export default class DashboardComponent {
       this.newExperience.author = '';
     }
   }
+  toggleShowMore() {
+    this.showMore = !this.showMore;
+  }
   startCountdown() {
     setInterval(() => {
       this.pendingDonations.forEach((donation) => {
@@ -178,11 +181,19 @@ export default class DashboardComponent {
       });
     }, 1000);
   }
+  shareItem(item: any) {
+    const itemUrl = `https://example.com/item/${item.id}`; 
+    const shareText = `Found a lost item: ${item.title}. More details: ${itemUrl}`;
 
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(itemUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    window.open(whatsappUrl, '_blank', 'width=600,height=400,resizable=yes');
+  }
   startCountdown1(item: any): void {
-    item.remainingTime = this.calculateTimeRemaining(item.foundDate);
+    item.remainingTime = this.calculateTimeRemaining(item.expirationDate);
     const timer = setInterval(() => {
-      item.remainingTime = this.calculateTimeRemaining(item.foundDate);
+      item.remainingTime = this.calculateTimeRemaining(item.expirationDate);
       if (item.remainingTime === 'Expired') {
         clearInterval(timer);
       }
@@ -261,14 +272,14 @@ export default class DashboardComponent {
     this.claimService.getUSerSlides().subscribe({
       next: (data: any) => {
         this.slides = data.map((item: any) => {
-          const remainingTime = this.calculateTimeRemaining(item.foundDate);
+          const remainingTime = this.calculateTimeRemaining(item.expirationDate);
 
           return {
             title: item.title || 'Untitled',
             date: item.date || 'Unknown Date',
             description: item.description || 'No Description',
             image: item.image || 'https://via.placeholder.com/150',
-            foundDate: item.foundDate || 'Unknown Date',
+            expirationDate: item.expirationDate || 'Unknown Date',
             remainingTime: remainingTime
           };
         });
@@ -282,9 +293,9 @@ export default class DashboardComponent {
   }
 
   calculateTimeRemaining(foundedDate: string): string {
-    const foundDate = new Date(foundedDate);
-    const targetDate = new Date(foundDate);
-    targetDate.setDate(foundDate.getDate() + 30);
+    const expirationDate = new Date(foundedDate);
+    const targetDate = new Date(expirationDate);
+    targetDate.setDate(expirationDate.getDate() + 30);
 
     const now = new Date();
     const timeDiff = targetDate.getTime() - now.getTime();

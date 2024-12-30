@@ -109,110 +109,75 @@
   
 </div>
 
-<div  *ngIf="role !== 'admin'" class="min-h-screen overflow-x-hidden	 flex flex-col bg-gray-50">
+<div *ngIf="role !== 'admin'" class="min-h-screen overflow-x-hidden flex flex-col bg-gray-50">
   <div class="bg-blue-100 py-10 text-center">
-      <h1 class="text-2xl md:text-4xl font-bold text-gray-700">Lost Something? Let’s Find It!</h1>
-      <div class="mt-4">
-          <mat-form-field appearance="outline" class="w-full md:w-1/2">
-              <mat-label>Search for lost items...</mat-label>
-              <input type="text" placeholder="Enter item name" aria-label="Search" matInput
-                  (input)="onSearchInput($event)" />
-              <button mat-icon-button (click)="searchItems()" matSuffix>
-                  <mat-icon>search</mat-icon>
-              </button>
-          </mat-form-field>
-
-      </div>
+    <h1 class="text-2xl md:text-4xl font-bold text-gray-700">Lost Something? Let’s Find It!</h1>
+    <div class="mt-4">
+      <mat-form-field appearance="outline" class="w-full md:w-1/2">
+        <mat-label>Search for lost items...</mat-label>
+        <input type="text" placeholder="Enter item name" aria-label="Search" matInput (input)="onSearchInput($event)" />
+        <button mat-icon-button (click)="searchItems()" matSuffix>
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
   </div>
+
   <div class="bg-green-100 p-6 rounded-md text-center mx-6 mt-6 shadow-md">
     <h2 class="text-xl font-bold text-green-700">Environmental Impact Saved</h2>
     <p class="text-4xl font-bold text-green-600">160 kg CO₂</p>
     <p class="text-gray-600">Thanks to reuniting or repurposing items!</p>
-  
+
     <!-- Category-wise Breakdown -->
     <div class="mt-4 text-left text-gray-700">
-        <p><strong>Plastic Items:</strong> 10 items saved ~ 40 kg CO₂</p>
-        <p><strong>Clothes:</strong>10 items saved ~ 40 kg CO₂</p>
-        <p><strong>Electronics:</strong>50 items saved ~ 80 kg CO₂</p>
+      <p><strong>Plastic Items:</strong> 10 items saved ~ 40 kg CO₂</p>
+      <p><strong>Clothes:</strong>10 items saved ~ 40 kg CO₂</p>
+      <p><strong>Electronics:</strong>50 items saved ~ 80 kg CO₂</p>
     </div>
   </div>
+
   <div class="swiper-container px-6 py-4">
     <h2 class="text-xl font-bold text-gray-700 mb-4">Recently Reported Items</h2>
-    <div class="swiper-wrapper">
-      <div class="swiper-slide p-4 flex justify-center items-center" *ngFor="let item of slides">
-        <mat-card class="w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer">
+    <div class="swiper-wrapper flex md:flex-row flex-col">
+      <div *ngFor="let item of slides.slice(0, showMore ? slides.length : 2)" class="swiper-slide p-4 flex justify-center items-start w-full md:w-auto">
+        <mat-card class="w-full md:w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer">
           <mat-card-header>
-            <mat-card-title class=" cursor-pointer text-lg font-semibold text-gray-800" matTooltip="{{item.title}}">
-              {{ item.title.slice(0,15) }} <span *ngIf="item.title.length>15">....</span>
+            <mat-card-title class="cursor-pointer text-lg font-semibold text-gray-800" matTooltip="{{item.title}}">
+              {{ item.title.slice(0, 15) }} <span *ngIf="item.title.length > 15">....</span>
             </mat-card-title>
             <mat-card-subtitle class="text-sm text-gray-500 cursor-pointer">
               Reported on: {{ item.foundDate | date: 'MM/dd/yyyy' }}
             </mat-card-subtitle>
-            
           </mat-card-header>
           <mat-card-content>
             <div class="flex flex-col items-center cursor-pointer">
-              <img
-                [src]="'data:image/jpeg;base64,' + item.image"
-                alt="{{ item.title }}"
-                class="w-32 h-32 object-cover rounded-md mb-4"
-              />
-              <!-- <p class="text-sm text-gray-700 text-center">
-                {{ item.description }}
-              </p> -->
+              <img [src]="'data:image/jpeg;base64,' + item.image" alt="{{ item.title }}"
+                   class="w-full h-32 object-cover rounded-md mb-4" style="min-height: 120px;" />
               <div class="text-sm text-center mt-4 text-gray-500 bg-blue-100 text-blue-600 py-2 px-4 rounded-lg">
                 Time remaining: <span class="font-semibold">{{ item.remainingTime }}</span>
               </div>
-              
             </div>
           </mat-card-content>
+          <mat-card-actions class="flex justify-between items-center p-4">
+            <button mat-icon-button (click)="shareItem(item)">
+              <mat-icon>share</mat-icon>
+            </button>
+          </mat-card-actions>
         </mat-card>
       </div>
     </div>
+
+    <div *ngIf="!showMore" class="text-center mt-4">
+      <button (click)="toggleShowMore()" class="text-blue-500">View More</button>
+    </div>
+
     <div class="swiper-pagination"></div>
   </div>
-  <div class="bg-white py-10 px-6">
-    <div class="text-center mb-8">
-      <h2 class="text-2xl font-bold text-gray-700">Our Impact So Far</h2>
-      <p class="text-gray-600">See how our platform has helped people recover their lost items.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="text-center">
-        <h3 class="text-4xl font-bold text-blue-500">5,000+</h3>
-        <p class="text-gray-700">Items Reunited</p>
-      </div>
-      <div class="text-center">
-        <h3 class="text-4xl font-bold text-blue-500">10,000+</h3>
-        <p class="text-gray-700">Happy Users</p>
-      </div>
-      <div class="text-center">
-        <h3 class="text-4xl font-bold text-blue-500">95%</h3>
-        <p class="text-gray-700">Success Rate</p>
-      </div>
-    </div>
-    <div class="mt-10">
-      <h2 class="text-2xl font-bold text-gray-700 text-center mb-6">Have a recovery story of any item you lost?</h2>
-    
-      <!-- Form to input the experience -->
-      <div class="mb-6">
-        <textarea [(ngModel)]="newExperience.text" class="w-full p-2 border border-gray-300 rounded" placeholder="Share your experience..."></textarea>
-        <input [(ngModel)]="newExperience.author" class="w-full p-2 mt-4 border border-gray-300 rounded" placeholder="Your name" />
-        <button (click)="addExperience()" class="bg-blue-500 text-white p-2 mt-4 rounded">Add Experience</button>
-      </div>
-      <h2 class="text-2xl font-bold text-gray-700 text-center mb-6">What Our Users Say</h2>
-      <!-- Displaying the user experiences -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <mat-card *ngFor="let experience of experiences">
-          <mat-card-content>
-            <p>"{{ experience.text }}"</p>
-            <p class="mt-4 font-bold">- {{ experience.author }}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-    
-  </div>
+
 </div>
+
+
+
 <div class="flex-none">
   <app-form-footer></app-form-footer>
 </div>

@@ -1,0 +1,90 @@
+
+.mat-accordion {
+    width: 100%;
+  }
+  @media screen and (max-width: 768px) {
+    .mat-accordion {
+      width: 100%;
+    }
+    h1 {
+      font-size: 1.5rem; 
+    }
+    .mat-expansion-panel-header {
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+    }
+  
+    .mat-panel-title {
+      font-size: 1.25rem; 
+    }
+    .flex {
+      flex-direction: column !important;
+    }
+  
+    .w-32 {
+      width: 100% !important;
+      height: 150px !important;
+    }
+    .text-sm {
+      font-size: 1rem; 
+    }
+    button {
+      width: 100%;
+    }
+  
+    .ngx-dropzone-label {
+      font-size: 1rem;
+    }
+    .app-data-table {
+      margin-top: 1rem;
+    }
+  
+    .mat-card {
+      padding: 1rem; 
+    }
+    .space-y-4 {
+      margin-bottom: 1rem;
+    }
+  
+    .space-x-4 {
+      margin-left: 0 !important;
+    }
+  
+    .flex-grow {
+      margin-top: 2rem;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+
+    h1 {
+      font-size: 1.25rem; 
+    }
+  
+    .mat-panel-title {
+      font-size: 1.1rem;
+    }
+  
+    .text-sm {
+      font-size: 0.875rem; 
+    }
+    .w-full {
+      width: 100% !important;
+    }
+  
+    .mat-expansion-panel-header {
+      flex-direction: column;
+    }
+    button {
+      width: 100%;
+    }
+  
+    .ngx-dropzone-label {
+      font-size: 0.875rem;
+    }
+    .mt-6 {
+      margin-top: 1.5rem;
+    }
+  }
+  
