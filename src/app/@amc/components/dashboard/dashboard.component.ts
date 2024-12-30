@@ -19,6 +19,7 @@ import Swiper from 'swiper'
 import { LoaderComponent } from '../loader/loader.component'
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { FormsModule } from '@angular/forms'
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component'
 import { ChangeDetectorRef } from '@angular/core';
@@ -52,6 +53,7 @@ interface Item {
     FooterComponent,
     FormFooterComponent,
     MatSelectModule,
+    MatMenuModule ,
     LoaderComponent,
     MatTooltipModule,
     MatButtonModule,
@@ -181,15 +183,30 @@ export default class DashboardComponent {
       });
     }, 1000);
   }
-  shareItem(item: any) {
-    const itemUrl = `https://example.com/item/${item.id}`; 
+  shareItem(item: any, platform: string) {
+    const itemUrl = `https://example.com/item/${item.id}`; // Adjust with your actual item URL
     const shareText = `Found a lost item: ${item.title}. More details: ${itemUrl}`;
-
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(itemUrl)}`;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-    window.open(whatsappUrl, '_blank', 'width=600,height=400,resizable=yes');
+    
+    let shareUrl = '';
+  
+    switch (platform) {
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(itemUrl)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+        break;
+      default:
+        console.error('Unsupported platform');
+        return;
+    }
+  
+    window.open(shareUrl, '_blank');
   }
+  
   startCountdown1(item: any): void {
     item.remainingTime = this.calculateTimeRemaining(item.expirationDate);
     const timer = setInterval(() => {

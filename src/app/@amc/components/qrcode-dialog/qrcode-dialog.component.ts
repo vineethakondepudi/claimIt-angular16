@@ -27,11 +27,24 @@ export class QrcodeDialogComponent {
       this.title = data.title;
     }
   generateQrCodeData(element: any): string {
+    console.log(element,'element')
     return JSON.stringify({
       id: element.itemId,
       name: element.name,
+      status: element.status,
     });
   }
+  getQrCodeColors(status: string): { colorDark: string; colorLight: string } {
+    switch (status) {
+      case 'CLAIMED':
+        return { colorDark: '#008000', colorLight: '#FFFFFF' }; // Green on white
+      case 'UNCLAIMED':
+        return { colorDark: '#FF0000', colorLight: '#FFFFFF' }; // Red on white
+      default:
+        return { colorDark: '#000000', colorLight: '#FFFFFF' }; // Black on white
+    }
+  }
+  
   onCancel() {
     this.dialogRef.close('no');
   }

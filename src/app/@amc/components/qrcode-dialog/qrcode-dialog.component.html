@@ -11,7 +11,8 @@
 <mat-divider></mat-divider>
 <mat-dialog-content align="start" class="mt-2">  
     <div *ngIf="data.requiredData" class="flex flex-row justify-center gap-2">
-        <qrcode [qrdata]="generateQrCodeData(requiredData)" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+        <qrcode [qrdata]="generateQrCodeData(requiredData)" [width]="200" [errorCorrectionLevel]="'M'"  [colorDark]="getQrCodeColors(data.requiredData.status).colorDark"
+        [colorLight]="getQrCodeColors(data.requiredData.status).colorLight"></qrcode>
     </div>
 </mat-dialog-content>
 

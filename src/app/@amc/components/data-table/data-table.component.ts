@@ -116,6 +116,7 @@ export class DataTableComponent<T> {
     return JSON.stringify({
       itemId: element.itemId,
       name: element.name,
+      status: element.status,
       // description: element.description,
     });
   }
