@@ -157,12 +157,8 @@ export default class SearchAndClaimComponent {
       }
     });
   }
-  public  onRemove(fileToRemove: any): void {
-    this.uplodedfilesdata.splice(this.uplodedfilesdata.indexOf(fileToRemove), 1);
-    const index = this.files.findIndex(f => f.file === fileToRemove);
-    if (index >= 0) {
-      this.files.splice(index, 1); 
-    }
+  onRemove(file: any) {
+    this.files = this.files.filter(f => f !== file);
   }
   searchItems() {
     if (this.searchQuery.trim() !== '') {
