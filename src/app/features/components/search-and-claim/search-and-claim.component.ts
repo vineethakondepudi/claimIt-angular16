@@ -285,10 +285,25 @@ export default class SearchAndClaimComponent {
     this.selectedCategory = category;
     this.search();
   }
-  public  onSelect(event: any): void {
+  // method for selecting the image and restricting the based on the image
+  public onSelect(event: any): void {
     const files = event.addedFiles;
     if (files && files.length > 0) {
       const file = files[0];
+      const allowedTypes = ['image/jpeg','image/png', 'image/gif', 'image/bmp', 'image/jfif'];
+      if (!allowedTypes.includes(file.type)) {
+        const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
+          width: "500px",
+          data: {
+            status: 'Error',
+            msg: 'Only JPG, JPEG, PNG, GIF, BMP, and JFIF image formats are allowed.',
+            btnName: "OK",
+          },
+        });
+        
+        dialogRef.afterClosed().subscribe(() => {
+        });
+      }
       const reader = new FileReader();
       reader.onload = () => {
         this.files.push({
@@ -297,9 +312,9 @@ export default class SearchAndClaimComponent {
         });
       };
       reader.readAsDataURL(file);  
+      
       this.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response.message);
           this.matchedItems = response.matchedItems; 
         },
         (error) => {

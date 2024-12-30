@@ -152,7 +152,7 @@ export default class DashboardComponent {
     const currentYear = this.selectedMonth.getFullYear();
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
-
+    this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
   }
   ngOnDestroy(): void {
     this.countdownTimers.forEach(timer => clearInterval(timer));
