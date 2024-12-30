@@ -164,20 +164,32 @@
             </button>
           </mat-card-actions>
           
+          <mat-card-actions class="flex justify-between items-center p-4">
+            <button mat-icon-button [matMenuTriggerFor]="shareMenu">
+              <mat-icon>share</mat-icon>
+            </button>
+          </mat-card-actions>
+          
           <mat-menu #shareMenu="matMenu">
+            <!-- WhatsApp -->
             <button mat-menu-item (click)="shareItem(item, 'whatsapp')">
-              <mat-icon>whatsapp</mat-icon>
+              <mat-icon svgIcon="whatsapp"></mat-icon>
               <span>Share on WhatsApp</span>
             </button>
+          
+            <!-- LinkedIn -->
             <button mat-menu-item (click)="shareItem(item, 'linkedin')">
-              <mat-icon>linkedin</mat-icon>
+              <mat-icon svgIcon="linkedin"></mat-icon>
               <span>Share on LinkedIn</span>
             </button>
+          
+            <!-- Twitter -->
             <button mat-menu-item (click)="shareItem(item, 'twitter')">
-              <mat-icon>twitter</mat-icon>
+              <mat-icon svgIcon="twitter"></mat-icon>
               <span>Share on Twitter</span>
             </button>
           </mat-menu>
+          
           
         </mat-card>
       </div>
