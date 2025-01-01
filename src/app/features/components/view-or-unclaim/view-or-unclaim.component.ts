@@ -65,7 +65,7 @@ export default class ViewOrUnclaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 2,
     },
     {
       label: "claim Date",
@@ -74,7 +74,7 @@ export default class ViewOrUnclaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 3,
     },
     {
       label: "Action",
@@ -83,7 +83,7 @@ export default class ViewOrUnclaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 4,
     },
   ]
   constructor(public dialog: MatDialog, private service: ClaimitService) {
@@ -96,7 +96,7 @@ export default class ViewOrUnclaimComponent {
   search() {
     const query = this.searchQuery.trim();
     this.service.getAllItems(query).subscribe((res: any) => {
-      console.log('res', res)
+      console.log('res99', res)
       this.searchResults = res.claimHistory.concat(res.itemRequests)
       this.loader = false
     })

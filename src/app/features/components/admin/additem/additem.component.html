@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table [tableColumns]="displayColumns" (sort)="handleSort($event)" [isPageable]="true" [tableData]="searchResults"
+        <app-data-table (previewImage)="previewImage($event)"  [tableColumns]="displayColumns" (sort)="handleSort($event)" [isPageable]="true" [tableData]="searchResults"
             [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
