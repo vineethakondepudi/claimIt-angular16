@@ -442,6 +442,7 @@ export default class DashboardComponent {
     labels: [],
     datasets: [
       {
+        label: [],
         data: [],
         backgroundColor: [],
       },
@@ -468,6 +469,7 @@ export default class DashboardComponent {
     console.log('Updating bar chart data:', labels, dataPoints);
   
     this.barChartData.labels = [...labels];
+    this.barChartData.datasets.label = [...dataPoints];
     this.barChartData.datasets[0].data = [...dataPoints];
     this.barChartData.datasets[0].backgroundColor = labels.map(() =>
       `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
@@ -536,6 +538,6 @@ export default class DashboardComponent {
         },
       ],
     };
-    this.cdr.detectChanges();
+    // this.cdr.detectChanges();
   }
 }
