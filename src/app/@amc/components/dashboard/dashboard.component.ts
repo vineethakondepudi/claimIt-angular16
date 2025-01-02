@@ -488,7 +488,19 @@ export default class DashboardComponent {
     });
   }
 
+  generateChartColors(count: number): string[] {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      colors.push(
+        `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
+      );
+    }
+    return colors;
+  }
+  
+
   updateDoughnutChartData(): void {
+    const colors = this.generateChartColors(3);
     this.doughnutChartData = {
       labels: ['Claimed', 'Unclaimed', 'Donated'],
       datasets: [
@@ -498,12 +510,12 @@ export default class DashboardComponent {
             this.currentMonthData.unclaimed,
             this.currentMonthData.donated,
           ],
-          backgroundColor: ['green', 'yellow', 'red'],
+          backgroundColor: colors,
         },
       ],
     };
 
-
+    const lineChartColors = this.generateChartColors(2);
 
     this.lineChartData = {
       labels: [this.monthName],
@@ -511,15 +523,15 @@ export default class DashboardComponent {
         {
           label: 'Claimed Items',
           data: [this.currentMonthData.claimed,],
-          backgroundColor: 'rgba(0, 128, 0, 0.5)',
-          borderColor: 'green',
+          backgroundColor: lineChartColors[0],
+          borderColor: lineChartColors[0],
           fill: false,
         },
         {
           label: 'Unclaimed Items',
           data: [this.currentMonthData.unclaimed],
-          backgroundColor: 'rgba(255, 255, 0, 0.5)',
-          borderColor: 'yellow',
+          backgroundColor:lineChartColors[1],
+          borderColor: lineChartColors[1],
           fill: false,
         },
       ],
