@@ -434,6 +434,15 @@ export default class DashboardComponent {
       },
     ],
   };
+  public barChartData: any = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [],
+      },
+    ],
+  };
   chartOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -451,7 +460,17 @@ export default class DashboardComponent {
 
     this.PieChartData = { ...this.PieChartData };
   }
-
+  updatedBarChartData(labels: string[], dataPoints: number[]): void {
+    console.log('Updating bar chart data:', labels, dataPoints);
+  
+    this.barChartData.labels = [...labels];
+    this.barChartData.datasets[0].data = [...dataPoints];
+    this.barChartData.datasets[0].backgroundColor = labels.map(() =>
+      `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
+    );
+  
+    this.barChartData = { ...this.barChartData };
+  }
   categoryItems(month: number, year: number): void {
     console.log('Fetching data for month:', month, 'year:', year);
 
@@ -461,6 +480,7 @@ export default class DashboardComponent {
 
       console.log('Labels:', labels, 'Data Points:', dataPoints);
       this.updatedPieChartData(labels, dataPoints);
+      this.updatedBarChartData(labels, dataPoints);
     });
   }
 
@@ -502,9 +522,4 @@ export default class DashboardComponent {
     };
     this.cdr.detectChanges();
   }
-
-
-
-
-
 }

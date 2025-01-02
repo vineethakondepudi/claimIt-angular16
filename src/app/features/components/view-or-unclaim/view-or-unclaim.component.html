@@ -18,13 +18,24 @@
                         </mat-expansion-panel-header>
                         <div class="flex flex-wrap items-center gap-5">
                             <!-- Input Field -->
-                            <mat-form-field appearance="outline" class="search-field">
-                                <mat-label>Email</mat-label>
-                                <input matInput type="text" placeholder="Email" [(ngModel)]="searchQuery" (keyup.enter)="search()" (input)="clearResultsIfEmpty()" />
-                                <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
-                                    <mat-icon>search</mat-icon>
-                                </button>
-                            </mat-form-field>
+                            <form [formGroup]="viewUnclaimForm" class="flex flex-wrap items-center gap-5">
+                                <mat-form-field appearance="outline" class="search-field">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput type="text" placeholder="Email" formControlName="email"
+                                        (keyup.enter)="search()"/>
+                                    <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" class="search-field">
+                                    <mat-label>Name</mat-label>
+                                    <input matInput type="text" placeholder="name" formControlName="name"
+                                        (keyup.enter)="search()" />
+                                    <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </form>
                         
                             <!-- Buttons Container -->
                             <div class="flex flex-row justify-end gap-2 ml-auto">

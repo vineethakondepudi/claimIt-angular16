@@ -13,7 +13,7 @@ export class ClaimitService {
   public loginResponse = new BehaviorSubject<any>(false);
   loginResponse_Triggered = this.loginResponse.asObservable();
   public getAllItems(query: any) {
-    return this.http.get(environment.getAllItems + '?email=' + query);
+    return this.http.get(environment.getAllItems + '?email='+query.email +'&userName=' + query.name);
   }
   public unClaimItem(query: any) {
     let filterQuery = Object.fromEntries(Object.entries(query).filter(([k, v]) => v != '' && v != null))
