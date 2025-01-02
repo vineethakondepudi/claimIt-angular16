@@ -134,9 +134,9 @@ export class OrganizationDialogComponent {
     }
   }
 
-  onCloseDialog(): void {
-    this.dialogRef.close();
+  onCloseDialog() {
+    this.dialogRef.close('no');
   }
   
-  
+ 
 }

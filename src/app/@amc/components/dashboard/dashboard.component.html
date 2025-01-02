@@ -33,28 +33,55 @@
     </div>
   </div>
   
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+   <div class="bg-white p-6 shadow rounded">
+  <ng-container *ngIf="currentMonthData?.totalItems > 0; else noData">
+    <canvas baseChart
+            [data]="PieChartData"
+            [type]="pieChartType">
+    </canvas>
+    <h3 class="text-center mt-4 font-semibold">Item Categories</h3>
+  </ng-container>
+  <ng-template #noData>
+    <p class="text-center text-gray-500">No data found for the selected month</p>
+  </ng-template>
+</div>
+<div class="bg-white p-6 shadow rounded">
+  <ng-container *ngIf="currentMonthData?.totalItems > 0; else noData">
+  <canvas baseChart style="height: 284px; width: 276px;"
+          [data]="barChartData"
+          [type]="barChartType">
+  </canvas>
+  <h3 class="text-center mt-4 font-semibold">Monthly Reports</h3>
+</ng-container>
+<ng-template #noData>
+  <p class="text-center text-gray-500">No data found for the selected month</p>
+</ng-template>
+</div>
+
     <div class="bg-white p-6 shadow rounded">
-      <canvas baseChart
-              [data]="PieChartData"
-              [type]="pieChartType">
-      </canvas>
-      <h3 class="text-center mt-4 font-semibold">Item Categories</h3>
-    </div>
-    <div class="bg-white p-6 shadow rounded">
+      <ng-container *ngIf="currentMonthData?.totalItems > 0; else noData">
       <canvas baseChart style="height: 284px;width: 276px;"
               [data]="lineChartData"
               [type]="lineChartType">
       </canvas>
       <h3 class="text-center mt-4 font-semibold">Items Claimed</h3>
+    </ng-container>
+    <ng-template #noData>
+      <p class="text-center text-gray-500">No data found for the selected month</p>
+    </ng-template>
     </div>
 
     <div class="bg-white p-6 shadow rounded">
+      <ng-container *ngIf="currentMonthData?.totalItems > 0; else noData">
       <canvas baseChart style="height: 284px;width: 276px;"
               [data]="doughnutChartData"
               [type]="doughnutChartType">
       </canvas>
       <h3 class="text-center mt-4 font-semibold">Claimed vs Unclaimed</h3>
+    </ng-container><ng-template #noData>
+      <p class="text-center text-gray-500">No data found for the selected month</p>
+    </ng-template>
     </div>
   </div>
   <div class="mt-12">

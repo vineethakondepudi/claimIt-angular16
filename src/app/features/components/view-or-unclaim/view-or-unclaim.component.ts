@@ -79,13 +79,31 @@ export default class ViewOrUnclaimComponent {
       index: 1,
     },
     {
+      label: "Username",
+      name: "userName",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
+    {
+      label: "Email",
+      name: "email",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 2,
+    },
+    {
       label: "Status",
       name: "status",
       type: "text",
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 2,
     },
     {
       label: "claim Date",
@@ -94,7 +112,7 @@ export default class ViewOrUnclaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 3,
     },
     {
       label: "Action",
@@ -103,7 +121,7 @@ export default class ViewOrUnclaimComponent {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 4,
     },
   ]
   constructor(public dialog: MatDialog, private service: ClaimitService,private fb: FormBuilder) {
