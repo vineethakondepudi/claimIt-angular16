@@ -158,8 +158,10 @@ export default class DashboardComponent {
   ngOnInit(): void {
     this.startCountdown();
     this.fetchSlides();
-    this.currentMonth = this.selectedMonth.getMonth() + 1;
+    this.currentMonth = (this.selectedMonth.getMonth() + 1).toString().padStart(2, '0');
     const currentYear = this.selectedMonth.getFullYear();
+    console.log(this.currentMonth,currentYear,163);
+    
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
     this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
@@ -406,6 +408,8 @@ export default class DashboardComponent {
           this.currentMonthData.donated = this.currentMonthData.totalItems -
             (this.currentMonthData.claimed + this.currentMonthData.unclaimed);
           this.updateDoughnutChartData();
+          console.log(res,409);
+          
         } else {
 
           this.currentMonthData = {
