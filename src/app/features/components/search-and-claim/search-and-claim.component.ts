@@ -130,9 +130,11 @@ export default class SearchAndClaimComponent {
     { value: 'Clothes & Accessories', viewValue: 'Clothes & Accessories' },
     { value: 'Work Tools', viewValue: 'Work Tools' },
     { value: 'Storage Items', viewValue: 'Storage Items' },
-    { value: 'Other Items', viewValue: 'Other Items' },
+    { value: 'Groceries', viewValue: 'Groceries ' },
     { value: 'Expensive Items', viewValue: 'Expensive Items' },
-    { value: 'Unlabeled Items', viewValue: 'Unlabeled Items' }
+    { value: 'Unlabeled Items', viewValue: 'Unlabeled Items' },
+    { value: 'Toys', viewValue: 'Toys' },
+    { value: 'accessories', viewValue: 'accessories' }
   ];
   displayedColumns: string[] = ['itemId', 'itemName', 'status', 'foundDate', 'categoryId', 'actions'];
   dataSource: any = [];
@@ -322,25 +324,30 @@ export default class SearchAndClaimComponent {
   getCategoryIcon(value: string): string {
     switch (value) {
       case 'Electronics':
-        return 'devices';
+        return 'devices'; // Suitable for electronics
       case 'Personal Accessories':
-        return 'watch';
+        return 'watch'; // A watch icon for personal accessories
       case 'Clothes & Accessories':
-        return 'checkroom';
+        return 'checkroom'; // Icon representing clothes and accessories
       case 'Work Tools':
-        return 'build';
+        return 'construction'; // Construction icon for work tools
       case 'Storage Items':
-        return 'inventory';
-      case 'Other Items':
-        return 'category';
+        return 'archive'; // Archive icon for storage items
+      case 'Groceries':
+        return 'shopping_cart'; // Shopping cart for groceries
       case 'Expensive Items':
-        return 'attach_money';
+        return 'attach_money'; // Money icon for expensive items
       case 'Unlabeled Items':
-        return 'help';
+        return 'help'; // Help icon for unlabeled items
+      case 'Toys':
+        return 'toys'; // Toy icon for toys
+      case 'Accessories':
+        return 'settings'; // Settings icon for miscellaneous accessories
       default:
-        return 'help';
+        return 'help'; // Default help icon
     }
   }
+  
   uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);

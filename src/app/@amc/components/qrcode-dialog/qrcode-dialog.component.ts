@@ -32,16 +32,23 @@ export class QrcodeDialogComponent {
       id: element.itemId,
       name: element.name,
       status: element.status,
+       verificationLink:  element.status === "UNCLAIMED" ? `http://localhost:4200/assets/verification.html?itemId=${element.itemId}` : 'Item is Claimed'
     });
   }
   getQrCodeColors(status: string): { colorDark: string; colorLight: string } {
     switch (status) {
       case 'CLAIMED':
-        return { colorDark: '#008000', colorLight: '#FFFFFF' }; // Green on white
+        return { colorDark: '#000000', colorLight: '#FFFFFF' }; 
       case 'UNCLAIMED':
-        return { colorDark: '#FF0000', colorLight: '#FFFFFF' }; // Red on white
+        return { colorDark: '#000000', colorLight: '#FFFFFF' }; 
+        case 'PENDING_PICKUP':
+        return { colorDark: '#000000', colorLight: '#FFFFFF' }; 
+        case 'OPEN':
+        return { colorDark: '#000000', colorLight: '#FFFFFF' };
+        case 'PENDING_APPROVAL':
+        return { colorDark: '#000000', colorLight: '#FFFFFF' };  
       default:
-        return { colorDark: '#000000', colorLight: '#FFFFFF' }; // Black on white
+        return { colorDark: '#000000', colorLight: '#FFFFFF' }; 
     }
   }
   

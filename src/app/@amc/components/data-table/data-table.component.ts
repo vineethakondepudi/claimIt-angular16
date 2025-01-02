@@ -114,10 +114,10 @@ export class DataTableComponent<T> {
   }
   generateQrCodeData(element: any): string {
     return JSON.stringify({
-      itemId: element.itemId,
+      id: element.itemId,
       name: element.name,
       status: element.status,
-      // description: element.description,
+       verificationLink: `http://localhost:4200/assets/verification.html?itemId=${element.itemId}`
     });
   }
 

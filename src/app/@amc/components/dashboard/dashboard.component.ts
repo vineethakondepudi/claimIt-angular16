@@ -23,7 +23,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component'
 import { ChangeDetectorRef } from '@angular/core';
-
+import { QRCodeModule } from 'angularx-qrcode';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faWhatsapp, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 interface CheckIn {
   name: string
   type: string
@@ -47,12 +49,13 @@ interface Item {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule, MatCardModule, MatDividerModule, MatToolbarModule, MatDialogModule,
+  imports: [CommonModule,QRCodeModule, MatTableModule, MatIconModule, MatCardModule, MatDividerModule, MatToolbarModule, MatDialogModule,
     MatCardModule,
     NgChartsModule,
     FooterComponent,
     FormFooterComponent,
     MatSelectModule,
+    FontAwesomeModule,
     MatMenuModule ,
     LoaderComponent,
     MatTooltipModule,
@@ -64,6 +67,11 @@ interface Item {
   styleUrls: ['./dashboard.component.scss'],
 })
 export default class DashboardComponent {
+  icons = {
+    whatsapp: faWhatsapp,
+    linkedin: faLinkedin,
+    twitter: faTwitter,
+  };
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   @ViewChild(BaseChartDirective) piechart: BaseChartDirective | undefined;
   role: any
@@ -75,7 +83,7 @@ export default class DashboardComponent {
   public pieChartType: ChartType = 'pie';
   public barChartType: ChartType = 'bar';
   lineChartType: ChartType = 'line';
-  showMore = false;
+  showMore = true;
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
   swiper: Swiper | undefined;
@@ -252,6 +260,13 @@ export default class DashboardComponent {
 
     return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
   }
+  generateDonationQrCode(item: any): string {
+    const donationLink = `https://www.charitywebsite.com/donate?itemId=${item.itemId}`;
+    return donationLink;
+  }
+  donateToCharity(item: any) {
+    window.open(`https://www.charitywebsite.com/donate?itemId=${item.itemId}`, '_blank');
+  }
   recentItems = [
     {
       title: 'Lost Wallet',
@@ -290,14 +305,14 @@ export default class DashboardComponent {
       next: (data: any) => {
         this.slides = data.map((item: any) => {
           const remainingTime = this.calculateTimeRemaining(item.expirationDate);
-
           return {
             title: item.title || 'Untitled',
             date: item.date || 'Unknown Date',
             description: item.description || 'No Description',
             image: item.image || 'https://via.placeholder.com/150',
             expirationDate: item.expirationDate || 'Unknown Date',
-            remainingTime: remainingTime
+            remainingTime: remainingTime,
+            foundDate: item.receivedDate || 'Unknown Date',
           };
         });
         this.slides.forEach((item: any) => this.startCountdown1(item));
@@ -309,26 +324,29 @@ export default class DashboardComponent {
     });
   }
 
-  calculateTimeRemaining(foundedDate: string): string {
-    const expirationDate = new Date(foundedDate);
-    const targetDate = new Date(expirationDate);
-    targetDate.setDate(expirationDate.getDate() + 30);
-
+  calculateTimeRemaining(expirationDate: string): string {
+    const expiration = new Date(expirationDate);
     const now = new Date();
-    const timeDiff = targetDate.getTime() - now.getTime();
-
+    const timeDiff = expiration.getTime() - now.getTime();
+  
     if (timeDiff <= 0) {
       return 'Expired';
     }
-
+  
     const days = Math.floor(timeDiff / (1000 * 3600 * 24));
     const hours = Math.floor((timeDiff % (1000 * 3600 * 24)) / (1000 * 3600));
     const minutes = Math.floor((timeDiff % (1000 * 3600)) / (1000 * 60));
-    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  
+    return `${days}d ${hours}h ${minutes}m`;
   }
-
+  isTimeisup(item: any): boolean {
+    const expirationDate = new Date(item.expirationDate);
+    const now = new Date();
+    return expirationDate < now;
+  }
+  get filteredSlides(): any[] {
+    return this.slides.filter((item: any) => !this.isTimeisup(item));
+  }
   openDialog(charity: any): void {
     this.dialog.open(SearchResultsDialogComponent, {
       width: '400px',
