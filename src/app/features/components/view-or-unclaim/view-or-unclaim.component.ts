@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { fadeInRight400ms } from 'src/app/@amc/animations/fade-in-right.animation';
@@ -37,6 +37,7 @@ import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component
     MatFormFieldModule,
     LoaderComponent,
     MatIconModule,
+    ReactiveFormsModule,
     FormsModule,],
   templateUrl: './view-or-unclaim.component.html',
   styleUrls: ['./view-or-unclaim.component.scss'],
@@ -44,6 +45,7 @@ import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component
 })
 export default class ViewOrUnclaimComponent {
   @Input() containerPanelOpened: boolean = false;
+  viewUnclaimForm: any= FormGroup
   searchQuery: string = '';
   searchResults: any = [];
   showNoResults: boolean = true;
@@ -52,6 +54,24 @@ export default class ViewOrUnclaimComponent {
     {
       label: "Image",
       name: "image",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
+    {
+      label: "Username",
+      name: "userName",
+      type: "text",
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 1,
+    },
+    {
+      label: "Email",
+      name: "email",
       type: "text",
       isSortable: true,
       position: "left",
@@ -86,33 +106,36 @@ export default class ViewOrUnclaimComponent {
       index: 1,
     },
   ]
-  constructor(public dialog: MatDialog, private service: ClaimitService) {
+  constructor(public dialog: MatDialog, private service: ClaimitService,private fb: FormBuilder) {
 
   }
   ngOnInit() {
+    this.initialForm( )
     this.search()
+  }
+  initialForm() {
+    this.viewUnclaimForm = this.fb.group({
+      email: [''], 
+      name: ['']
+    });
   }
 
   search() {
-    const query = this.searchQuery.trim();
-    this.service.getAllItems(query).subscribe((res: any) => {
+    const reqbody = {
+      email: this.viewUnclaimForm.value.email ? this.viewUnclaimForm.value.email : '',
+      name: this.viewUnclaimForm.value.name ? this.viewUnclaimForm.value.name : '',
+    }
+    this.service.getAllItems(reqbody).subscribe((res: any) => {
       console.log('res', res)
       this.searchResults = res.claimHistory.concat(res.itemRequests)
       this.loader = false
     })
 
   }
-  clearResultsIfEmpty() {
-    // if (!this.searchQuery.trim()) {
-    //   this.searchResults = [];
-    //   this.showNoResults = false;
-    // } else {
-    //   this.search()
-    // }
-  }
+
   SearchAndClear(type: any) {
     if (type === 'clear') {
-      this.searchQuery = ''; 
+      this.viewUnclaimForm.reset() 
       this.searchResults = [];
       this.showNoResults = true;
     } else if (type === 'search') {
