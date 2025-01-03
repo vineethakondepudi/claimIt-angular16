@@ -13,6 +13,7 @@
     </span>
   </span>
   </h2>
+
   <h1 class="text-3xl font-semibold font-extrabold text-center mb-8">Lost & Found Admin Dashboard</h1>
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-white shadow p-4 text-center rounded">
@@ -59,6 +60,7 @@
 </ng-template>
 </div>
 
+
     <div class="bg-white p-6 shadow rounded">
       <ng-container *ngIf="currentMonthData?.totalItems > 0; else noData">
       <canvas baseChart style="height: 284px;width: 276px;"
@@ -84,64 +86,83 @@
     </ng-template>
     </div>
   </div>
-  <div class="swiper-wrapper flex md:flex-row flex-col">
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <ng-container *ngFor="let item of slides">
-          <div *ngIf="isTimeisup(item)" class="swiper-slide p-4 flex justify-center items-start w-full md:w-auto">
-            <mat-card class="w-full md:w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer flex flex-col">
-              <mat-card-header>
-                <mat-card-title class="cursor-pointer text-lg font-semibold text-gray-800" matTooltip="{{item.title}}">
-                  {{ item.title.slice(0, 15) }} <span *ngIf="item.title.length > 15">....</span>
-                </mat-card-title>
-                <mat-card-subtitle class="text-sm text-gray-500 cursor-pointer">
-                  Reported on: {{ item.foundDate | date: 'MM/dd/yyyy' }}
-                </mat-card-subtitle>
-              </mat-card-header>
-    
-              <mat-card-content class="flex flex-col items-center cursor-pointer space-y-2">
-                <img [src]="'data:image/jpeg;base64,' + item.image" alt="{{ item.title }}"
-                     class="w-full h-32 object-cover rounded-md mb-4" style="min-height: 120px;" />
-    
-                <div class="text-sm text-center mt-4 text-gray-500 bg-orange-100 text-orange-600 py-2 px-4 rounded-lg">
-                  Time is up!
-                </div>
-    
-                <div class="mt-4">
-                  <qrcode [qrdata]="generateDonationQrCode(item)" [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
-                  <button (click)="donateToCharity(item)" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg">
-                    Donate Now
-                  </button>
-                </div>
-              </mat-card-content>
-    
-              <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
-                <button mat-icon-button [matMenuTriggerFor]="shareMenu">
-                  <mat-icon>share</mat-icon>
-                </button>
-              </mat-card-actions>
-    
-              <mat-menu #shareMenu="matMenu">
-                <button mat-menu-item (click)="shareItem(item, 'whatsapp')">
-                  <fa-icon [icon]="icons.whatsapp" class="text-green-500 mr-2"></fa-icon>
-                  <span>Share on WhatsApp</span>
-                </button>
-                <button mat-menu-item (click)="shareItem(item, 'linkedin')">
-                  <fa-icon [icon]="icons.linkedin" class="text-blue-500 mr-2"></fa-icon>
-                  <span>Share on LinkedIn</span>
-                </button>
-                <button mat-menu-item (click)="shareItem(item, 'twitter')">
-                  <fa-icon [icon]="icons.twitter" class="text-sky-500 mr-2"></fa-icon>
-                  <span>Share on Twitter</span>
-                </button>
-              </mat-menu>
-            </mat-card>
-          </div>
-        </ng-container>
+  <div class="swiper-container px-6 py-4">
+    <h2 class="text-xl font-bold text-gray-700 mb-4">Reported items more than 30 days</h2>
+    <div class="swiper-wrapper flex md:flex-row flex-col">
+      <div *ngFor="let item of slides" class="swiper-slide p-4 flex justify-center items-start w-full md:w-auto">
+        <mat-card   *ngIf="isTimeisup(item)" class="w-full md:w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer flex flex-col">
+          <mat-card-header>
+            <mat-card-title class="cursor-pointer text-lg font-semibold text-gray-800" matTooltip="{{item.title}}">
+              {{ item.title.slice(0, 15) }} <span *ngIf="item.title.length > 15">....</span>
+            </mat-card-title>
+            <mat-card-subtitle class="text-sm text-gray-500 cursor-pointer">
+              Reported on: {{ item.foundDate | date: 'MM/dd/yyyy' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+  
+          <mat-card-content class="flex flex-col items-center cursor-pointer space-y-2">
+            <img [src]="'data:image/jpeg;base64,' + item.image" alt="{{ item.title }}"
+                 class="w-full h-32 object-cover rounded-md mb-4" style="min-height: 120px;" />
+  
+            <div *ngIf="isTimeisup(item); else timeRemaining"
+                 class="text-sm text-center mt-4 text-gray-500 bg-orange-100 text-orange-600 py-2 px-4 rounded-lg">
+              Time is up!
+            </div>
+  
+            <ng-template #timeRemaining>
+              <div class="text-sm text-center mt-4 text-gray-500 bg-blue-100 text-blue-600 py-2 px-4 rounded-lg">
+                Time remaining: <span class="font-semibold">{{ item.remainingTime }}</span>
+              </div>
+            </ng-template>
+  
+            <!-- Display location name here -->
+            <!-- <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
+              Location: {{ item.locationName }}
+            </div> -->
+          </mat-card-content>
+  
+          <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
+            <button mat-icon-button [matMenuTriggerFor]="shareMenu">
+              <mat-icon>share</mat-icon>
+            </button>
+            <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
+              <button mat-button (click)="getLocation(item)">
+                Add Location
+              </button>
+            </mat-card-actions>
+            
+            <!-- Display location dynamically after fetching -->
+            <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
+              Location: {{ item.locationName }}
+            </div>
+          </mat-card-actions>
+  
+          <mat-menu #shareMenu="matMenu">
+            <button mat-menu-item (click)="shareItem(item, 'whatsapp')">
+              <fa-icon [icon]="icons.whatsapp" class="text-green-500 mr-2"></fa-icon>
+              <span>Share on WhatsApp</span>
+            </button>
+            <button mat-menu-item (click)="shareItem(item, 'linkedin')">
+              <fa-icon [icon]="icons.linkedin" class="text-blue-500 mr-2"></fa-icon>
+              <span>Share on LinkedIn</span>
+            </button>
+            <button mat-menu-item (click)="shareItem(item, 'twitter')">
+              <fa-icon [icon]="icons.twitter" class="text-sky-500 mr-2"></fa-icon>
+              <span>Share on Twitter</span>
+            </button>
+          </mat-menu>
+        </mat-card>
       </div>
     </div>
-    
+  
+    <div *ngIf="!showMore" class="text-center mt-4">
+      <button (click)="toggleShowMore()" class="text-blue-500">View More</button>
+    </div>
+  
+    <div class="swiper-pagination"></div>
   </div>
+  
+
   <div class="mt-12">
     <h2 class="text-2xl font-bold mb-6">Donation History</h2>
   
@@ -205,22 +226,38 @@
           <mat-card-content class="flex flex-col items-center cursor-pointer space-y-2">
             <img [src]="'data:image/jpeg;base64,' + item.image" alt="{{ item.title }}"
                  class="w-full h-32 object-cover rounded-md mb-4" style="min-height: 120px;" />
-          
-            <div *ngIf="isTimeisup(item); else timeRemaining" 
+  
+            <div *ngIf="isTimeisup(item); else timeRemaining"
                  class="text-sm text-center mt-4 text-gray-500 bg-orange-100 text-orange-600 py-2 px-4 rounded-lg">
               Time is up!
             </div>
-            
+  
             <ng-template #timeRemaining>
               <div class="text-sm text-center mt-4 text-gray-500 bg-blue-100 text-blue-600 py-2 px-4 rounded-lg">
                 Time remaining: <span class="font-semibold">{{ item.remainingTime }}</span>
               </div>
             </ng-template>
+  
+            <!-- Display location name here -->
+            <!-- <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
+              Location: {{ item.locationName }}
+            </div> -->
           </mat-card-content>
+  
           <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
             <button mat-icon-button [matMenuTriggerFor]="shareMenu">
               <mat-icon>share</mat-icon>
             </button>
+            <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
+              <button mat-button (click)="getLocation(item)">
+                Add Location
+              </button>
+            </mat-card-actions>
+            
+            <!-- Display location dynamically after fetching -->
+            <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
+              Location: {{ item.locationName }}
+            </div>
           </mat-card-actions>
   
           <mat-menu #shareMenu="matMenu">
@@ -247,11 +284,14 @@
   
     <div class="swiper-pagination"></div>
   </div>
+  
 
 </div>
 
 
-
+<div  class="heading">
+  <div id="map" class="map"></div>
+</div>
 <div class="flex-none">
   <app-form-footer></app-form-footer>
 </div>
