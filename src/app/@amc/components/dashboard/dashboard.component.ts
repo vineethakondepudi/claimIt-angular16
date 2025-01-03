@@ -315,7 +315,6 @@ export default class DashboardComponent {
     
     this.claimService.getUSerSlides().subscribe({
       next: (data: any) => {
-        // Store the slides data without location names
         this.slides = data.map((item: any) => {
           const remainingTime = this.calculateTimeRemaining(item.expirationDate);
           
@@ -328,12 +327,10 @@ export default class DashboardComponent {
             latitude: item.latitude,
             longitude: item.longitude,
             remainingTime: remainingTime,
-            locationName: null,  // Initially set locationName to null
+            locationName: null,  
             foundDate: item.receivedDate || 'Unknown Date',
           };
         });
-  
-        // Start the countdown and set loading to false
         this.slides.forEach((item: any) => this.startCountdown1(item));
         this.loader = false;
       },
@@ -346,8 +343,6 @@ export default class DashboardComponent {
   getLocation(item: any): void {
     const lat = item.latitude;
     const lon = item.longitude;
-  
-    // Ensure valid coordinates
     if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
       this.fetchLocationName(lat, lon, item);
     } else {
@@ -355,10 +350,7 @@ export default class DashboardComponent {
     }
   }
   toggleLocationVisibility(item: any): void {
-    // Toggle visibility
     item.showLocation = !item.showLocation;
-  
-    // If toggling to view the location and it's not already fetched
     if (item.showLocation && !item.locationName) {
       this.fetchLocationName(item.latitude, item.longitude, item);
     }
