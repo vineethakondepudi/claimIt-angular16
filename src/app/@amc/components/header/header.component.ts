@@ -91,15 +91,16 @@ export class HeaderComponent {
 
      this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
-        { label: 'Add Item', icon: 'add', route: '/claimit/addItem' },
-        // { label: 'Remove/Archive Item', icon: 'archive', route: '/claimit/removeOrArchive' },
-        { label: 'Approve / Reject Claim', icon: 'search', route: '/claimit/search' },
+        { label: 'Add Item', icon: 'add_circle', route: '/claimit/addItem' },
+        { label: 'Approve / Reject Claim', icon: 'rule', route: '/claimit/search' },
+        { label: 'Pending Claim', icon: 'hourglass_empty', route: '/claimit/pendingClaim' },
       ];
     } else {
       this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
         { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
+        { label: 'Claim Request', icon: 'request_page', route: '/claimit/claimRequest' },
       ];
     }
 

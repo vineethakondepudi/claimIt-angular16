@@ -41,6 +41,11 @@ const routes: Routes = [
         loadComponent: () => import('./features/components/search-and-claim/search-and-claim.component')
       },
       {
+        title: 'claimRequest | claimit',
+        path: 'claimRequest',
+        loadComponent: () => import('./features/components/claim-request/claim-request.component')
+      },
+      {
         title: 'addItem | claimit',
         path: 'addItem',
         loadComponent: () => import('./features/components/admin/additem/additem.component')
@@ -54,6 +59,11 @@ const routes: Routes = [
         title:'admin search | claimit',
         path:'search',
         loadComponent:()=> import('./features/components/admin/admin-search/admin-search.component')
+      },
+      {
+        title:'pending claim | claimit',
+        path:'pendingClaim',
+        loadComponent:()=> import('./features/components/admin/pending-claim/pending-claim.component')
       }
     ]
   },
