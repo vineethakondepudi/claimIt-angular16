@@ -158,8 +158,10 @@ export default class DashboardComponent {
   ngOnInit(): void {
     this.startCountdown();
     this.fetchSlides();
-    this.currentMonth = this.selectedMonth.getMonth() + 1;
+    this.currentMonth = (this.selectedMonth.getMonth() + 1).toString().padStart(2, '0');
     const currentYear = this.selectedMonth.getFullYear();
+    console.log(this.currentMonth,currentYear,163);
+    
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
     this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
@@ -389,6 +391,8 @@ export default class DashboardComponent {
           this.currentMonthData.donated = this.currentMonthData.totalItems -
             (this.currentMonthData.claimed + this.currentMonthData.unclaimed);
           this.updateDoughnutChartData();
+          console.log(res,409);
+          
         } else {
 
           this.currentMonthData = {
@@ -421,6 +425,7 @@ export default class DashboardComponent {
     labels: [],
     datasets: [
       {
+        label: [],
         data: [],
         backgroundColor: [],
       },
@@ -447,6 +452,7 @@ export default class DashboardComponent {
     console.log('Updating bar chart data:', labels, dataPoints);
   
     this.barChartData.labels = [...labels];
+    this.barChartData.datasets.label = [...dataPoints];
     this.barChartData.datasets[0].data = [...dataPoints];
     this.barChartData.datasets[0].backgroundColor = labels.map(() =>
       `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
@@ -467,7 +473,19 @@ export default class DashboardComponent {
     });
   }
 
+  generateChartColors(count: number): string[] {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      colors.push(
+        `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
+      );
+    }
+    return colors;
+  }
+  
+
   updateDoughnutChartData(): void {
+    const colors = this.generateChartColors(3);
     this.doughnutChartData = {
       labels: ['Claimed', 'Unclaimed', 'Donated'],
       datasets: [
@@ -477,12 +495,12 @@ export default class DashboardComponent {
             this.currentMonthData.unclaimed,
             this.currentMonthData.donated,
           ],
-          backgroundColor: ['green', 'yellow', 'red'],
+          backgroundColor: colors,
         },
       ],
     };
 
-
+    const lineChartColors = this.generateChartColors(2);
 
     this.lineChartData = {
       labels: [this.monthName],
@@ -490,19 +508,19 @@ export default class DashboardComponent {
         {
           label: 'Claimed Items',
           data: [this.currentMonthData.claimed,],
-          backgroundColor: 'rgba(0, 128, 0, 0.5)',
-          borderColor: 'green',
+          backgroundColor: lineChartColors[0],
+          borderColor: lineChartColors[0],
           fill: false,
         },
         {
           label: 'Unclaimed Items',
           data: [this.currentMonthData.unclaimed],
-          backgroundColor: 'rgba(255, 255, 0, 0.5)',
-          borderColor: 'yellow',
+          backgroundColor:lineChartColors[1],
+          borderColor: lineChartColors[1],
           fill: false,
         },
       ],
     };
-    this.cdr.detectChanges();
+    // this.cdr.detectChanges();
   }
 }
