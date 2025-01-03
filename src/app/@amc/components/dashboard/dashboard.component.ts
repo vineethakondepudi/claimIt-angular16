@@ -167,8 +167,10 @@ export default class DashboardComponent {
      this.initializeMap();
     this.startCountdown();
     this.fetchSlides();
-    this.currentMonth = this.selectedMonth.getMonth() + 1;
+    this.currentMonth = (this.selectedMonth.getMonth() + 1).toString().padStart(2, '0');
     const currentYear = this.selectedMonth.getFullYear();
+    console.log(this.currentMonth,currentYear,163);
+    
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
     this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
@@ -254,27 +256,10 @@ export default class DashboardComponent {
 
   ngAfterViewInit() {
     this.swiper = new Swiper('.swiper-container', {
-      slidesPerView: 3,
-      spaceBetween: 15,
-
       autoplay: {
         delay: 2500,
         disableOnInteraction: false,
-      },
-      breakpoints: {
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-        },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 15,
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 20,
-        },
-      },
+      }, 
     });
     this.initializeMap();
   }
@@ -488,6 +473,8 @@ forceUpdate(): void {
           this.currentMonthData.donated = this.currentMonthData.totalItems -
             (this.currentMonthData.claimed + this.currentMonthData.unclaimed);
           this.updateDoughnutChartData();
+          console.log(res,409);
+          
         } else {
 
           this.currentMonthData = {
@@ -520,6 +507,7 @@ forceUpdate(): void {
     labels: [],
     datasets: [
       {
+        label: [],
         data: [],
         backgroundColor: [],
       },
@@ -546,6 +534,7 @@ forceUpdate(): void {
     console.log('Updating bar chart data:', labels, dataPoints);
   
     this.barChartData.labels = [...labels];
+    this.barChartData.datasets.label = [...dataPoints];
     this.barChartData.datasets[0].data = [...dataPoints];
     this.barChartData.datasets[0].backgroundColor = labels.map(() =>
       `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
@@ -566,7 +555,19 @@ forceUpdate(): void {
     });
   }
 
+  generateChartColors(count: number): string[] {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      colors.push(
+        `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.6)`
+      );
+    }
+    return colors;
+  }
+  
+
   updateDoughnutChartData(): void {
+    const colors = this.generateChartColors(3);
     this.doughnutChartData = {
       labels: ['Claimed', 'Unclaimed', 'Donated'],
       datasets: [
@@ -576,12 +577,12 @@ forceUpdate(): void {
             this.currentMonthData.unclaimed,
             this.currentMonthData.donated,
           ],
-          backgroundColor: ['green', 'yellow', 'red'],
+          backgroundColor: colors,
         },
       ],
     };
 
-
+    const lineChartColors = this.generateChartColors(2);
 
     this.lineChartData = {
       labels: [this.monthName],
@@ -589,19 +590,19 @@ forceUpdate(): void {
         {
           label: 'Claimed Items',
           data: [this.currentMonthData.claimed,],
-          backgroundColor: 'rgba(0, 128, 0, 0.5)',
-          borderColor: 'green',
+          backgroundColor: lineChartColors[0],
+          borderColor: lineChartColors[0],
           fill: false,
         },
         {
           label: 'Unclaimed Items',
           data: [this.currentMonthData.unclaimed],
-          backgroundColor: 'rgba(255, 255, 0, 0.5)',
-          borderColor: 'yellow',
+          backgroundColor:lineChartColors[1],
+          borderColor: lineChartColors[1],
           fill: false,
         },
       ],
     };
-    this.cdr.detectChanges();
+    // this.cdr.detectChanges();
   }
 }
