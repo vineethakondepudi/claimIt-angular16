@@ -10,11 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from "@angular/material/divider";
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
@@ -22,7 +23,9 @@ export class OrganizationDialogComponent {
   organizationList: any[] = [];
   isOrganizationSelected: boolean = false;
   files: { file: File, preview: string }[] = [];
-  
+  selectedLocation!: string;
+  latitude: number | null = null;
+  longitude: number | null = null;
   selectedOrgId: string = '';
   selected: any;
 
@@ -81,6 +84,29 @@ export class OrganizationDialogComponent {
     }
   }
   
+  onLocationChange(): void {
+    switch (this.selectedLocation) {
+      case 'Miracle City':
+        this.latitude = 17.739707548305788;
+        this.longitude = 83.3433213167522;
+        break;
+      case 'Miracle Valley': 
+        this.latitude = 17.814901263799708;
+        this.longitude =  83.39172982091242;
+        break;
+      case 'Miracle Heights': 
+        this.latitude = 17.809998290809897;
+        this.longitude =  83.39687966178053; 
+        break;
+      case 'Miracle Global HQ':
+        this.latitude = 42.48540914670753;
+        this.longitude = -83.49780041745922;
+        break;
+      default:
+        this.latitude = null;
+        this.longitude = null;
+    }
+  }
   
 
   onRemove(file: any): void {
@@ -88,30 +114,34 @@ export class OrganizationDialogComponent {
   }
 
   onUploadImage(): void {
-    if (this.files.length > 0 && this.selectedOrgId) {
+    if (this.files.length > 0 && this.selected) {
+      if (this.latitude === null || this.longitude === null) {
+        console.error('Latitude or Longitude is not set. Please select a valid location.');
+        return;
+      }
+  
       const formData = new FormData();
       formData.append('image', this.files[0].file);
-      console.log(this.files);
-      
       formData.append('orgId', this.selectedOrgId);
+      formData.append('latitude', this.latitude.toString());
+      formData.append('longitude', this.longitude.toString());
   
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
           console.log('File uploaded successfully:', response);
           this.isOrganizationSelected = false;
           this.files = [];
-          console.log(this.files);
-          
-          this.dialogRef.close();  
+          this.dialogRef.close();
         },
         (error) => {
           console.error('Error uploading file:', error);
         }
       );
     } else {
-      console.warn('No file selected for upload.');
-    }    
+      console.warn('No file selected for upload or organization not selected.');
+    }
   }
+  
   submit(): void {
     if (this.files.length > 0 && this.selectedOrgId) {
       const formData = new FormData();
