@@ -28,11 +28,6 @@
   text-align: left;
   font-weight: 600;
 }
-.swiper-container {
-  /* Ensure proper container height and spacing */
-  max-width: 100%;
-  padding: 1rem;
-}
 
 .swiper-wrapper {
   display: flex;
@@ -94,6 +89,7 @@
 .text-center {
   text-align: center;
 }
+
 /* If you are not using TailwindCSS, here is some custom CSS for card styling */
 .donation-card {
   border: 1px solid #ddd;
@@ -136,6 +132,7 @@
 .shadow-md {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 @media (max-width: 768px) {
   .swiper-wrapper {
     flex-direction: column; 
@@ -169,5 +166,13 @@
 
   .swiper-slide {
     width: auto; 
+  }
+}
+.card-container {
+  width: 250px; 
+}
+@media (max-width: 450px) {
+  .card-container {
+    width: 15rem;
   }
 }
