@@ -1,14 +1,25 @@
-<div class="p-6 bg-gray-100 min-h-screen">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Pending Claims</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="p-0 bg-gray-100 min-h-screen">
+    <div class="flex-none px-0 pt-5 bg-[#E8F2F3]">
+      <div @fadeInRight class="flex flex-row justify-between px-5">
+        <div class="flex flex-col">
+          <h1 class="font-semibold max-w-3xs mr-6 text-2xl" id="claim-heading">Pending Claims</h1>
+        </div>
+      </div>
+    </div>
+  
+    <div class="flex flex-col gap-6 w-full">
       <div
         *ngFor="let claim of pendingClaims"
-        class="bg-white p-6 shadow-lg rounded-md border border-gray-200"
+        class="bg-white p-10 shadow-xl rounded-xl transform transition duration-300 w-full"
       >
         <h3 class="text-lg font-semibold text-gray-800">{{ claim.name }}</h3>
         <p class="text-sm text-gray-600">Contact: {{ claim.contact }}</p>
-        <p class="text-sm text-gray-600">Location: {{ claim.location }}</p>
+        <p class="text-sm text-gray-600">Email: {{ claim.email }}</p>
+        <p class="text-sm text-gray-600">Incident Location: {{ claim.location }}</p>
+        <p class="text-sm text-gray-600">Item Type: {{ claim.itemType }}</p>
+        <p class="text-sm text-gray-600">Date Incident: {{ claim.incidentDate | date }}</p>
         <p class="text-sm text-gray-600">Identification: {{ claim.identification }}</p>
+        <p class="text-sm text-gray-600">Additional Info: {{ claim.additionalInfo }}</p>
       </div>
     </div>
   </div>

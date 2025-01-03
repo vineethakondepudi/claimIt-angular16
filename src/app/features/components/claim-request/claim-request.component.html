@@ -1,70 +1,163 @@
-<div class="p-6 bg-gray-100 min-h-screen">
-    <div class="max-w-lg mx-auto bg-white p-8 shadow-lg rounded-md">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Claim Request Form</h2>
+<div class="p-8 bg-gray-100 min-h-screen">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3]">
+      <div @fadeInRight class="flex flex-row justify-between px-5">
+        <div class="flex flex-col">
+          <h1 class="font-semibold max-w-3xs mr-6 text-2xl" id="claim-heading">Claim Request</h1>
+        </div>
+      </div>
+    </div>
+  
+    <div class="max-w-8xl mx-auto bg-white p-10 shadow-xl rounded-xl transform transition duration-300" style="width: calc(100% - 30px);">
+      <h2 class="text-4xl font-semibold text-gray-800 mb-10 text-center max-w-5xl mx-auto">Claim Request Form</h2>
       <form (ngSubmit)="onSubmit()">
-        <!-- Name -->
-        <div class="mb-4">
-          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-          <input
-            type="text"
-            id="name"
-            [(ngModel)]="claimData.name"
-            name="name"
-            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter your name"
-            required
-          />
+    
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+   
+          <div class="w-full">
+            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              [(ngModel)]="claimData.name"
+              name="name"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+  
+ 
+          <div class="w-full">
+            <label for="contact" class="block text-sm font-medium text-gray-700">Contact Information</label>
+            <input
+              type="text"
+              id="contact"
+              [(ngModel)]="claimData.contact"
+              name="contact"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter your phone number"
+              required
+            />
+          </div>
+        </div>     
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div class="w-full">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              [(ngModel)]="claimData.email"
+              name="email"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter your Email address"
+              required
+            />
+          </div>
+          <div class="w-full">
+            <label for="location" class="block text-sm font-medium text-gray-700">Incident Location</label>
+            <input
+              type="text"
+              id="location"
+              [(ngModel)]="claimData.location"
+              name="location"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enter the location where the item was lost"
+              required
+            />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+       
+          <div class="w-full">
+            <label for="itemType" class="block text-sm font-medium text-gray-700">Item Type</label>
+            <select
+              id="itemType"
+              [(ngModel)]="claimData.itemType"
+              name="itemType"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              required
+            >
+              <option value="" disabled>Select Item Type</option>
+              <option value="electronic">Electronics</option>
+              <option value="personalAccessories">Personal Accessories</option>
+              <option value="clothes&accessories">Clothes & Accessories</option>
+              <option value="workTools">Work Tools</option>
+              <option value="storageItems">Storage Items</option>
+              <option value="groceries">Groceries</option>
+              <option value="expensiveItems">Expensive Items</option>
+              <option value="unlabeledItems">Unlabeled Items</option>
+              <option value="toys">Toys</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="w-full relative">
+            <label for="incidentDate" class="block text-sm font-medium text-gray-700 flex items-center">
+              <span class="mr-2">Date of Incident</span>
+              <mat-datepicker-toggle matIconSuffix [for]="picker" class="absolute right-2 top-1/2 transform -translate-y-1/2"></mat-datepicker-toggle>
+            </label>
+            
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="claimData.incidentDate"
+              name="incidentDate"
+              readonly
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
+              required
+            />
+            
+            <mat-datepicker
+              #picker
+              startView="multi-year"
+              panelClass="month-year-picker"
+            ></mat-datepicker>
+          </div>
+          
         </div>
   
-        <!-- Contact Details -->
-        <div class="mb-4">
-          <label for="contact" class="block text-sm font-medium text-gray-700">Contact Details</label>
-          <input
-            type="text"
-            id="contact"
-            [(ngModel)]="claimData.contact"
-            name="contact"
-            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter your contact details"
-            required
-          />
+       
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+       
+          <div class="w-full">
+            <label for="identification" class="block text-sm font-medium text-gray-700">Item Description</label>
+            <textarea
+              id="identification"
+              [(ngModel)]="claimData.identification"
+              name="identification"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Provide a detailed description of the lost item"
+              rows="5"
+              required
+            ></textarea>
+          </div>
+          <div class="w-full">
+            <label for="additionalInfo" class="block text-sm font-medium text-gray-700">Additional Information</label>
+            <textarea
+              id="additionalInfo"
+              [(ngModel)]="claimData.additionalInfo"
+              name="additionalInfo"
+              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Any other details related to the incident"
+              rows="4"
+            ></textarea>
+          </div>
         </div>
-  
-        <!-- Location -->
-        <div class="mb-4">
-          <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-          <input
-            type="text"
-            id="location"
-            [(ngModel)]="claimData.location"
-            name="location"
-            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter the location where you lost the item"
-            required
-          />
-        </div>
-  
-        <!-- Thing Identification -->
-        <div class="mb-4">
-          <label for="identification" class="block text-sm font-medium text-gray-700">Thing Identification</label>
-          <textarea
-            id="identification"
-            [(ngModel)]="claimData.identification"
-            name="identification"
-            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Describe the item in detail"
-            rows="4"
-            required
-          ></textarea>
-        </div>
-  
-        <!-- Submit Button -->
+      <div class="flex items-center justify-between space-x-6">
         <button
-          type="submit"
-          class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-indigo-700"
-        >
-          Submit Request
-        </button>
+        type="submit"
+        class="w-full bg-[#219C90] text-white py-3 px-6 rounded-md shadow-md hover:bg-[#1A7C6A] focus:outline-none transition duration-300"
+      >
+        Submit Request
+      </button>
+      
+          <button
+            type="button"
+            class="w-full bg-gray-300 text-gray-700 py-3 px-6 rounded-md shadow-md hover:bg-gray-400 focus:outline-none transition duration-300"
+            (click)="onCancel()"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   </div>
