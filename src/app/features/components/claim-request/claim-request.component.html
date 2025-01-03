@@ -1,0 +1,71 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+    <div class="max-w-lg mx-auto bg-white p-8 shadow-lg rounded-md">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Claim Request Form</h2>
+      <form (ngSubmit)="onSubmit()">
+        <!-- Name -->
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input
+            type="text"
+            id="name"
+            [(ngModel)]="claimData.name"
+            name="name"
+            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter your name"
+            required
+          />
+        </div>
+  
+        <!-- Contact Details -->
+        <div class="mb-4">
+          <label for="contact" class="block text-sm font-medium text-gray-700">Contact Details</label>
+          <input
+            type="text"
+            id="contact"
+            [(ngModel)]="claimData.contact"
+            name="contact"
+            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter your contact details"
+            required
+          />
+        </div>
+  
+        <!-- Location -->
+        <div class="mb-4">
+          <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+          <input
+            type="text"
+            id="location"
+            [(ngModel)]="claimData.location"
+            name="location"
+            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter the location where you lost the item"
+            required
+          />
+        </div>
+  
+        <!-- Thing Identification -->
+        <div class="mb-4">
+          <label for="identification" class="block text-sm font-medium text-gray-700">Thing Identification</label>
+          <textarea
+            id="identification"
+            [(ngModel)]="claimData.identification"
+            name="identification"
+            class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Describe the item in detail"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+  
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-indigo-700"
+        >
+          Submit Request
+        </button>
+      </form>
+    </div>
+  </div>
+  
