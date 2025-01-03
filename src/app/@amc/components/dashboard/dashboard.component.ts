@@ -24,6 +24,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component'
 import { ChangeDetectorRef } from '@angular/core';
 import { QRCodeModule } from 'angularx-qrcode';
+import { GoogleMapsModule } from '@angular/google-maps';
+import * as esri from 'esri-leaflet';
+import * as L from 'leaflet';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faWhatsapp, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 interface CheckIn {
@@ -54,6 +58,7 @@ interface Item {
     NgChartsModule,
     FooterComponent,
     FormFooterComponent,
+    GoogleMapsModule,
     MatSelectModule,
     FontAwesomeModule,
     MatMenuModule ,
@@ -67,6 +72,8 @@ interface Item {
   styleUrls: ['./dashboard.component.scss'],
 })
 export default class DashboardComponent {
+  private map!: L.Map;
+  private mapTilerKey = 'xJWFJF5JvkaPr6hJCReR';
   icons = {
     whatsapp: faWhatsapp,
     linkedin: faLinkedin,
@@ -77,6 +84,7 @@ export default class DashboardComponent {
   role: any
   pieChart: any = []
   pieChartLabels: any
+  // cdRef: any
   constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
     this.role = localStorage.getItem('role');
   }
@@ -120,7 +128,6 @@ export default class DashboardComponent {
     { text: 'I was able to return a found phone to its owner. Amazing experience!', author: 'Krishna Vedantam' }
   ];
 
-
   lineChartData: ChartData = {
     labels: this.monthName == '' ? "dec" : this.monthName,
     datasets: [
@@ -156,6 +163,8 @@ export default class DashboardComponent {
   countdownTimers: any[] = [];
 
   ngOnInit(): void {
+    this.slides = this.slides || [];
+     this.initializeMap();
     this.startCountdown();
     this.fetchSlides();
     this.currentMonth = this.selectedMonth.getMonth() + 1;
@@ -214,7 +223,23 @@ export default class DashboardComponent {
   
     window.open(shareUrl, '_blank');
   }
-  
+  private initializeMap(): void {
+    const mapContainer = document.getElementById('map');
+    if (!mapContainer) {
+      console.error('Map container not found!');
+      return;
+    }
+
+    this.map = L.map('map', {
+      center: [18.000792934619952, 83.52597181488764],
+      zoom: 10,
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(this.map);
+    
+  }
   startCountdown1(item: any): void {
     item.remainingTime = this.calculateTimeRemaining(item.expirationDate);
     const timer = setInterval(() => {
@@ -251,6 +276,7 @@ export default class DashboardComponent {
         },
       },
     });
+    this.initializeMap();
   }
   formatTime(ms: number): string {
     const days = Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -299,30 +325,85 @@ export default class DashboardComponent {
     this.searchQuery = input.value;
   }
   fetchSlides(): void {
-    this.loader = true
+    this.loader = true;
     const apiUrl = 'http://172.17.12.38:8081/api/users/search';
+    
     this.claimService.getUSerSlides().subscribe({
       next: (data: any) => {
+        // Store the slides data without location names
         this.slides = data.map((item: any) => {
           const remainingTime = this.calculateTimeRemaining(item.expirationDate);
+          
           return {
             title: item.title || 'Untitled',
             date: item.date || 'Unknown Date',
             description: item.description || 'No Description',
             image: item.image || 'https://via.placeholder.com/150',
             expirationDate: item.expirationDate || 'Unknown Date',
+            latitude: item.latitude,
+            longitude: item.longitude,
             remainingTime: remainingTime,
+            locationName: null,  // Initially set locationName to null
             foundDate: item.receivedDate || 'Unknown Date',
           };
         });
+  
+        // Start the countdown and set loading to false
         this.slides.forEach((item: any) => this.startCountdown1(item));
-        this.loader = false
+        this.loader = false;
       },
       error: (err) => {
         console.error('Error fetching slides:', err);
       }
     });
   }
+  
+  getLocation(item: any): void {
+    const lat = item.latitude;
+    const lon = item.longitude;
+  
+    // Ensure valid coordinates
+    if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
+      this.fetchLocationName(lat, lon, item);
+    } else {
+      alert("Invalid coordinates.");
+    }
+  }
+  toggleLocationVisibility(item: any): void {
+    // Toggle visibility
+    item.showLocation = !item.showLocation;
+  
+    // If toggling to view the location and it's not already fetched
+    if (item.showLocation && !item.locationName) {
+      this.fetchLocationName(item.latitude, item.longitude, item);
+    }
+  }
+  private fetchLocationName(lat: number, lon: number, item: any): void {
+    L.tileLayer('https://api.maptiler.com/maps/nl-cartiqo-topo/{z}/{x}/{y}.png?key=xJWFJF5JvkaPr6hJCReR', {
+      attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors',
+    }).addTo(this.map);
+    const apiUrl = `https://api.maptiler.com/geocoding/reverse.json?lat=${lat}&lon=${lon}&key=xJWFJF5JvkaPr6hJCReR`;
+  
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        item.locationName = data?.features?.[0]?.place_name || 'Unknown Location';
+        this.cdr.detectChanges();
+      })
+      .catch(error => {
+        console.error('Error fetching location:', error);
+        item.locationName = 'Unable to fetch location';
+        this.cdr.detectChanges();
+      });
+  }
+  
+  
+
+// Optionally trigger change detection
+forceUpdate(): void {
+  this.cdr.detectChanges();
+}
+
 
   calculateTimeRemaining(expirationDate: string): string {
     const expiration = new Date(expirationDate);
@@ -345,8 +426,9 @@ export default class DashboardComponent {
     return expirationDate < now;
   }
   get filteredSlides(): any[] {
-    return this.slides.filter((item: any) => !this.isTimeisup(item));
-  }
+  return (this.slides || []).filter((item: any) => !this.isTimeisup(item));
+}
+
   openDialog(charity: any): void {
     this.dialog.open(SearchResultsDialogComponent, {
       width: '400px',

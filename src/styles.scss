@@ -16,7 +16,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-
+@import "~leaflet/dist/leaflet.css";
 $claimit-primary-palette: (
         50 : #e8f2f3,
         100 : #c5dfe2,
