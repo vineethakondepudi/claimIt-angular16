@@ -43,14 +43,7 @@
             </div>
           
             <div class="w-full">
-              <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
-                <ngx-dropzone-label class="text-gray-500 text-center">
-                  Drag and drop an image here or click to upload
-                </ngx-dropzone-label>
-                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)" >
-                  <img [src]="f.preview" alt="Image Preview" class="w-32 h-32 object-cover rounded-md" />
-                </ngx-dropzone-preview>
-              </ngx-dropzone> 
+ 
             <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
               <ngx-dropzone-label class="text-gray-500 text-center" *ngIf="files.length === 0">
                 Drag and drop an image here or click to upload
