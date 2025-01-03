@@ -60,24 +60,7 @@ export default class ViewOrUnclaimComponent {
       isChecked: true,
       index: 1,
     },
-    {
-      label: "Username",
-      name: "userName",
-      type: "text",
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 1,
-    },
-    {
-      label: "Email",
-      name: "email",
-      type: "text",
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 1,
-    },
+
     {
       label: "Username",
       name: "userName",
