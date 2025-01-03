@@ -122,11 +122,7 @@ export class OrganizationDialogComponent {
   
       const formData = new FormData();
       formData.append('image', this.files[0].file);
-  
-      // Adding organization ID
       formData.append('orgId', this.selectedOrgId);
-  
-      // Add latitude and longitude
       formData.append('latitude', this.latitude.toString());
       formData.append('longitude', this.longitude.toString());
   
