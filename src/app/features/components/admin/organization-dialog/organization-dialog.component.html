@@ -12,14 +12,40 @@
         <div *ngIf="organizationList.length > 0; else noData">
           <div class="flex flex-col space-y-4">
             <div class="w-full">
-                <mat-form-field class="w-full">
-                  <mat-label>Select an Organization</mat-label>
-                  <mat-select [(value)]="selected" [disabled]="true">
-                    <mat-option value="{{ selected }}" disabled>{{ organizationList[0]?.orgName }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-
+              <mat-form-field class="w-full">
+                <mat-label>Select an Organization</mat-label>
+                <mat-select [(value)]="selected" [disabled]="true">
+                  <mat-option value="{{ selected }}" disabled>{{ organizationList[0]?.orgName }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          
+            <!-- Location Dropdown -->
+            <div class="w-full">
+              <mat-form-field class="w-full">
+                <mat-label>Select Location</mat-label>
+                <mat-select [(ngModel)]="selectedLocation" (selectionChange)="onLocationChange()">
+                  <mat-option value="Miracle City">Miracle City</mat-option>
+                  <mat-option value="Miracle Valley">Miracle Valley</mat-option>
+                  <mat-option value="Miracle Heights">Miracle Heights</mat-option>
+                  <mat-option value="Miracle Global HQ">Miracle Global HQ</mat-option>
+                </mat-select>
+              </mat-form-field>
+              
+            </div>
+          
+            <!-- Latitude and Longitude inputs when "User Selected" is chosen -->
+            <div *ngIf="selectedLocation === 'userSelected'" class="w-full">
+              <mat-form-field class="w-full">
+                <mat-label>Latitude</mat-label>
+                <input matInput [(ngModel)]="latitude" type="number" placeholder="Enter latitude" />
+              </mat-form-field>
+              <mat-form-field class="w-full">
+                <mat-label>Longitude</mat-label>
+                <input matInput [(ngModel)]="longitude" type="number" placeholder="Enter longitude" />
+              </mat-form-field>
+            </div>
+          
             <div class="w-full">
               <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
                 <ngx-dropzone-label class="text-gray-500 text-center">
@@ -30,15 +56,15 @@
                 </ngx-dropzone-preview>
               </ngx-dropzone>
             </div>
-  
+          
             <div class="w-full">
               <button mat-raised-button color="primary" class="mt-6 w-full" [disabled]="!selected || files.length === 0" (click)="onUploadImage()">
                 <mat-icon>upload</mat-icon>
                 Submit
               </button>
             </div>
-            
           </div>
+          
         </div>
         <ng-template #noData>
           <p class="text-gray-500 text-center">No organizations available.</p>
