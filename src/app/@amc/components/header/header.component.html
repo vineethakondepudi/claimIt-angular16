@@ -41,19 +41,25 @@
         <span class="text-base md:text-2xl lg:text-2xl font-semibold text-black cursor-pointer flex">{{applicationName}}</span>
       </div>
       <div class="flex justify-end">
-        <button  [routerLink]="'/claimit/about'" [class.active-top-button]="isTabActive('/claimit/about')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="About">
-          <mat-icon class="mr-1" [routerLink]="'/claimit/about'" [class.active-top-button]="isTabActive('/claimit/about')">info</mat-icon>
-        </button>
-        <button [routerLink]="'/claimit/contact'" [class.active-top-button]="isTabActive('/claimit/contact')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Contact">
-          <mat-icon class="mr-1" [class.active-top-button]="isTabActive('/claimit/contact')">phone</mat-icon>
-        </button>
-        <button [routerLink]="'/claimit/help'" [class.active-top-button]="isTabActive('/claimit/help')" class="cursor-pointer bg-white mr-1" mat-icon-button matTooltip="Help">
-          <mat-icon class="mr-1">help</mat-icon>
-        </button>
+        <ng-container *ngFor="let item of tabRoutes">
+          <button 
+            [routerLink]="item.route" 
+            [class.active-top-button]="isTabActive(item.route)" 
+            class="cursor-pointer bg-white mr-1" 
+            mat-icon-button 
+            [matTooltip]="item.label">
+            <mat-icon class="mr-1" [class.active-top-button]="isTabActive(item.route)">
+              {{ item.icon }}
+            </mat-icon>
+          </button>
+         
+        </ng-container>
         <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Admin Login" (click)="logout()">
           <mat-icon class="ml-1">logout</mat-icon>
         </button>
+        
       </div>
+
     </mat-toolbar>
     <router-outlet></router-outlet>
   </div>

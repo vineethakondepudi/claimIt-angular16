@@ -49,13 +49,14 @@ export class HeaderComponent {
   param: any;
   userRole: string | null = '';
   menuItems: any[] = [];
+  tabRoutes: { route: string, icon: string, label: string }[] = [];
 
   constructor(public router: Router, private route: ActivatedRoute,private service:ClaimitService) {
     this.service.loginResponse_Triggered.subscribe((res:any)=>{
       console.log(res)
       this.userRole = localStorage.getItem('role');
       this.getMenuItems()
-
+      this.setTabRoutes()
     })
     this.route.queryParamMap.subscribe((params) => {
       this.param = params.get('type');
@@ -74,26 +75,38 @@ export class HeaderComponent {
     this.opened = !this.opened;
   }
 
-  public isTabActive(tab: string): boolean {
-    const currentUrl = this.router.url;
-    const tabRoutes: any =  ['/claimit/searchAndClaim', '/claimit/searchAndClaim','/claimit/about','/claimit/contact','/claimit/help']
-    if (tabRoutes[tab]) {
-      return tabRoutes[tab].some((route: string) => currentUrl.startsWith(route));
-    }
-    return currentUrl === tab;
+ 
+ // Set the tab routes based on user role
+ setTabRoutes() {
+  if (this.userRole === 'admin') {
+    this.tabRoutes = [
+      { route: '/claimit/searchAndClaim', icon: 'search', label: 'Search and Claim' },
+      { route: '/claimit/about', icon: 'info', label: 'About' },
+      { route: '/claimit/notifications', icon: 'notifications', label: 'Notifications' },
+      { route: '/claimit/help', icon: 'help', label: 'Help' },
+    ];
+  } else {
+    this.tabRoutes = [
+      { route: '/claimit/searchAndClaim', icon: 'search', label: 'Search and Claim' },
+      { route: '/claimit/about', icon: 'info', label: 'About' },
+      { route: '/claimit/contact', icon: 'contacts', label: 'Contact' },
+      { route: '/claimit/help', icon: 'help', label: 'Help' },
+    ];
   }
-
+}
+public isTabActive(tab: string): boolean {
+  const currentUrl = this.router.url;
+  return currentUrl === tab; // Exact match check
+}
   getMenuItems() {
     // this.userRole = localStorage.getItem('role');
     console.log('menuuuuuu');
-    
     if (this.userRole === 'admin') {
-
      this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add_circle', route: '/claimit/addItem' },
         { label: 'Approve / Reject Claim', icon: 'rule', route: '/claimit/search' },
-        { label: 'Pending Claim', icon: 'hourglass_empty', route: '/claimit/pendingClaim' },
+        { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim' },
       ];
     } else {
       this.menuItems = [
