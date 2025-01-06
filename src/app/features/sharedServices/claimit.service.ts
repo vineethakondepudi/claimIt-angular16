@@ -74,7 +74,9 @@ export class ClaimitService {
     const url = `${environment.categoryItems}?month=${year}-${month}`;
     return this.http.get(url);
   }
-
+  public getCategories() {
+    return this.http.get(environment.getCategories)
+  }
 
   pendingClaims: any[] = [];
 

@@ -17,7 +17,7 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { RejectClaimComponent } from '../reject-claim/reject-claim.component';
+import { RejectClaimComponent } from '../../../reject-claim/reject-claim.component';
 
 @Component({
   selector: 'app-admin-search',
