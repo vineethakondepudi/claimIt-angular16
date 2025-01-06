@@ -126,17 +126,18 @@
               <mat-icon>share</mat-icon>
             </button>
             <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
-              <button mat-button (click)="getLocation(item)">
-                View Location
+              <button 
+                mat-icon-button 
+                *ngIf="!item.locationName" 
+                (click)="getLocation(item)">
+                <mat-icon>location_on</mat-icon>
               </button>
             </mat-card-actions>
-            
-            <!-- Display location dynamically after fetching -->
             <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
               Location: {{ item.locationName }}
             </div>
           </mat-card-actions>
-  
+          
           <mat-menu #shareMenu="matMenu">
             <button mat-menu-item (click)="shareItem(item, 'whatsapp')">
               <fa-icon [icon]="icons.whatsapp" class="text-green-500 mr-2"></fa-icon>
@@ -242,16 +243,17 @@
             </button>
             <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
               <button 
-                mat-button 
+                mat-icon-button 
                 *ngIf="!item.locationName" 
                 (click)="getLocation(item)">
-                view Location
+                <mat-icon>location_on</mat-icon>
               </button>
             </mat-card-actions>
             <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
               Location: {{ item.locationName }}
             </div>
           </mat-card-actions>
+          
           
   
           <mat-menu #shareMenu="matMenu">
