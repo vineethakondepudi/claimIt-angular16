@@ -21,7 +21,7 @@ export default class PendingClaimComponent {
   }
 
   ngAfterViewChecked() {
-    // Detect changes manually to ensure that data is displayed
+    
     this.cdr.detectChanges();
   }
 }

@@ -185,24 +185,24 @@
                   </mat-icon>
                 </mat-expansion-panel-header>
     
-                <!-- Form Field and Button Container -->
+                
                 <div class="flex w-full space-x-4 overflow-x-auto">
                   <div class="flex flex-nowrap gap-4 w-full whitespace-nowrap">
                     <mat-card
-                      *ngFor="let item of categories; index as i"
+                      *ngFor="let item of categories"
                       class="min-w-48 h-24 shadow-md hover:bg-gray-100 cursor-pointer flex-none p-2"
-                      (click)="selectCategory(item.value)"
+                      (click)="selectCategory(item.name)"
                     >
                       <mat-card-header class="flex justify-center items-center custom-icon h-12">
                         <mat-icon [ngStyle]="{ color: '#388d97' }" class="items-center justify-center">
-                          {{ getCategoryIcon(item.value) }}
+                          {{ getCategoryIcon(item.name) }}
                         </mat-icon>
                       </mat-card-header>
                       <mat-card-title
                         class="text-center text-sm font-medium truncate"
-                        [title]="item.viewValue"
+                        [title]="item.name"
                       >
-                        {{ item.viewValue }}
+                        {{ item.name }}
                       </mat-card-title>
                     </mat-card>
                   </div>

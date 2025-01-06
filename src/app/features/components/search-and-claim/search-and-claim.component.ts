@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -62,7 +62,7 @@ interface Item {
   templateUrl: './search-and-claim.component.html',
   styleUrls: ['./search-and-claim.component.scss']
 })
-export default class SearchAndClaimComponent {
+export default class SearchAndClaimComponent implements OnInit {
   @Input() containerPanelOpened: boolean = false;
   displaycoloums: any[] = [
     {
@@ -124,18 +124,8 @@ export default class SearchAndClaimComponent {
   savedSearches: string[] = []; // List of saved searches
   selectedSavedSearch: string | null = null; // Currently selected saved search
 
-  categories = [
-    { value: 'Electronics', viewValue: 'Electronics' },
-    { value: 'Personal Accessories', viewValue: 'Personal Accessories' },
-    { value: 'Clothes & Accessories', viewValue: 'Clothes & Accessories' },
-    { value: 'Work Tools', viewValue: 'Work Tools' },
-    { value: 'Storage Items', viewValue: 'Storage Items' },
-    { value: 'Groceries', viewValue: 'Groceries ' },
-    { value: 'Expensive Items', viewValue: 'Expensive Items' },
-    { value: 'Unlabeled Items', viewValue: 'Unlabeled Items' },
-    { value: 'Toys', viewValue: 'Toys' },
-    { value: 'accessories', viewValue: 'accessories' }
-  ];
+  categories: any[] = []; 
+
   displayedColumns: string[] = ['itemId', 'itemName', 'status', 'foundDate', 'categoryId', 'actions'];
   dataSource: any = [];
   categerorydata: any = [];
@@ -149,7 +139,36 @@ export default class SearchAndClaimComponent {
   constructor(private http: HttpClient, private route: ActivatedRoute,private snackBar: MatSnackBar, private matDialog: MatDialog,private claimService:ClaimitService) {
     this.loadSavedSearches(); 
    }
-
+   private categoryIcons: { [key: string]: string } = {
+    'Electronics': 'devices',
+    'Personal Accessories': 'watch',
+    'Clothes & Accessories': 'checkroom',
+    'Work Tools': 'construction',
+    'Storage Items': 'archive',
+    'Groceries': 'shopping_cart',
+    'Expensive Items': 'attach_money',
+    'Uncategorized Items': 'help',
+    'Toys and Baby Products': 'toys',
+    'Bags': 'work',
+    'Documents': 'description',
+    'Home and Furniture': 'weekend',
+    'Vehicles': 'directions_car',
+    'Childcare Items': 'child_friendly',
+    'Pets': 'pets',
+    'Books & Publications': 'menu_book',
+    'Musical Instruments': 'music_note',
+    'Art & Craft Supplies': 'brush',
+    'Fitness & Outdoor Equipment': 'fitness_center',
+    'Medical Items': 'medical_services',
+    'Tech Accessories': 'memory',
+    'Travel Essentials': 'flight',
+    'Food & Beverage Containers': 'lunch_dining',
+    'Gaming Equipment': 'sports_esports',
+    'Event Items': 'event',
+    'Fashion Accessories': 'style',
+    'Plants & Gardening Tools': 'yard',
+    'Kitchen Appliances': 'kitchen'
+  };
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.itemName = params['id']; 
@@ -158,7 +177,68 @@ export default class SearchAndClaimComponent {
         this.searchItems(); 
       }
     });
+    this.loadCategories();
   }
+  // getCategoryIcon(categoryName: string): string {
+  //   const defaultIcon = 'category';  
+  //   if (categoryName.includes('Electronics')) {
+  //     return 'tv';
+  //   } else if (categoryName.includes('Personal Accessories')) {
+  //     return 'accessibility';
+  //   } else if (categoryName.includes('Clothes') || categoryName.includes('Fashion')) {
+  //     return 'shopping_bag';
+  //   } else if (categoryName.includes('Work Tools')) {
+  //     return 'build';
+  //   } else if (categoryName.includes('Storage')) {
+  //     return 'storage';
+  //   } else if (categoryName.includes('Groceries')) {
+  //     return 'local_grocery_store';
+  //   } else if (categoryName.includes('Expensive')) {
+  //     return 'attach_money';
+  //   } else if (categoryName.includes('Uncategorized')) {
+  //     return 'category';
+  //   } else if (categoryName.includes('Toys') || categoryName.includes('Baby')) {
+  //     return 'toys';
+  //   } else if (categoryName.includes('Bags')) {
+  //     return 'backpack';
+  //   } else if (categoryName.includes('Documents')) {
+  //     return 'description';
+  //   } else if (categoryName.includes('Home') || categoryName.includes('Furniture')) {
+  //     return 'home';
+  //   } else if (categoryName.includes('Vehicles')) {
+  //     return 'directions_car';
+  //   } else if (categoryName.includes('Childcare')) {
+  //     return 'child_care';
+  //   } else if (categoryName.includes('Pets')) {
+  //     return 'pets';
+  //   } else if (categoryName.includes('Books')) {
+  //     return 'book';
+  //   } else if (categoryName.includes('Musical Instruments')) {
+  //     return 'music_note';
+  //   } else if (categoryName.includes('Art') || categoryName.includes('Craft')) {
+  //     return 'palette';
+  //   } else if (categoryName.includes('Fitness')) {
+  //     return 'fitness_center';
+  //   } else if (categoryName.includes('Medical')) {
+  //     return 'medication';
+  //   } else if (categoryName.includes('Tech Accessories')) {
+  //     return 'devices';
+  //   } else if (categoryName.includes('Travel')) {
+  //     return 'directions_walk';
+  //   } else if (categoryName.includes('Food') || categoryName.includes('Beverage')) {
+  //     return 'food_bank';
+  //   } else if (categoryName.includes('Gaming')) {
+  //     return 'games';
+  //   } else if (categoryName.includes('Event')) {
+  //     return 'event';
+  //   } else if (categoryName.includes('Plants') || categoryName.includes('Gardening')) {
+  //     return 'eco';
+  //   } else if (categoryName.includes('Kitchen')) {
+  //     return 'kitchen';
+  //   }
+  //   return defaultIcon;
+  // }
+  
   onRemove(file: any) {
     this.files = this.files.filter(f => f !== file);
   }
@@ -229,8 +309,8 @@ export default class SearchAndClaimComponent {
         localStorage.setItem('savedSearches', JSON.stringify(this.savedSearches));
         this.snackBar.open('Search saved successfully!', 'Close', {
           duration: 3000,
-          horizontalPosition: 'right', // Set horizontal position
-          verticalPosition: 'top',    // Set vertical position
+          horizontalPosition: 'right', 
+          verticalPosition: 'top',    
         });
       } else {
         this.snackBar.open('This search is already saved.', 'Close', {
@@ -283,7 +363,6 @@ export default class SearchAndClaimComponent {
     this.selectedCategory = category;
     this.search();
   }
-  // method for selecting the image and restricting the based on the image
   public onSelect(event: any): void {
     const files = event.addedFiles;
     if (files && files.length > 0) {
@@ -321,33 +400,21 @@ export default class SearchAndClaimComponent {
       );
     }
   }
-  getCategoryIcon(value: string): string {
-    switch (value) {
-      case 'Electronics':
-        return 'devices'; // Suitable for electronics
-      case 'Personal Accessories':
-        return 'watch'; // A watch icon for personal accessories
-      case 'Clothes & Accessories':
-        return 'checkroom'; // Icon representing clothes and accessories
-      case 'Work Tools':
-        return 'construction'; // Construction icon for work tools
-      case 'Storage Items':
-        return 'archive'; // Archive icon for storage items
-      case 'Groceries':
-        return 'shopping_cart'; // Shopping cart for groceries
-      case 'Expensive Items':
-        return 'attach_money'; // Money icon for expensive items
-      case 'Unlabeled Items':
-        return 'help'; // Help icon for unlabeled items
-      case 'Toys':
-        return 'toys'; // Toy icon for toys
-      case 'Accessories':
-        return 'settings'; // Settings icon for miscellaneous accessories
-      default:
-        return 'help'; // Default help icon
-    }
+  getCategoryIcon(name: string): string {
+    return this.categoryIcons[name] || 'help'; 
   }
-  
+  loadCategories(): void {
+    this.http.get<any[]>('http://172.17.12.38:8081/api/admin/getcategories')
+      .subscribe({
+        next: (data) => {
+          this.categories = data;
+        },
+        error: (err) => {
+          console.error('Error loading categories:', err);
+        }
+      });
+  }
+
   uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
