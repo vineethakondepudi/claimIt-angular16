@@ -1,18 +1,20 @@
 <div  *ngIf="role === 'admin'" class="min-h-screen bg-gray-50 p-6">
   <h2 class="flex flex-wrap lg:flex-row md:flex-row font-semibold text-lg items-center">
     <span
-    class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto cursor-pointer relative"
-    (click)="openCalendarDialog()"
-  >
-    Report for the month of
-    <span
-    class="italic font-semibold"
-    style="color: #007BFF; text-decoration: underline; cursor: pointer;"
-  >
-      {{ selectedMonth | date: 'MMMM' }}
+      class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto cursor-pointer relative"
+      (click)="openCalendarDialog()"
+    >
+      <mat-icon class="mr-2" style="color: #007BFF;">calendar_today</mat-icon> <!-- Calendar Icon -->
+      Report for the month of
+      <span
+        class="italic font-semibold"
+        style="color: #007BFF; text-decoration: underline; cursor: pointer;"
+      >
+        {{ selectedMonth | date: 'MMMM' }}
+      </span>
     </span>
-  </span>
   </h2>
+  
 
   <h1 class="text-3xl font-semibold font-extrabold text-center mb-8">Lost & Found Admin Dashboard</h1>
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
