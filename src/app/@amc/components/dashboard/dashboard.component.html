@@ -114,11 +114,6 @@
                 Time remaining: <span class="font-semibold">{{ item.remainingTime }}</span>
               </div>
             </ng-template>
-  
-            <!-- Display location name here -->
-            <!-- <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
-              Location: {{ item.locationName }}
-            </div> -->
           </mat-card-content>
   
           <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
@@ -168,7 +163,7 @@
     <h2 class="text-2xl font-bold mb-6">Donation History</h2>
   
     <!-- Card Layout for Donation History -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div *ngFor="let history of donationHistory" class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">{{ history.item }}</div>
@@ -178,7 +173,67 @@
           </p>
         </div>
       </div>
+    </div> -->
+    <div class="p-6 bg-gray-100 min-h-screen">
+      <!-- Button to Show New Charities -->
+      <div class="text-center mb-6">
+        <button
+          (click)="displayTwoRandomCharities()"
+          class="bg-teal-500 text-white px-4 py-2 rounded shadow hover:bg-teal-600 transition-colors duration-200"
+        >
+          Show New Charities
+        </button>
+      </div>
+    
+      <!-- Charity Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          *ngFor="let charity of displayedCharities"
+          class="max-w-md rounded-lg overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-shadow duration-300"
+        >
+          <img
+            [src]="charity.image || 'https://via.placeholder.com/300?text=Charity+Image'"
+            alt="{{ charity.name }}"
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ charity.name }}</h3>
+            <p class="text-gray-600 mb-4">{{ charity.description }}</p>
+            <p class="text-sm text-teal-600 font-semibold mb-2">
+              <strong>Impact:</strong> {{ charity.impact }}
+            </p>
+            <p class="text-sm text-blue-600 mb-4">
+              <strong>How We Help:</strong> {{ charity.howWeHelp }}
+            </p>
+            <h4 class="font-semibold text-lg text-gray-800 mb-2">Donations:</h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div
+                *ngFor="let donation of charity.donations"
+                class="flex flex-col items-center"
+              >
+                <img
+                  [src]="donation.image"
+                  alt="{{ donation.name }}"
+                  class="w-24 h-24 object-cover rounded-md"
+                />
+                <p class="text-sm text-gray-700 mt-2">{{ donation.name }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="px-6 py-4">
+            <a
+              [href]="charity.website"
+              target="_blank"
+              class="text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 px-4 py-2 rounded text-sm"
+            >
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    
   </div>
   
 </div>
