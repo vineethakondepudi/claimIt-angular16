@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClaimitService } from '../../sharedServices/claimit.service';
@@ -7,16 +7,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
-
+import { ClaimConfirmationDialogComponent } from '../claim-confirmation-dialog/claim-confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 @Component({
   selector: 'app-claim-request',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatDatepickerModule, MatFormFieldModule, MatSelectModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatDatepickerModule, MatFormFieldModule, 
+    MatSelectModule, MatDialogModule],
   templateUrl: './claim-request.component.html',
   styleUrls: ['./claim-request.component.scss']
 })
-export default class ClaimRequestComponent {
+export default class ClaimRequestComponent implements OnInit {
   selectedLocation!: string;
+  categories: any[] = [];
   latitude: number | null = null;
   longitude: number | null = null;
   selectedFile: File | null = null; 
@@ -32,11 +36,18 @@ export default class ClaimRequestComponent {
     imageUrl:''
   };
 
-  constructor(private claimService: ClaimitService, private router: Router ) {}
+  constructor(private claimService: ClaimitService, private router: Router, public dialog: MatDialog) {}
+
+  ngOnInit(){
+    this.claimService.getCategories().subscribe((data: any) => {
+      this.categories = data;
+      console.log(this.categories,41); 
+    });
+  }
 
   onSubmit() {
     this.claimService.addClaim({ ...this.claimData });
-    alert('Your claim request has been submitted successfully.');
+    this.dialog.open(ClaimConfirmationDialogComponent);
     this.resetForm();
   }
   onCancel() {

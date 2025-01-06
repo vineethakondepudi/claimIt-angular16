@@ -75,28 +75,21 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
        
-          <div class="w-full">
-            <mat-label>Item Type</mat-label>
-            <select
-              id="itemType"
-              [(ngModel)]="claimData.itemType"
-              name="itemType"
-              class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              required
-            >
-              <option value="" disabled>Select Item Type</option>
-              <option value="electronic">Electronics</option>
-              <option value="personalAccessories">Personal Accessories</option>
-              <option value="clothes&accessories">Clothes & Accessories</option>
-              <option value="workTools">Work Tools</option>
-              <option value="storageItems">Storage Items</option>
-              <option value="groceries">Groceries</option>
-              <option value="expensiveItems">Expensive Items</option>
-              <option value="unlabeledItems">Unlabeled Items</option>
-              <option value="toys">Toys</option>
-              <option value="accessories">Accessories</option>
-            </select>
-          </div>
+            <div class="w-full">
+                <mat-label>Item Type</mat-label>
+                <select
+                  id="itemType"
+                  [(ngModel)]="claimData.itemType"
+                  name="itemType"
+                  class="mt-1 p-4 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  required
+                >
+                  <option value="" disabled>Select Item Type</option>
+                 
+                  <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+                </select>
+              </div>
+              
           <div class="w-full relative">
             <label for="incidentDate" class="block text-sm font-medium text-gray-700 flex items-center">
               <span class="mr-2">Date of Incident</span>
@@ -171,4 +164,4 @@
       </form>
     </div>
   </div>
-  
+ 
