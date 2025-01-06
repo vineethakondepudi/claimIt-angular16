@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -62,7 +62,7 @@ interface Item {
   templateUrl: './search-and-claim.component.html',
   styleUrls: ['./search-and-claim.component.scss']
 })
-export default class SearchAndClaimComponent {
+export default class SearchAndClaimComponent implements OnInit {
   @Input() containerPanelOpened: boolean = false;
   displaycoloums: any[] = [
     {
@@ -123,19 +123,7 @@ export default class SearchAndClaimComponent {
   searchQuery: string = ''; // Current search query
   savedSearches: string[] = []; // List of saved searches
   selectedSavedSearch: string | null = null; // Currently selected saved search
-
-  categories = [
-    { value: 'Electronics', viewValue: 'Electronics' },
-    { value: 'Personal Accessories', viewValue: 'Personal Accessories' },
-    { value: 'Clothes & Accessories', viewValue: 'Clothes & Accessories' },
-    { value: 'Work Tools', viewValue: 'Work Tools' },
-    { value: 'Storage Items', viewValue: 'Storage Items' },
-    { value: 'Groceries', viewValue: 'Groceries ' },
-    { value: 'Expensive Items', viewValue: 'Expensive Items' },
-    { value: 'Unlabeled Items', viewValue: 'Unlabeled Items' },
-    { value: 'Toys', viewValue: 'Toys' },
-    { value: 'accessories', viewValue: 'accessories' }
-  ];
+  categories: any[] = [];
   displayedColumns: string[] = ['itemId', 'itemName', 'status', 'foundDate', 'categoryId', 'actions'];
   dataSource: any = [];
   categerorydata: any = [];
@@ -158,7 +146,78 @@ export default class SearchAndClaimComponent {
         this.searchItems(); 
       }
     });
+
+     
+  this.claimService.getCategories().subscribe((data: any) => {
+    this.categories = data.map((item:any) => ({
+      value: item.id,         
+      viewValue: item.name, 
+      icon: this.getCategoryIcon(item.name)
+    }));
+    console.log(this.categories); 
+  });
+ 
   }
+  getCategoryIcon(categoryName: string): string {
+    const defaultIcon = 'category';  
+    if (categoryName.includes('Electronics')) {
+      return 'tv';
+    } else if (categoryName.includes('Personal Accessories')) {
+      return 'accessibility';
+    } else if (categoryName.includes('Clothes') || categoryName.includes('Fashion')) {
+      return 'shopping_bag';
+    } else if (categoryName.includes('Work Tools')) {
+      return 'build';
+    } else if (categoryName.includes('Storage')) {
+      return 'storage';
+    } else if (categoryName.includes('Groceries')) {
+      return 'local_grocery_store';
+    } else if (categoryName.includes('Expensive')) {
+      return 'attach_money';
+    } else if (categoryName.includes('Uncategorized')) {
+      return 'category';
+    } else if (categoryName.includes('Toys') || categoryName.includes('Baby')) {
+      return 'toys';
+    } else if (categoryName.includes('Bags')) {
+      return 'backpack';
+    } else if (categoryName.includes('Documents')) {
+      return 'description';
+    } else if (categoryName.includes('Home') || categoryName.includes('Furniture')) {
+      return 'home';
+    } else if (categoryName.includes('Vehicles')) {
+      return 'directions_car';
+    } else if (categoryName.includes('Childcare')) {
+      return 'child_care';
+    } else if (categoryName.includes('Pets')) {
+      return 'pets';
+    } else if (categoryName.includes('Books')) {
+      return 'book';
+    } else if (categoryName.includes('Musical Instruments')) {
+      return 'music_note';
+    } else if (categoryName.includes('Art') || categoryName.includes('Craft')) {
+      return 'palette';
+    } else if (categoryName.includes('Fitness')) {
+      return 'fitness_center';
+    } else if (categoryName.includes('Medical')) {
+      return 'medication';
+    } else if (categoryName.includes('Tech Accessories')) {
+      return 'devices';
+    } else if (categoryName.includes('Travel')) {
+      return 'directions_walk';
+    } else if (categoryName.includes('Food') || categoryName.includes('Beverage')) {
+      return 'food_bank';
+    } else if (categoryName.includes('Gaming')) {
+      return 'games';
+    } else if (categoryName.includes('Event')) {
+      return 'event';
+    } else if (categoryName.includes('Plants') || categoryName.includes('Gardening')) {
+      return 'eco';
+    } else if (categoryName.includes('Kitchen')) {
+      return 'kitchen';
+    }
+    return defaultIcon;
+  }
+  
   onRemove(file: any) {
     this.files = this.files.filter(f => f !== file);
   }
@@ -321,33 +380,7 @@ export default class SearchAndClaimComponent {
       );
     }
   }
-  getCategoryIcon(value: string): string {
-    switch (value) {
-      case 'Electronics':
-        return 'devices'; // Suitable for electronics
-      case 'Personal Accessories':
-        return 'watch'; // A watch icon for personal accessories
-      case 'Clothes & Accessories':
-        return 'checkroom'; // Icon representing clothes and accessories
-      case 'Work Tools':
-        return 'construction'; // Construction icon for work tools
-      case 'Storage Items':
-        return 'archive'; // Archive icon for storage items
-      case 'Groceries':
-        return 'shopping_cart'; // Shopping cart for groceries
-      case 'Expensive Items':
-        return 'attach_money'; // Money icon for expensive items
-      case 'Unlabeled Items':
-        return 'help'; // Help icon for unlabeled items
-      case 'Toys':
-        return 'toys'; // Toy icon for toys
-      case 'Accessories':
-        return 'settings'; // Settings icon for miscellaneous accessories
-      default:
-        return 'help'; // Default help icon
-    }
-  }
-  
+ 
   uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
