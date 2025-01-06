@@ -34,12 +34,12 @@
   flex-wrap: nowrap;
 }
 
-.swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: stretch; /* Ensure all cards stretch to the same height */
-  padding: 0.5rem;
-}
+// .swiper-slide {
+//   display: flex;
+//   justify-content: center;
+//   align-items: stretch; /* Ensure all cards stretch to the same height */
+//   padding: 0.9rem;
+// }
 
 .mat-card {
   display: flex;
@@ -138,10 +138,10 @@
     flex-direction: column; 
   }
 
-  .swiper-slide {
-    width: 100%; 
-    margin-bottom: 1rem; 
-  }
+  // .swiper-slide {
+  //   width: 100%; 
+  //   margin-bottom: 1rem; 
+  // }
 
   .mat-card {
     width: 100%; 
