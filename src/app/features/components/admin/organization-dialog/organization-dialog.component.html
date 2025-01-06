@@ -43,29 +43,33 @@
             </div>
           
             <div class="w-full">
-              <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
-                <ngx-dropzone-label class="text-gray-500 text-center">
-                  Drag and drop an image here or click to upload
-                </ngx-dropzone-label>
-                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" (removed)="onRemove(f)">
-                  <img [src]="f.preview" alt="Image Preview" class="w-32 h-32 object-cover rounded-md" />
-                </ngx-dropzone-preview>
-              </ngx-dropzone>
-            </div>
-          
-            <div class="w-full">
-              <button mat-raised-button color="primary" class="mt-6 w-full" [disabled]="!selected || files.length === 0" (click)="onUploadImage()">
-                <mat-icon>upload</mat-icon>
-                Submit
-              </button>
-            </div>
+ 
+            <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
+              <ngx-dropzone-label class="text-gray-500 text-center" *ngIf="files.length === 0">
+                Drag and drop an image here or click to upload
+              </ngx-dropzone-label>
+              <div *ngFor="let f of files" class="relative flex justify-center items-center">
+                <img [src]="f.preview" alt="Image Preview" class="w-32 h-32 object-cover rounded-md" />
+                <button (click)="onRemove(f); $event.stopPropagation()"
+                  class="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1">
+                  X
+                </button>
+              </div>
+            </ngx-dropzone>
+          </div>
+          <div class="w-full">
+            <button mat-raised-button color="primary" class="mt-6 w-full" [disabled]="!selected || files.length === 0"
+              (click)="onUploadImage()">
+              <mat-icon>upload</mat-icon>
+              Submit
+            </button>
           </div>
           
         </div>
-        <ng-template #noData>
-          <p class="text-gray-500 text-center">No organizations available.</p>
-        </ng-template>
       </div>
-    </mat-card-content>
-  </mat-card>
-  
+      <ng-template #noData>
+        <p class="text-gray-500 text-center">No organizations available.</p>
+      </ng-template>
+    </div>
+  </mat-card-content>
+</mat-card>

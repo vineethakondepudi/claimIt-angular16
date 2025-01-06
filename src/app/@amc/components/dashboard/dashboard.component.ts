@@ -470,10 +470,7 @@ forceUpdate(): void {
           this.currentMonthData.totalItems = data.totalItems;
           this.currentMonthData.claimed = data.claimed;
           this.currentMonthData.unclaimed = data.unclaimed;
-          console.log(this.currentMonthData.claimed);
-
-          this.currentMonthData.donated = this.currentMonthData.totalItems -
-            (this.currentMonthData.claimed + this.currentMonthData.unclaimed);
+          this.currentMonthData.donated = data.rejected+data.archived
           this.updateDoughnutChartData();
           console.log(res,409);
           
