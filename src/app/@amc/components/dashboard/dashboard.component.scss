@@ -176,3 +176,39 @@
     width: 15rem;
   }
 }
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.card h3 {
+  color: #2d3748;
+}
+
+.card p {
+  line-height: 1.6;
+}
+
+.card a {
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  background-color: #3182ce;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.card a:hover {
+  background-color: #2b6cb0;
+}
