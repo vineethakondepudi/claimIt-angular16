@@ -340,27 +340,29 @@ export default class DashboardComponent {
     });
   }
   
-  getLocation(item: any): void {
+  getLocation(items: any | any[]): void {
+    if (Array.isArray(items)) {
+      items.forEach(item => this.processLocation(item));
+    } else {
+      this.processLocation(items);
+    }
+  }
+  
+  private processLocation(item: any): void {
     const lat = item.latitude;
     const lon = item.longitude;
     if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
       this.fetchLocationName(lat, lon, item);
+      // console.log(lat,lon,'latitiude')
     } else {
-      alert("Invalid coordinates.");
+      item.locationName = 'Invalid coordinates';
     }
   }
-  toggleLocationVisibility(item: any): void {
-    item.showLocation = !item.showLocation;
-    if (item.showLocation && !item.locationName) {
-      this.fetchLocationName(item.latitude, item.longitude, item);
-    }
-  }
-  private fetchLocationName(lat: number, lon: number, item: any): void {
-    L.tileLayer('https://api.maptiler.com/maps/nl-cartiqo-topo/{z}/{x}/{y}.png?key=xJWFJF5JvkaPr6hJCReR', {
-      attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> contributors',
-    }).addTo(this.map);
-    const apiUrl = `https://api.maptiler.com/geocoding/reverse.json?lat=${lat}&lon=${lon}&key=xJWFJF5JvkaPr6hJCReR`;
   
+  private fetchLocationName(lat: number, lon: number, item: any): void {
+    
+    const apiUrl = `https://api.maptiler.com/geocoding/${lon},${lat}.json?key=xJWFJF5JvkaPr6hJCReR`;
+    console.log(lat,lon,'latitiude')
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
@@ -374,6 +376,14 @@ export default class DashboardComponent {
       });
   }
   
+  
+  toggleLocationVisibility(item: any): void {
+    item.showLocation = !item.showLocation;
+    if (item.showLocation && !item.locationName) {
+      this.fetchLocationName(item.latitude, item.longitude, item);
+    }
+  }
+ 
   
 
 // Optionally trigger change detection
