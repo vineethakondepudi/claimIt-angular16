@@ -27,7 +27,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { GoogleMapsModule } from '@angular/google-maps';
 import * as esri from 'esri-leaflet';
 import * as L from 'leaflet';
-
+import { WASTE_DATA } from '../../types/waste-data'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faWhatsapp, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { ChatService } from '../service/chat.service'
@@ -36,6 +36,7 @@ interface CheckIn {
   type: string
   appointmentId: string
 }
+type WasteCategory = 'plastic' | 'organic' | 'electronic' | 'paper' | 'glass' | 'other';
 interface Item {
   itemId: number;
   itemName: string;
@@ -85,6 +86,10 @@ export default class DashboardComponent {
   role: any
   pieChart: any = []
   pieChartLabels: any
+  selectedWasteType: WasteCategory = 'plastic';
+  customWasteInput: string = '';
+  suggestions: string[] = [];
+  userLocation: string = ''; 
   // cdRef: any
   constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef,private chatService: ChatService) {
     this.role = localStorage.getItem('role');
@@ -93,6 +98,7 @@ export default class DashboardComponent {
   public barChartType: ChartType = 'bar';
   lineChartType: ChartType = 'line';
   showMore = true;
+  mapUrl: string = '';
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
   swiper: Swiper | undefined;
@@ -158,7 +164,7 @@ export default class DashboardComponent {
   ];
 
   displayedCharities: any[] = [];
-
+  recyclingCenters: any[] = []; 
   categoryData: Array<{ categoryName: string; itemCount: number }> = [];
 
   searchResults: any = [];
@@ -214,6 +220,7 @@ export default class DashboardComponent {
 
   ngOnInit(): void {
     this.slides = this.slides || [];
+  
      this.initializeMap();
     this.startCountdown();
     this.fetchSlides();
@@ -225,6 +232,7 @@ export default class DashboardComponent {
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
     this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
+    this.initMap();
   }
   ngOnDestroy(): void {
     this.countdownTimers.forEach(timer => clearInterval(timer));
@@ -242,6 +250,57 @@ export default class DashboardComponent {
   }
   toggleShowMore() {
     this.showMore = !this.showMore;
+  }
+  onSubmit() {
+    if (this.selectedWasteType || this.customWasteInput) {
+      this.suggestions = [];
+      if (this.selectedWasteType) {
+        this.suggestions = WASTE_DATA[this.selectedWasteType]?.tips || [];
+      }
+      if (this.customWasteInput) {
+        if (this.customWasteInput.toLowerCase().includes('battery')) {
+          this.suggestions.push("Take batteries to a special recycling center.");
+        }
+      }
+      this.initMap();
+    }
+  }
+  initMap() {
+    this.map = L.map('map').setView([ 0,0], 13);
+    L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=xJWFJF5JvkaPr6hJCReR', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }).addTo(this.map);
+    
+  }
+  provideLocationBasedTips() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        this.userLocation = `Latitude: ${lat}, Longitude: ${lng}`;
+        this.suggestions.push('Check out the nearest recycling center near your location!');
+        if (this.map) {
+          this.map.setView([lat, lng], 13);
+        }
+        L.marker([lat, lng]).addTo(this.map!)
+          .bindPopup('Your Location')
+          .openPopup();
+        this.fetchNearbyRecyclingCenters(lat, lng);
+      });
+    }
+  }
+  fetchNearbyRecyclingCenters(lat: number, lng: number) {
+    this.recyclingCenters = [
+      { name: 'Recycling Center A', lat: lat + 0.01, lng: lng + 0.01 },
+      { name: 'Recycling Center B', lat: lat - 0.01, lng: lng - 0.01 },
+      { name: 'Recycling Center C', lat: lat + 0.02, lng: lng - 0.02 },
+    ];
+    this.recyclingCenters.forEach(center => {
+      L.marker([center.lat, center.lng]).addTo(this.map!)
+        .bindPopup(center.name);
+    });
   }
   startCountdown() {
     setInterval(() => {
@@ -653,7 +712,32 @@ forceUpdate(): void {
         },
       ],
     };
-    // this.cdr.detectChanges();
+  }
+
+
+  // toggleChat() {
+  //   this.chatExpanded = !this.chatExpanded;
+  // }
+
+  // sendMessage() {
+  //   if (this.currentMessage.trim()) {
+      
+  //     this.messages.push('You: ' + this.currentMessage);
+     
+  //     this.messages.push(this.getBotResponse(this.currentMessage));
+  //     this.currentMessage = ''; 
+  //   }
+  // }
+
+
+  getBotResponse(userMessage: string): string {
+    if (userMessage.toLowerCase().includes('hello')) {
+      return 'Bot: Hello! How can I assist you today?';
+    } else if (userMessage.toLowerCase().includes('i lost something')) {
+      return 'Bot: I\'ll find it shortly. We will reach out via your email.';
+    } else {
+      return 'Bot: I\'m sorry, I didn\'t quite catch that. Could you please rephrase?';
+    }
   }
   toggleChat() {
     this.isChatOpen = !this.isChatOpen;

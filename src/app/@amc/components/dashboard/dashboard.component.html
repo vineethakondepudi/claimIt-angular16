@@ -1,15 +1,17 @@
-<div *ngIf="role === 'admin'" class="min-h-screen bg-gray-50 p-6">
-  <h2 class="flex flex-wrap lg:flex-row md:flex-row font-semibold text-lg items-center">
-    <span class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto cursor-pointer relative"
-      (click)="openCalendarDialog()">
+<div  *ngIf="role === 'admin'" class="min-h-screen bg-gray-50 p-6">
+  <h1 class="flex flex-wrap lg:flex-row md:flex-row font-semibold text-lg items-center">
+    <span
+      class="font-semibold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] flex-auto cursor-pointer relative"
+      (click)="openCalendarDialog()"
+    >
       <mat-icon class="mr-2" style="color: #007BFF;">calendar_today</mat-icon> <!-- Calendar Icon -->
       Report for the month of
       <span class="italic font-semibold" style="color: #007BFF; text-decoration: underline; cursor: pointer;">
         {{ selectedMonth | date: 'MMMM' }}
       </span>
     </span>
-  </h2>
-
+  </h1>
+  
 
   <h1 class="text-3xl font-semibold font-extrabold text-center mb-8">Lost & Found Admin Dashboard</h1>
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -75,6 +77,7 @@
       </ng-template>
     </div>
   </div>
+
   <div class="swiper-container px-6 py-4">
     <h2 class="text-xl font-bold text-gray-700 mb-4">Reported items more than 30 days</h2>
     <div class="swiper-wrapper flex md:flex-row flex-col">
@@ -146,20 +149,8 @@
 
 
   <div class="mt-12">
-    <h2 class="text-2xl font-bold mb-6">Donation History</h2>
-
-    <!-- Card Layout for Donation History -->
-    <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let history of donationHistory" class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-        <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2">{{ history.item }}</div>
-          <p class="text-gray-700 text-base">
-            <strong>Donation Date:</strong> {{ history.donationDate | date }}<br />
-            <strong>Charity:</strong> {{ history.charity }}
-          </p>
-        </div>
-      </div>
-    </div> -->
+    <h2 class="text-2xl font-bold mb-6">Partnered Charitites</h2>
+  
     <div class="p-6 bg-gray-100 min-h-screen">
       <!-- Button to Show New Charities -->
       <div class="text-center mb-6">
@@ -201,8 +192,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 
 </div>
