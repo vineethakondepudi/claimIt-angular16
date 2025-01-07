@@ -316,7 +316,7 @@ export default class AdminSearchComponent {
 
         const params = {
           itemId: event.itemId ,
-          "status": "CLAIMED",
+          "claimStatus": "CLAIMED",
           userId:event.userId
         };
 
