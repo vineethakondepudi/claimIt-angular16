@@ -31,6 +31,9 @@ import { WASTE_DATA } from '../../types/waste-data'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faWhatsapp, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import {  MatDialogRef } from '@angular/material/dialog';
+import { fadeInRight400ms } from '../../animations/fade-in-right.animation'
+import { fadeInUp400ms } from '../../animations/fade-in-up.animation'
+import { MatExpansionModule } from '@angular/material/expansion'
 interface CheckIn {
   name: string
   type: string
@@ -69,9 +72,11 @@ interface Item {
     MatButtonModule,
     FormsModule,
     MatInputModule,
+    MatExpansionModule,
     MatIconModule,],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  animations: [fadeInRight400ms, fadeInUp400ms],
 })
 export default class DashboardComponent {
   private map!: L.Map;
@@ -102,6 +107,8 @@ export default class DashboardComponent {
   doughnutChartType: ChartType = 'doughnut';
   searchQuery: string = '';
   swiper: Swiper | undefined;
+  public panelOpened: boolean = false;
+  public PanelOpened: boolean = false
   loader: boolean = false;
   selectedMonth: Date = new Date();
   currentMonth: any = [];
