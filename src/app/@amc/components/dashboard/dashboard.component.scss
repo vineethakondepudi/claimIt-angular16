@@ -253,4 +253,36 @@ ul {
 
 ul li {
   margin-bottom: 10px;
+/* Styles for User Message */
+.user-message {
+  background-color: #DCF8C6; /* Light green background for user messages */
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+  margin-left: auto; /* Align user messages to the right */
+  text-align: right;
+  color: #000;
+  word-wrap: break-word;
+}
+
+/* Styles for Bot Message */
+.bot-message {
+  background-color: #FFFFFF; /* White background for bot messages */
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+  margin-right: auto; /* Align bot messages to the left */
+  text-align: left;
+  color: #000;
+  word-wrap: break-word;
+}
+
+/* Optional: Style the chat container */
+.fixed.bottom-4.right-4.w-80 {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+mat-card {
+  border-radius: 10px;
+  overflow: hidden;
 }

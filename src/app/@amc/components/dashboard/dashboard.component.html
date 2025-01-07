@@ -322,6 +322,53 @@
     </div>
     <div class="swiper-pagination"></div>
   </div>
+  </div><div class="fixed bottom-4 right-4 w-80">
+    
+  
+<!-- Chat Card -->
+<div class="fixed bottom-4 right-4 w-80">
+  <mat-card class="shadow-md">
+    <!-- Chat Icon (opens/closes chat input field) -->
+    <div class="flex justify-between items-center p-4">
+      <button
+        mat-icon-button
+        (click)="toggleChat()"
+        aria-label="Chat with us"
+        class="bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-full p-3"
+      >
+        <mat-icon>{{ chatExpanded ? 'close' : 'chat' }}</mat-icon>
+      </button>
+    </div>
+
+
+<div *ngIf="chatExpanded && messages.length > 0" class="p-4 border-b max-h-48 overflow-y-auto">
+  <div *ngFor="let message of messages" class="mb-2">
+    <p [ngClass]="{'user-message': message.startsWith('You:'), 'bot-message': message.startsWith('Bot:')}">
+      {{ message }}
+    </p>
+  </div>
+</div>
+
+
+
+    <div *ngIf="chatExpanded" class="p-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Chat with us</mat-label>
+        <input
+          matInput
+          placeholder="Type your message..."
+          (focus)="chatExpanded = true"
+          [(ngModel)]="currentMessage"
+          (keydown.enter)="sendMessage()"
+        />
+      </mat-form-field>
+    </div>
+  </mat-card>
+</div>
+
+
+  
+  
 </div>
 <div class="mt-8 bg-white p-6 shadow rounded">
   <h2 class="text-2xl font-semibold text-center">Waste Management Suggestions</h2>
