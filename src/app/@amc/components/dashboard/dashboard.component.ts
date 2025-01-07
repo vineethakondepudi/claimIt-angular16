@@ -30,6 +30,7 @@ import * as L from 'leaflet';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faWhatsapp, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { ChatService } from '../service/chat.service'
 interface CheckIn {
   name: string
   type: string
@@ -85,7 +86,7 @@ export default class DashboardComponent {
   pieChart: any = []
   pieChartLabels: any
   // cdRef: any
-  constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
+  constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef,private chatService: ChatService) {
     this.role = localStorage.getItem('role');
   }
   public pieChartType: ChartType = 'pie';
@@ -99,6 +100,15 @@ export default class DashboardComponent {
   selectedMonth: Date = new Date();
   currentMonth: any = [];
   monthName: any = [];
+  isChatOpen = false;
+  chatInput: string = '';
+  messages: string[] = [];
+  loading: boolean = false;
+  resultData: string = '';
+  recentPrompt: string = '';
+  prevPrompt: string[] = [];
+  showResult: boolean = false;
+  activeTab = 'focused';
   currentMonthData: any = {
     totalItems: 0,
     claimed: 0,
@@ -644,5 +654,27 @@ forceUpdate(): void {
       ],
     };
     // this.cdr.detectChanges();
+  }
+  toggleChat() {
+    this.isChatOpen = !this.isChatOpen;
+  }
+
+  sendMessage(): void {
+    if (this.chatInput.trim()) {
+      this.messages.push(`You: ${this.chatInput}`);
+      this.loading = true;
+  
+      this.chatService.generateResponse(this.chatInput)
+        .then((response: string) => {
+          this.messages.push(`AI: ${response}`);
+          this.loading = false;
+          this.chatInput = ''; // Clear input field
+        })
+        .catch((error: any) => {
+          this.messages.push("AI: Sorry, I couldn't process that request.");
+          this.loading = false;
+          console.error('Error generating response:', error);
+        });
+    }
   }
 }

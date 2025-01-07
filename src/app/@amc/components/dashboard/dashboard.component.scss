@@ -212,3 +212,60 @@
 .card a:hover {
   background-color: #2b6cb0;
 }
+
+
+/* Floating Chat Icon */
+.fixed {
+  position: fixed;
+}
+
+.right-6 {
+  right: 24px;
+}
+
+.bottom-6 {
+  bottom: 24px;
+}
+
+/* Chat Window */
+.chat-window {
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Add any other styling you need */
+.fixed {
+  position: fixed;
+}
+.z-50 {
+  z-index: 50;
+}
+.shadow-lg {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.flex {
+  display: flex;
+}
+.space-x-2 > :not(:last-child) {
+  margin-right: 0.5rem;
+}
+.items-center {
+  align-items: center;
+}
+.rounded-full {
+  border-radius: 9999px;
+}
+.rounded-t-lg {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+.hidden {
+  display: none;
+}
+.md\\:block {
+  display: block;
+}
