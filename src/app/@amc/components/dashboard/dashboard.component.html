@@ -302,6 +302,14 @@
   </button>
 </div>
 
+<!-- Floating Chat Icon -->
+<div class="fixed bottom-6 right-6 z-50">
+  <button (click)="toggleChat()"
+    class="bg-blue-500 p-4 rounded-full shadow-lg text-white flex items-center justify-center" aria-label="Open Chat">
+    <mat-icon>chat</mat-icon>
+  </button>
+</div>
+
 <!-- Chat Window -->
 <div *ngIf="isChatOpen"
   class="fixed bottom-0 right-0 bg-white w-full md:w-1/3 h-[500px] shadow-lg rounded-t-lg flex flex-col">
@@ -326,10 +334,15 @@
     </div>
   </div>
 
-
-  
-  
+  <!-- Chat Input Area -->
+  <div class="bg-gray-200 p-4">
+    <textarea [(ngModel)]="chatInput" class="w-full p-2 rounded-md" rows="3" placeholder="Type a message..." (keydown.enter)="sendMessage()"></textarea>
+    <button (click)="sendMessage()" class="bg-blue-500 text-white p-2 mt-2 rounded-md w-full" [disabled]="loading">
+      Send
+    </button>
+  </div>
 </div>
+
 <mat-accordion @fadeInUp>
   <mat-expansion-panel hideToggle (opened)="PanelOpened = true" (closed)="PanelOpened = false">
     <mat-expansion-panel-header>
