@@ -242,7 +242,11 @@ button {
   border: none;
   cursor: pointer;
 }
-
+#map {
+  height: 200px;
+  width: 100%;
+  border-radius: 8px;
+}
 /* Add any other styling you need */
 .fixed {
   position: fixed;
