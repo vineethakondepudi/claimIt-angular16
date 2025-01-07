@@ -212,21 +212,25 @@
 .card a:hover {
   background-color: #2b6cb0;
 }
-.waste-management-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+
+
+/* Floating Chat Icon */
+.fixed {
+  position: fixed;
 }
 
-h2 {
-  text-align: center;
-  font-size: 24px;
+.right-6 {
+  right: 24px;
 }
 
-form div {
-  margin-bottom: 15px;
+.bottom-6 {
+  bottom: 24px;
+}
+
+/* Chat Window */
+.chat-window {
+  max-height: 80%;
+  overflow-y: auto;
 }
 
 button {
@@ -238,52 +242,36 @@ button {
   border: none;
   cursor: pointer;
 }
-#map {
-  height: 200px;
-  width: 100%;
-  border-radius: 8px;
-}
-button:hover {
-  background-color: #48af4d;
-}
 
-ul {
-  padding-left: 20px;
+/* Add any other styling you need */
+.fixed {
+  position: fixed;
 }
-
-ul li {
-  margin-bottom: 10px;
+.z-50 {
+  z-index: 50;
 }
-/* Styles for User Message */
-.user-message {
-  background-color: #DCF8C6; /* Light green background for user messages */
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 70%;
-  margin-left: auto; /* Align user messages to the right */
-  text-align: right;
-  color: #000;
-  word-wrap: break-word;
+.shadow-lg {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-/* Styles for Bot Message */
-.bot-message {
-  background-color: #FFFFFF; /* White background for bot messages */
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 70%;
-  margin-right: auto; /* Align bot messages to the left */
-  text-align: left;
-  color: #000;
-  word-wrap: break-word;
+.flex {
+  display: flex;
 }
-
-/* Optional: Style the chat container */
-.fixed.bottom-4.right-4.w-80 {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.space-x-2 > :not(:last-child) {
+  margin-right: 0.5rem;
 }
-
-mat-card {
-  border-radius: 10px;
-  overflow: hidden;
+.items-center {
+  align-items: center;
+}
+.rounded-full {
+  border-radius: 9999px;
+}
+.rounded-t-lg {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+.hidden {
+  display: none;
+}
+.md\\:block {
+  display: block;
 }

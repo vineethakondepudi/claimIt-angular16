@@ -34,6 +34,7 @@ import {  MatDialogRef } from '@angular/material/dialog';
 import { fadeInRight400ms } from '../../animations/fade-in-right.animation'
 import { fadeInUp400ms } from '../../animations/fade-in-up.animation'
 import { MatExpansionModule } from '@angular/material/expansion'
+import { ChatService } from '../service/chat.service'
 interface CheckIn {
   name: string
   type: string
@@ -96,7 +97,7 @@ export default class DashboardComponent {
   suggestions: string[] = [];
   userLocation: string = ''; 
   // cdRef: any
-  constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
+  constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef,private chatService: ChatService) {
     this.role = localStorage.getItem('role');
   }
   public pieChartType: ChartType = 'pie';
@@ -113,9 +114,15 @@ export default class DashboardComponent {
   selectedMonth: Date = new Date();
   currentMonth: any = [];
   monthName: any = [];
-  chatExpanded:boolean = false;
-  currentMessage: string = ''; 
+  isChatOpen = false;
+  chatInput: string = '';
   messages: string[] = [];
+  loading: boolean = false;
+  resultData: string = '';
+  recentPrompt: string = '';
+  prevPrompt: string[] = [];
+  showResult: boolean = false;
+  activeTab = 'focused';
   currentMonthData: any = {
     totalItems: 0,
     claimed: 0,
@@ -716,19 +723,19 @@ forceUpdate(): void {
   }
 
 
-  toggleChat() {
-    this.chatExpanded = !this.chatExpanded;
-  }
+  // toggleChat() {
+  //   this.chatExpanded = !this.chatExpanded;
+  // }
 
-  sendMessage() {
-    if (this.currentMessage.trim()) {
+  // sendMessage() {
+  //   if (this.currentMessage.trim()) {
       
-      this.messages.push('You: ' + this.currentMessage);
+  //     this.messages.push('You: ' + this.currentMessage);
      
-      this.messages.push(this.getBotResponse(this.currentMessage));
-      this.currentMessage = ''; 
-    }
-  }
+  //     this.messages.push(this.getBotResponse(this.currentMessage));
+  //     this.currentMessage = ''; 
+  //   }
+  // }
 
 
   getBotResponse(userMessage: string): string {
@@ -738,6 +745,28 @@ forceUpdate(): void {
       return 'Bot: I\'ll find it shortly. We will reach out via your email.';
     } else {
       return 'Bot: I\'m sorry, I didn\'t quite catch that. Could you please rephrase?';
+    }
+  }
+  toggleChat() {
+    this.isChatOpen = !this.isChatOpen;
+  }
+
+  sendMessage(): void {
+    if (this.chatInput.trim()) {
+      this.messages.push(`You: ${this.chatInput}`);
+      this.loading = true;
+  
+      this.chatService.generateResponse(this.chatInput)
+        .then((response: string) => {
+          this.messages.push(`AI: ${response}`);
+          this.loading = false;
+          this.chatInput = ''; // Clear input field
+        })
+        .catch((error: any) => {
+          this.messages.push("AI: Sorry, I couldn't process that request.");
+          this.loading = false;
+          console.error('Error generating response:', error);
+        });
     }
   }
 }
