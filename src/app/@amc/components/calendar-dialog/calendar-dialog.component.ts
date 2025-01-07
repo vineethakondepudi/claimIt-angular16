@@ -34,6 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
           matInput
           [matDatepicker]="picker"
           [(ngModel)]="selectedDate"
+           [matDatepickerFilter]="filterDates"
           readonly
         />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -86,4 +87,9 @@ export class CalendarDialogComponent {
   onClose(): void {
     this.dialogRef.close();
   }
+
+  filterDates = (date: Date | null): boolean => {
+    const today = new Date();
+    return date ? date <= today : false;
+  };
 }
