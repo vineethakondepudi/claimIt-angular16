@@ -30,6 +30,7 @@ import * as L from 'leaflet';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faWhatsapp, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import {  MatDialogRef } from '@angular/material/dialog';
 interface CheckIn {
   name: string
   type: string
@@ -99,6 +100,9 @@ export default class DashboardComponent {
   selectedMonth: Date = new Date();
   currentMonth: any = [];
   monthName: any = [];
+  chatExpanded:boolean = false;
+  currentMessage: string = ''; 
+  messages: string[] = [];
   currentMonthData: any = {
     totalItems: 0,
     claimed: 0,
@@ -643,6 +647,31 @@ forceUpdate(): void {
         },
       ],
     };
-    // this.cdr.detectChanges();
+  }
+
+
+  toggleChat() {
+    this.chatExpanded = !this.chatExpanded;
+  }
+
+  sendMessage() {
+    if (this.currentMessage.trim()) {
+      
+      this.messages.push('You: ' + this.currentMessage);
+     
+      this.messages.push(this.getBotResponse(this.currentMessage));
+      this.currentMessage = ''; 
+    }
+  }
+
+
+  getBotResponse(userMessage: string): string {
+    if (userMessage.toLowerCase().includes('hello')) {
+      return 'Bot: Hello! How can I assist you today?';
+    } else if (userMessage.toLowerCase().includes('i lost something')) {
+      return 'Bot: I\'ll find it shortly. We will reach out via your email.';
+    } else {
+      return 'Bot: I\'m sorry, I didn\'t quite catch that. Could you please rephrase?';
+    }
   }
 }
