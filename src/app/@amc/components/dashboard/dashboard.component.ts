@@ -529,7 +529,7 @@ forceUpdate(): void {
   
     return `${days}d ${hours}h ${minutes}m`;
   }
-  isTimeisup(item: any): boolean {
+  isTimeisup(item: any): boolean { 
     const expirationDate = new Date(item.expirationDate);
     const now = new Date();
     return expirationDate < now;

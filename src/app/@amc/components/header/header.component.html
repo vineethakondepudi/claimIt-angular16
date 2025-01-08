@@ -6,10 +6,10 @@
       </button>
     </div>
     <div *ngIf="opened" class="flex flex-row gapy-1 ml-4 mt-6">
-      <span class="flex flex-row w-15 cursor-pointer">
+      <!-- <span class="flex flex-row w-15 cursor-pointer">
         <img class="w-18 mr-2 ml-1 h-8" style="    width: 196px;
     height: 54px;" src="assets/loginLogo.jpg" />
-      </span>
+      </span> -->
     </div>
     <div class="mt-1 -ml-2">
       <mat-list class="mt-24">
@@ -47,18 +47,24 @@
             [class.active-top-button]="isTabActive(item.route)" 
             class="cursor-pointer bg-white mr-1" 
             mat-icon-button 
-            [matTooltip]="item.label">
-            <mat-icon class="mr-1" [class.active-top-button]="isTabActive(item.route)">
+            [matTooltip]="item.label"
+            (click)="item.route === '/claimit/pendingClaim' ? resetNotificationCount() : null">
+            <mat-icon 
+              class="mr-1" 
+              [class.active-top-button]="isTabActive(item.route)"
+              [ngClass]="{'text-red-500':item.isNotification && notificationCount > 0}">
               {{ item.icon }}
             </mat-icon>
+            <span *ngIf="item.label.startsWith('Notifications')" [class.text-red-500]="notificationCount > 0">
+              {{ notificationCount }}
+            </span>
           </button>
-         
         </ng-container>
         <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Admin Login" (click)="logout()">
           <mat-icon class="ml-1">logout</mat-icon>
         </button>
-        
       </div>
+      
 
     </mat-toolbar>
     <router-outlet></router-outlet>
