@@ -47,9 +47,10 @@ export class HeaderComponent {
   showReports: boolean = false;
   opened: boolean = true;
   param: any;
+  notificationCount = 0;
   userRole: string | null = '';
   menuItems: any[] = [];
-  tabRoutes: { route: string, icon: string, label: string }[] = [];
+  tabRoutes: { route: string, icon: string, label: string, isNotification?: boolean; }[] = [];
 
   constructor(public router: Router, private route: ActivatedRoute,private service:ClaimitService) {
     this.service.loginResponse_Triggered.subscribe((res:any)=>{
@@ -64,6 +65,10 @@ export class HeaderComponent {
     window.addEventListener('storage', this.onStorageChange.bind(this));
   }
   ngOnInit() {
+    this.service.pendingClaimsCount$.subscribe((count) => {
+      this.notificationCount = count;
+      this.updateNotificationLabel();
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -99,14 +104,12 @@ public isTabActive(tab: string): boolean {
   return currentUrl === tab; // Exact match check
 }
   getMenuItems() {
-    // this.userRole = localStorage.getItem('role');
-    console.log('menuuuuuu');
     if (this.userRole === 'admin') {
      this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add_circle', route: '/claimit/addItem' },
         { label: 'Approve / Reject Claim', icon: 'rule', route: '/claimit/search' },
-        { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim' },
+        { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim', isNotification: true },
       ];
     } else {
       this.menuItems = [
@@ -118,7 +121,18 @@ public isTabActive(tab: string): boolean {
     }
 
   }
-
+  updateNotificationLabel() {
+    const notificationsTab = this.tabRoutes.find((item) => item.label.startsWith('Notifications'));
+    if (notificationsTab) {
+      notificationsTab.label = `Notifications (${this.notificationCount})`;
+    }
+  }
+  resetNotificationCount() {
+    if (this.notificationCount > 0) {
+      this.notificationCount = 0;
+      this.updateNotificationLabel();
+    }
+  }
   logout() {
     localStorage.removeItem('role')
     this.router.navigateByUrl('/login')
