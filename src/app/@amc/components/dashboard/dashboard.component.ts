@@ -114,7 +114,7 @@ export default class DashboardComponent {
   selectedMonth: Date = new Date();
   currentMonth: any = [];
   monthName: any = [];
-  isChatOpen = false;
+  isChatOpen: boolean = false;
   chatInput: string = '';
   messages: string[] = [];
   loading: boolean = false;
@@ -769,4 +769,5 @@ forceUpdate(): void {
         });
     }
   }
+  
 }

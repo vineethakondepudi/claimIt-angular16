@@ -356,6 +356,7 @@
 
 
 <!-- Chat Window -->
+<!-- Chat Window -->
 <div *ngIf="isChatOpen" class="fixed bottom-0 right-0 bg-white w-full md:w-1/4 h-[400px] shadow-lg rounded-t-lg flex flex-col">
   <!-- Chat Header -->
   <div class="bg-[#219C90] text-white p-4 flex justify-between items-center rounded-t-lg">
@@ -366,7 +367,7 @@
   </div>
 
   <!-- Chat Messages -->
-  <div class="flex-1 overflow-y-auto p-4 bg-gray-100">
+  <div #messagesContainer class="flex-1 overflow-y-auto p-4 bg-gray-100">
     <div *ngFor="let message of messages" class="mb-2">
       <div *ngIf="message.startsWith('You:')" class="bg-[#219C90] p-2 rounded-lg text-sm text-white max-w-[70%] ml-auto">
         {{ message.replace('You: ', '') }}
@@ -385,6 +386,7 @@
     </button>
   </div>
 </div>
+
 
 
 
