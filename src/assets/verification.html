@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ownership Verification</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Angular Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
@@ -37,8 +35,6 @@
       </div>
     </form>
   </div>
-
-  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <script>
     const form = document.getElementById('verification-form');
@@ -63,51 +59,41 @@
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
 
-      // Add logo (fetch the logo from assets folder)
-      const logoUrl = 'assets/loginLogo.jpg'; // Path to the local logo image
+      const logoUrl = 'assets/loginLogo.jpg'; 
       const logo = await toBase64(logoUrl);
 
-      pdf.addImage(logo, 'JPEG', 10, 10, 50, 50); // Add logo to the top-left corner
+      pdf.addImage(logo, 'JPEG', 10, 10, 50, 50); 
 
-      // Set header with date
       pdf.setFontSize(16);
-      pdf.text('Ownership Verification', 70, 20); // Title of the document
+      pdf.text('Ownership Verification', 70, 20); 
       pdf.setFontSize(12);
-      pdf.text(`Date: ${currentDate}`, 70, 30); // Current date
-
-      // Add the details in an invoice format
+      pdf.text(`Date: ${currentDate}`, 70, 30); 
       pdf.setFontSize(12);
       pdf.text(`Item ID: ${itemId || 'N/A'}`, 10, 50);
       pdf.text(`Name: ${name}`, 10, 60);
       pdf.text(`Contact: ${contact}`, 10, 70);
 
       let yPosition = 80;
-
-      // Process each uploaded file
       for (const file of files) {
         const fileType = file.type;
         const fileName = file.name;
 
         pdf.text(`File: ${fileName}`, 10, yPosition);
         yPosition += 10;
-
-        // Read file content
         if (fileType.startsWith('text/') || fileType === 'application/json') {
           const textContent = await file.text();
-          const lines = pdf.splitTextToSize(textContent, 180); // Split long text for the PDF
+          const lines = pdf.splitTextToSize(textContent, 180); 
           pdf.text(lines, 10, yPosition);
           yPosition += lines.length * 10;
         } else if (fileType.startsWith('image/')) {
           // Embed image
           const imageData = await toBase64(file);
-          pdf.addImage(imageData, 'JPEG', 10, yPosition, 50, 50); // Adjust image dimensions as needed
+          pdf.addImage(imageData, 'JPEG', 10, yPosition, 50, 50); 
           yPosition += 60;
         } else {
           pdf.text('Content not supported for this file type.', 10, yPosition);
           yPosition += 10;
         }
-
-        // Add a page if content exceeds current page height
         if (yPosition > 270) {
           pdf.addPage();
           yPosition = 10;
@@ -115,20 +101,15 @@
       }
 
       pdf.text(`Submission Timestamp: ${new Date().toISOString()}`, 10, yPosition + 10);
-
-      // Trigger download
       const fileName = `ownership-verification-${itemId || 'submission'}.pdf`;
       pdf.save(fileName);
     });
-
-    // Helper function to convert file to base64
     function toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
         if (typeof file === 'string') {
-          // It's a URL, so fetch the image and convert to base64
           fetch(file)
             .then(response => response.blob())
             .then(blob => reader.readAsDataURL(blob))

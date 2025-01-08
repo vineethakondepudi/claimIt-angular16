@@ -87,4 +87,23 @@
       margin-top: 1.5rem;
     }
   }
-  
+.flex-col {
+  scroll-behavior: smooth;
+}
+
+.flex-col::-webkit-scrollbar {
+  width: 8px; 
+}
+
+.flex-col::-webkit-scrollbar-thumb {
+  background-color: #388d97; 
+  border-radius: 4px; 
+}
+
+.flex-col::-webkit-scrollbar-thumb:hover {
+  background-color: #2b717a; 
+}
+
+.flex-col::-webkit-scrollbar-track {
+  background-color: #f3f3f3; 
+}
