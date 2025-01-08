@@ -9,7 +9,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ClaimitService {
 
   constructor(private http: HttpClient) { }
+  private pendingClaimsSubject = new BehaviorSubject<number>(0);
 
+  // Observable for components to subscribe to
+  pendingClaimsCount$ = this.pendingClaimsSubject.asObservable();
   public loginResponse = new BehaviorSubject<any>(false);
   loginResponse_Triggered = this.loginResponse.asObservable();
   public getAllItems(query: any) {
@@ -82,6 +85,7 @@ export class ClaimitService {
 
   addClaim(claim: any) {
     this.pendingClaims.push(claim);
+    this.pendingClaimsSubject.next(this.pendingClaims.length); // Update notification count
   }
 
   getClaims() {

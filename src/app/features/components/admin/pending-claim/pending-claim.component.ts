@@ -11,13 +11,10 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 })
 export default class PendingClaimComponent {
   pendingClaims: any[] = [];
-
   constructor(private claimService: ClaimitService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.pendingClaims = this.claimService.getClaims();
-    console.log(this.pendingClaims,19);
-    
   }
 
   ngAfterViewChecked() {
