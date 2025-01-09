@@ -317,12 +317,12 @@
               <option value="other">Other</option>
             </select>
           </div>
-          <div class="mt-4">
+          <!-- <div class="mt-4">
             <label for="custom-waste-input" class="block text-lg">Or Enter Custom Waste:</label>
             <input type="text" id="custom-waste-input" [(ngModel)]="customWasteInput" placeholder="Enter custom waste item"
               class="mt-2 p-2 w-full border rounded" />
           </div>
-      
+       -->
           <button type="submit" class="mt-6 bg-teal-500 button-waste text-white py-2 px-4 rounded shadow hover:bg-teal-600 transition-colors duration-200 w-full">Get Suggestions</button>
         </form>
         <div *ngIf="suggestions.length > 0" class="mt-6">
@@ -330,9 +330,9 @@
           <ul class="list-disc pl-6 mt-2">
             <li *ngFor="let suggestion of suggestions">{{ suggestion }}</li>
           </ul>
-          <div *ngIf="userLocation" class="location-info">
+          <!-- <div *ngIf="userLocation" class="location-info">
             <p>{{ userLocation }}</p>
-          </div>
+          </div> -->
           <button (click)="provideLocationBasedTips()" type="submit" class="mt-6 bg-teal-500 button-waste text-white py-2 px-4 rounded shadow hover:bg-teal-600 transition-colors duration-200 w-full">
             Get Location-Based Tips
           </button>
