@@ -65,10 +65,14 @@ export class HeaderComponent {
     window.addEventListener('storage', this.onStorageChange.bind(this));
   }
   ngOnInit() {
-    this.service.pendingClaimsCount$.subscribe((count) => {
+    this.service.notificationCount$.subscribe((count) => {
       this.notificationCount = count;
       this.updateNotificationLabel();
     });
+    // this.service.pendingClaimsCount$.subscribe((count) => {
+    //   this.notificationCount = count;
+    //   this.updateNotificationLabel();
+    // });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -94,7 +98,7 @@ export class HeaderComponent {
     this.tabRoutes = [
       { route: '/claimit/searchAndClaim', icon: 'search', label: 'Search and Claim' },
       { route: '/claimit/about', icon: 'info', label: 'About' },
-      { route: '/claimit/contact', icon: 'contacts', label: 'Contact' },
+      { route: '/claimit/contact', icon: 'contacts', label: 'Contact Us' },
       { route: '/claimit/help', icon: 'help', label: 'Help' },
     ];
   }
@@ -116,7 +120,6 @@ public isTabActive(tab: string): boolean {
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
         { label: 'View/Unclaim', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
-        { label: 'Claim Request', icon: 'request_page', route: '/claimit/claimRequest' },
       ];
     }
 
