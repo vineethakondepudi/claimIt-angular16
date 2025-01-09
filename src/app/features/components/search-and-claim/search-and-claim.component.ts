@@ -83,15 +83,15 @@ export default class SearchAndClaimComponent implements OnInit {
       isChecked: true,
       index: 2,
     },
-    {
-      label: "FoundDate",
-      name: "foundDate",
-      type: "date",
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 3,
-    },
+    // {
+    //   label: "FoundDate",
+    //   name: "foundDate",
+    //   type: "date",
+    //   isSortable: true,
+    //   position: "left",
+    //   isChecked: true,
+    //   index: 3,
+    // },
     {
       label: "ReceivedDate",
       name: "receivedDate",
@@ -108,7 +108,7 @@ export default class SearchAndClaimComponent implements OnInit {
       isSortable: true,
       position: "left",
       isChecked: true,
-      index: 1,
+      index: 5,
     },
 
   ]
@@ -283,25 +283,38 @@ export default class SearchAndClaimComponent implements OnInit {
   }
   //categeory integration
   search(): void {
-    this.loader = true
-
+    this.searchResults = [];
+    this.loader = true;
+  
     const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${this.selectedCategory}`;
     this.http.get<any[]>(apiUrl).subscribe(
       (data: any) => {
-        this.categerorydata = data; 
-        this.loader = false
-        console.log(this.categerorydata, 'categerorydata')
-        if (this.categerorydata.message.includes('No items found for the search term')) {
-          this.categeoryerror = true
+        if (Array.isArray(data)) {
+          this.categerorydata = data; 
+          console.log(this.categerorydata, 'matcheditems1');
+          this.loader = false;
+          console.log(this.categerorydata, 'categerorydata');
+  
+          // Check if the array is empty
+          if (this.categerorydata.length === 0) {
+            this.categeoryerror = true; // No items found
+          } else {
+            this.categeoryerror = false; // Items found
+          }
         } else {
-          this.categeoryerror = false
+          // If data is not an array, handle the unexpected response
+          console.error('Unexpected API response format:', data);
+          this.loader = false;
+          this.categeoryerror = true;
         }
       },
       (error: any) => {
         console.error('API Error:', error);
+        this.loader = false;
       }
     );
   }
+  
   saveSearch() {
     if (this.searchQuery.trim() !== '') {
       if (!this.savedSearches.includes(this.searchQuery)) {
@@ -336,6 +349,8 @@ export default class SearchAndClaimComponent implements OnInit {
   clearSearch() {
     this.searchQuery = '';
     this.searchResults = [];
+    this.matchedItems = [];
+    this.categerorydata = [];
   }
   loadSavedSearches() {
     const storedSearches = localStorage.getItem('savedSearches');
@@ -360,10 +375,13 @@ export default class SearchAndClaimComponent implements OnInit {
     }
   }
   selectCategory(category: string) {
+    this.searchResults = [];
+    this.matchedItems = [];
     this.selectedCategory = category;
     this.search();
   }
   public onSelect(event: any): void {
+    this.searchResults = [];
     const files = event.addedFiles;
     if (files && files.length > 0) {
       const file = files[0];
@@ -393,6 +411,7 @@ export default class SearchAndClaimComponent implements OnInit {
       this.uploadImage(file).subscribe(
         (response) => {
           this.matchedItems = response.matchedItems; 
+          console.log(this.matchedItems,'matcheditems')
         },
         (error) => {
           console.error('Error uploading image:', error);
