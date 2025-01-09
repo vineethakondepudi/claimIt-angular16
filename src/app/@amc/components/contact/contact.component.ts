@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormFooterComponent } from '../form-footer/form-footer.component';
 import { FormSubmissionModalComponent } from '../form-submission-modal/form-submission-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 
 @Component({
   selector: 'app-contact',
@@ -31,20 +32,11 @@ export default class ContactComponent {
   contactForm!: FormGroup;
   enableSave: boolean = true
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  constructor(private fb: FormBuilder, public dialog: MatDialog,) {
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private service:ClaimitService) {
 
   }
   ngOnInit() {
     this.initializeContactForm()
-    this.contactForm.statusChanges.subscribe((res: any) => {
-      console.log('res', res)
-      if (res === 'VALID') {
-        this.enableSave = false
-      } else {
-        this.enableSave = true
-
-      }
-    })
   }
   initializeContactForm() {
     this.contactForm = this.fb.group({
@@ -61,21 +53,18 @@ export default class ContactComponent {
   }
   contactUs() {
     console.log(this.contactForm)
-    const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
-      width: "500px",
-      data: {
-        status: 'Success',
-        msg: 'Thank you! Our team will reach out to you shortly.',
-        btnName: "OK",
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.contactForm.reset({
-        name: '',   
-        email: '',   
-        message: ''  
-      });
+ 
+    const reqbody = {
+      name: this.contactForm.value.name ? this.contactForm.value.name : '',
+      mail: this.contactForm.value.email ? this.contactForm.value.email : '',
+      message: this.contactForm.value.message ? this.contactForm.value.message : '',      
+    }
+    this.service.contactUs(reqbody).subscribe(
+      (res: any) => {
+        console.log(res);
+        
+      })
+   
       
-    });
   }
 }

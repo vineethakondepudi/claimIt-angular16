@@ -9,6 +9,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ClaimitService {
 
   constructor(private http: HttpClient) { }
+  private notificationCountSource = new BehaviorSubject<number>(0);
+  notificationCount$ = this.notificationCountSource.asObservable();
+
+
   private pendingClaimsSubject = new BehaviorSubject<number>(0);
 
   // Observable for components to subscribe to
@@ -79,6 +83,18 @@ export class ClaimitService {
   }
   public getCategories() {
     return this.http.get(environment.getCategories)
+  }
+  public contactUs(REQBODY: any) {
+    return this.http.post(environment.contactUs, REQBODY)
+  }
+  public getNotifications(): Observable<any> {
+    return this.http.get(environment.getNotifications)
+  }
+  public updateNotification(reqbody: any) {
+    return this.http.put(environment.updateNotification, reqbody);
+  }
+  setNotificationCount(count: number): void {
+    this.notificationCountSource.next(count);
   }
 
   pendingClaims: any[] = [];

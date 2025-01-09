@@ -1,45 +1,26 @@
 <div class="p-0 bg-gray-100 min-h-screen">
-
-    <div class="flex-none px-5 pt-5 pb-2 bg-[#E8F2F3]">
-      <h1 class="font-semibold text-2xl" id="claim-heading">Pending Claims</h1>
-    </div>
-  
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-5">
-      <div
-        *ngFor="let claim of pendingClaims"
-        class="bg-white p-5 shadow-md rounded-lg border border-gray-200"
-      >
-      
-        <img
-          [src]="claim.imageUrl || 'assets/placeholder.png'"
-          alt="Claim Image"
-          class="w-full h-40 object-cover rounded-md mb-3"
-        />
-  
-      
-        <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ claim.name }}</h3>
-        <div class="space-y-1">
-          <p class="text-sm">
-            <span class="font-semibold text-gray-700">Contact:</span> {{ claim.contact }}
-          </p>
-          <p class="text-sm">
-            <span class="font-semibold text-gray-700">Email:</span> {{ claim.email }}
-          </p>
-          <p class="text-sm">
-            <span class="font-semibold text-gray-700">Incident Location:</span> {{ claim.location }}
-          </p>
-          <p class="text-sm">
-            <span class="font-semibold text-gray-700">Item Type:</span> {{ claim.itemType }}
-          </p>
-          <p class="text-sm">
-            <span class="font-semibold text-gray-700">Date Incident:</span> {{ claim.incidentDate | date }}
-          </p>
-          <p class="text-sm">
-            <span class="font-semibold text-gray-700">Identification:</span> {{ claim.identification }}
-          </p>
-        </div>
+  <div class="flex-none px-5 pt-5 pb-2 bg-[#E8F2F3]">
+    <h1 class="font-semibold text-2xl" id="claim-heading">Notifications</h1>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-5">
+    <div
+      *ngFor="let notification of notifications"
+      class="p-5 shadow-md rounded-lg border border-gray-200 cursor-pointer"
+      [ngClass]="{
+        'bg-gray-300': !notification.read,
+        'bg-white': notification.read
+      }"
+      (click)="markAsRead(notification.id)"
+    >
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ notification.name }}</h3>
+      <div class="space-y-1">
+        <p class="text-sm">
+          <span class="font-semibold text-gray-700">Email:</span> {{ notification.email }}
+        </p>
+        <p class="text-sm">
+          <span class="font-semibold text-gray-700">Message:</span> {{ notification.message }}
+        </p>
       </div>
     </div>
   </div>
-  
+</div>

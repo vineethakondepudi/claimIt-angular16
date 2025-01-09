@@ -35,8 +35,7 @@
                                         <mat-icon>search</mat-icon>
                                     </button>
                                 </mat-form-field>
-                            </form>
-                        
+                            </form>                        
                             <!-- Buttons Container -->
                             <div class="flex flex-row justify-end gap-2 ml-auto">
                                 <button mat-button color="warn" (click)="SearchAndClear('clear')"
@@ -49,8 +48,6 @@
                                 </button>
                             </div>
                         </div>
-                        
-                        
                     </mat-expansion-panel>
                 </mat-accordion>
             </mat-card>
@@ -62,7 +59,7 @@
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
-    <div class="flex-none">
+    <div class="fixed bottom-0 w-full bg-white">
         <app-form-footer></app-form-footer>
     </div>
 </div>
