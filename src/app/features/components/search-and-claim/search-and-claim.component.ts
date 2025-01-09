@@ -351,6 +351,7 @@ export default class SearchAndClaimComponent implements OnInit {
     this.searchResults = [];
     this.matchedItems = [];
     this.categerorydata = [];
+    this.files = []
   }
   loadSavedSearches() {
     const storedSearches = localStorage.getItem('savedSearches');
