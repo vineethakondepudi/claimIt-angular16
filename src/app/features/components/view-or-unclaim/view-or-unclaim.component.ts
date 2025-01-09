@@ -18,7 +18,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimitService } from '../../sharedServices/claimit.service';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
-
+import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-view-or-unclaim',
   standalone: true,
@@ -38,7 +38,8 @@ import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component
     LoaderComponent,
     MatIconModule,
     ReactiveFormsModule,
-    FormsModule,],
+    FormsModule,
+    MatSelectModule],
   templateUrl: './view-or-unclaim.component.html',
   styleUrls: ['./view-or-unclaim.component.scss'],
   animations: [fadeInRight400ms, fadeInUp400ms],
@@ -107,6 +108,13 @@ export default class ViewOrUnclaimComponent {
       index: 4,
     },
   ]
+  public statusDropDown: any = [
+    { label: 'REJECTED', value: 'REJECTED' },
+    { label: 'PENDING_APPROVAL', value: 'PENDING APPROVAL' },
+    { label: 'PENDING_PICKUP', value: 'PENDING PICKUP' },
+    { label: 'CLAIMED', value: 'CLAIMED' },
+    { label: 'UNCLAIMED', value: 'UNCLAIMED' },
+  ]
   constructor(public dialog: MatDialog, private service: ClaimitService,private fb: FormBuilder) {
 
   }
@@ -126,6 +134,7 @@ export default class ViewOrUnclaimComponent {
       email: this.viewUnclaimForm.value.email ? this.viewUnclaimForm.value.email : '',
       name: this.viewUnclaimForm.value.name ? this.viewUnclaimForm.value.name : '',
       status: this.viewUnclaimForm.value.status ? this.viewUnclaimForm.value.status : '',
+    
     }
     this.service.getAllItems(reqbody).subscribe((res: any) => {
       console.log('res', res)
