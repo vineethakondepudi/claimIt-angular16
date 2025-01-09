@@ -7,18 +7,56 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pending-claim.component.html',
-  styleUrls: ['./pending-claim.component.scss']
+  styleUrls: ['./pending-claim.component.scss'],
 })
 export default class PendingClaimComponent {
   pendingClaims: any[] = [];
+  notifications: any[] = []; // Holds the notification data
+
   constructor(private claimService: ClaimitService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.pendingClaims = this.claimService.getClaims();
+    this.loadNotifications(); // Call the function to fetch notifications
   }
 
   ngAfterViewChecked() {
-    
     this.cdr.detectChanges();
+  }
+  loadNotifications() {
+    this.claimService.getNotifications().subscribe(
+      (res: any) => {
+        if (res && res.data) {
+          this.notifications = res.data; // Assign data to notifications
+          console.log('Notifications fetched:', this.notifications);
+  
+          // Filter notifications where read is false
+          const unreadNotifications = this.notifications.filter(notification => !notification.read);
+          const unreadCount = unreadNotifications.length;
+  
+          // Update the notification count in the service
+          this.claimService.setNotificationCount(unreadCount);
+        }
+      },
+      (error) => {
+        console.error('Error fetching notifications:', error);
+      }
+    );
+  }
+  
+  markAsRead(notificationId: any) {
+    const reqbody={
+      "id": notificationId,
+      "isRead": true
+  }
+    this.claimService.updateNotification(reqbody).subscribe(
+      (res: any) => {
+        console.log(res);
+        if(res){
+          this.loadNotifications()
+        }else{
+          console.log("method error");   
+        }
+      })
   }
 }

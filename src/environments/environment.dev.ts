@@ -14,5 +14,8 @@ export const environment = {
     markASClaimed:'http://172.17.12.38:8081/api/admin/history',
     statusCount: 'http://172.17.12.38:8081/api/admin/status/counts',
     categoryItems:'http://172.17.12.38:8081/api/admin/countByCategory',
-    getCategories: 'http://172.17.12.38:8081/api/admin/getcategories'
+    getCategories: 'http://172.17.12.38:8081/api/admin/getcategories',
+    contactUs: 'http://172.17.12.38:8081/api/users/submit',
+    getNotifications:'http://172.17.12.38:8081/api/admin/notifications',
+    updateNotification:'http://172.17.12.38:8081/api/admin/update-claimrequest'
   };
