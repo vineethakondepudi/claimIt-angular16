@@ -63,7 +63,7 @@ interface Item {
   styleUrls: ['./search-and-claim.component.scss']
 })
 export default class SearchAndClaimComponent implements OnInit {
-  @Input() containerPanelOpened: boolean = false;
+  @Input() containerPanelOpened: boolean = true;
   displaycoloums: any[] = [
     {
       label: "Image Data",

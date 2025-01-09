@@ -35,7 +35,16 @@
                                         <mat-icon>search</mat-icon>
                                     </button>
                                 </mat-form-field>
-                            </form>                        
+                                <mat-form-field appearance="outline" class="search-field">
+                                    <mat-label>Status</mat-label>
+                                    <input matInput type="text" placeholder="status" formControlName="status"
+                                        (keyup.enter)="search()" />
+                                    <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </form>
+                        
                             <!-- Buttons Container -->
                             <div class="flex flex-row justify-end gap-2 ml-auto">
                                 <button mat-button color="warn" (click)="SearchAndClear('clear')"

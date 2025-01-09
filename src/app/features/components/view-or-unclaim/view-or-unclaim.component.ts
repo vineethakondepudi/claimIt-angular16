@@ -125,6 +125,7 @@ export default class ViewOrUnclaimComponent {
     const reqbody = {
       email: this.viewUnclaimForm.value.email ? this.viewUnclaimForm.value.email : '',
       name: this.viewUnclaimForm.value.name ? this.viewUnclaimForm.value.name : '',
+      status: this.viewUnclaimForm.value.status ? this.viewUnclaimForm.value.status : '',
     }
     this.service.getAllItems(reqbody).subscribe((res: any) => {
       console.log('res', res)
