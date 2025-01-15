@@ -1,6 +1,6 @@
 <div class="min-h-screen flex flex-col">
   <div  *ngIf="isMobileView" class="px-5 pt-5 pb-5 bg-[#E8F2F3]">
-    <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
+    <span class="font-bold max-w-3xs mr-6 text-2xl">Search and Claim</span>
     <div class="filter-container">
       <div class="search-section">
         <mat-form-field appearance="outline" class="w-full">
@@ -173,7 +173,7 @@
       No Records Found
     </p>
   </div>
-  <div class="fixed bottom-0 w-full bg-white">
+  <div  *ngIf="!isMobileView" class="fixed bottom-0 w-full bg-white">
     <app-form-footer></app-form-footer>
 </div>
 </div>
