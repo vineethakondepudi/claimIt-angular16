@@ -65,6 +65,41 @@
                 {{ element | dataPropertyGetter : tableColumn.name }}
               </div>
             </div>
+            <div *ngIf="tableColumn.label === 'Action'">
+              <button *ngIf="!removeArchive && !showUnClaim && !adminActions" (click)="unClaimItem(element)"
+                [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary" class="txt-button">
+                UnClaim
+              </button>
+              <button [disabled]="element.status !== 'UNCLAIMED'" *ngIf="!removeArchive && showUnClaim"
+                (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+                Claim
+              </button>
+              <button *ngIf="removeArchive" (click)="removeItem(element)" [disabled]="element.status === 'PENDING_PICKUP'"
+                mat-raised-button color="warn" class="txt-button">
+                Remove
+              </button>
+              <div *ngIf="adminActions">
+                <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" matTooltip=""
+                  matTooltipHideDelay="100">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"  class="px-4 py-2" (click)="$event.stopPropagation()" style="width: 150px;">
+                  <button   [disabled]="element.status !== 'PENDING_APPROVAL'" 
+                  mat-stroked-button color="primary" class="cancel-button" (click)="approveClaimReq(element)">
+                    Approve
+                  </button><br><br>
+                  <button   [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'"  mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
+                    Reject
+                  </button><br><br>
+                  <button [disabled]="element.status !== 'REJECTED' && element.status !== 'UNCLAIMED'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
+                    Remove
+                  </button><br><br>
+                  <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)" mat-stroked-button color="primary" class="cancel-button">
+                   Claimed
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
           </div>
         </td>
       </ng-container>
