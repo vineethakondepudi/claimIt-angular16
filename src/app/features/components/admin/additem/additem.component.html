@@ -1,6 +1,6 @@
 <div class="min-h-screen flex flex-col">
     <!-- Top Section -->
-    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3]">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] mb-[-40px]">
         <div @fadeInRight class="flex flex-row justify-between px-5">
             <div class="flex flex-col">
                 <span class="max-w-3xs mr-6 font-bold text-xl  font-weight: 900">Add-Item</span>
@@ -22,7 +22,7 @@
         </div>
     </div>
     <!-- Data Table Section -->
-    <div class="flex-grow mt-14 mx-3">
+    <div class="flex-grow mt-14 mx-3 table">
         <app-data-table 
             (previewImage)="previewImage($event)" 
             [tableColumns]="displayColumns" 

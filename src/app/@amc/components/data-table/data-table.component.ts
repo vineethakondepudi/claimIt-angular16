@@ -99,6 +99,7 @@ export class DataTableComponent<T> {
       (tableColumn: TableColumn) => tableColumn.name
     );
     this.displayedColumns = columnNames;
+    console.log('displayedColumns', this.displayedColumns);
     this.checkViewport();
   }
 
