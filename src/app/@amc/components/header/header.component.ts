@@ -14,6 +14,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { APP_NAME, OWNER_NAME } from '../../constants/application.details';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
+import { BreakpointObserver,Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -50,9 +51,10 @@ export class HeaderComponent {
   notificationCount = 0;
   userRole: string | null = '';
   menuItems: any[] = [];
+  isMobile = false;
   tabRoutes: { route: string, icon: string, label: string, isNotification?: boolean; }[] = [];
 
-  constructor(public router: Router, private route: ActivatedRoute,private service:ClaimitService) {
+  constructor(public router: Router, private route: ActivatedRoute,private service:ClaimitService,private breakpointObserver: BreakpointObserver) {
     this.service.loginResponse_Triggered.subscribe((res:any)=>{
       console.log(res)
       this.userRole = localStorage.getItem('role');
@@ -69,6 +71,10 @@ export class HeaderComponent {
       this.notificationCount = count;
       this.updateNotificationLabel();
     });
+       this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+      this.isMobile = result.matches;
+    });
+  
     // this.service.pendingClaimsCount$.subscribe((count) => {
     //   this.notificationCount = count;
     //   this.updateNotificationLabel();

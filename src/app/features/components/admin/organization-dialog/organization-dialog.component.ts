@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
@@ -28,7 +28,7 @@ export class OrganizationDialogComponent {
   longitude: number | null = null;
   selectedOrgId: string = '';
   selected: any;
-
+  isMobileScreen: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
@@ -46,9 +46,18 @@ export class OrganizationDialogComponent {
     this.onUploadImage();
     
   }
-
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
   onOrganizationSelect(orgId: string): void {
     this.selectedOrgId = orgId;
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenSize();
+  }
+  private checkScreenSize(): void {
+    this.isMobileScreen = window.innerWidth <= 768; // Adjust breakpoint as needed
   }
   onSelectFile(event: any): void {
     const allowedTypes = ['image/jpeg','image/png', 'image/gif', 'image/bmp', 'image/jfif'];

@@ -1,75 +1,59 @@
 <mat-sidenav-container class="flex h-screen" autosize>
-  <mat-sidenav mode="side" opened="true" class="bgcolor" *ngIf="authSuccess && !router.url.includes('login')">
-    <div *ngIf="opened === false" class="toolbar-icon" [ngClass]="{'min-[800px]': !opened}">
-      <button mat-icon-button class="bg-[#3e969f] cursor-pointer ml-2 mt-2" (click)="openMenu()">
-        <mat-icon class="iconStyle">menu</mat-icon>
-      </button>
-    </div>
-    <div *ngIf="opened" class="flex flex-row gapy-1 ml-4 mt-6">
-      <!-- <span class="flex flex-row w-15 cursor-pointer">
-        <img class="w-18 mr-2 ml-1 h-8" style="    width: 196px;
-    height: 54px;" src="assets/loginLogo.jpg" />
-      </span> -->
-    </div>
-    <div class="mt-1 -ml-2">
-      <mat-list class="mt-24">
-        <span *ngFor="let item of menuItems">
-          <mat-list-item (click)="router.navigateByUrl(item.route)">
-            <span class="flex h-10 rounded cursor-pointer px-2 py-1" (click)="router.navigateByUrl(item.route)"
-              [class.active-button]="isTabActive(item.route)">
-              <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text text-white"
-                [class.active-button]="isTabActive(item.route)" [matTooltip]="opened ? '' : item.label" matTooltipPosition="right">
-                {{item.icon}}
-              </mat-icon>
-              <span *ngIf="opened" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text text-base"
-                [class.active-button]="isTabActive(item.route)">{{item.label}}</span>
-            </span>
-          </mat-list-item>
-        </span>
-      </mat-list>
-    </div>
-  </mat-sidenav>
-  <div class="flex-grow">
-    <mat-toolbar class="flex justify-between header p-0 shadow-md" *ngIf="!router.url.includes('login')">
-      <div *ngIf="opened === true" class="flex flex-row gap-1" [ngClass]="{'min-[800px]': opened}">
-        <button mat-icon-button class="cursor-pointer" (click)="openMenu()">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <span class="text-1xl mt-2 font-semibold text-black cursor-pointer flex">{{applicationName}}</span>
-      </div>
-      <div *ngIf="opened === false">
-        <span class="text-base md:text-2xl lg:text-2xl font-semibold text-black cursor-pointer flex">{{applicationName}}</span>
-      </div>
-      <div class="flex justify-end">
-        <ng-container *ngFor="let item of tabRoutes">
-          <button 
-            [routerLink]="item.route" 
-            [class.active-top-button]="isTabActive(item.route)" 
-            class="cursor-pointer bg-white mr-1" 
-            mat-icon-button 
-            [matTooltip]="item.label"
-            (click)="item.route === '/claimit/pendingClaim' ? resetNotificationCount() : null">
-            <mat-icon 
-              class="mr-1" 
-              [class.active-top-button]="isTabActive(item.route)"
-              [ngClass]="{'text-red-500':item.isNotification && notificationCount > 0}">
+  <!-- Sidebar -->
+  <mat-sidenav 
+    [mode]="isMobile ? 'over' : 'side'" 
+    [opened]="!isMobile || opened" 
+    class="bgcolor" 
+    *ngIf="authSuccess && !router.url.includes('login')"
+    [ngClass]="{ 'mobile-sidebar': isMobile }">
+    <!-- Sidebar content -->
+    <mat-list *ngIf="!isMobile">
+      <span *ngFor="let item of menuItems">
+        <mat-list-item (click)="router.navigateByUrl(item.route)">
+          <span class="flex h-10 rounded cursor-pointer px-2 py-1" 
+                (click)="router.navigateByUrl(item.route)" 
+                [class.active-button]="isTabActive(item.route)">
+            <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text text-white"
+                      [class.active-button]="isTabActive(item.route)" 
+                      [matTooltip]="opened ? '' : item.label" 
+                      matTooltipPosition="right">
               {{ item.icon }}
             </mat-icon>
-            <span *ngIf="item.label.startsWith('Notifications')" [class.text-red-500]="notificationCount > 0">
-              {{ notificationCount }}
-            </span>
-          </button>
-        </ng-container>
-        <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Admin Login" (click)="logout()">
-          <mat-icon class="ml-1">logout</mat-icon>
-        </button>
-      </div>
-      
+            <span *ngIf="opened" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text text-base"
+                  [class.active-button]="isTabActive(item.route)">{{ item.label }}</span>
+          </span>
+        </mat-list-item>
+      </span>
+    </mat-list>
 
-    </mat-toolbar>
-    <router-outlet></router-outlet>
-  </div>
+    <!-- Mobile Sidebar -->
+    <div *ngIf="isMobile" class="mobile-menu">
+      <span *ngFor="let item of menuItems" class="mobile-menu-item" (click)="router.navigateByUrl(item.route)">
+        <mat-icon class="mobile-menu-icon">{{ item.icon }}</mat-icon>
+        <span class="mobile-menu-label">{{ item.label }}</span>
+      </span>
+    </div>
+  </mat-sidenav>
+<div class="flex-grow">
+  <mat-toolbar class="flex justify-between header p-0 shadow-md" *ngIf="!router.url.includes('login')">
+    <!-- Toolbar content -->
+    <div class="flex justify-end w-full">
+      <button 
+        *ngFor="let item of tabRoutes" 
+        [routerLink]="item.route" 
+        class="cursor-pointer bg-white mr-1" 
+        mat-icon-button 
+        [matTooltip]="item.label"
+        [ngClass]="{ 'text-red-500': item.isNotification && notificationCount > 0 }"
+        (click)="item.route === '/claimit/pendingClaim' ? resetNotificationCount() : null">
+        <mat-icon>{{ item.icon }}</mat-icon>
+      </button>
+      <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Admin Login" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</div>
+
 </mat-sidenav-container>
-
-
-  

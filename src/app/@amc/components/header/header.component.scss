@@ -106,3 +106,30 @@
   font-size: 0.8rem;
   margin-left: 0.5rem;
 }
+.mobile-sidebar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #3e969f;
+}
+
+.mobile-menu-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.mobile-menu-icon {
+  color: white;
+  font-size: 24px;
+}
+
+.mobile-menu-label {
+  color: white;
+  font-size: 12px;
+  display: block;
+}

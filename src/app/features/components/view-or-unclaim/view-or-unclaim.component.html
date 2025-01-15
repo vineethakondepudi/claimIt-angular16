@@ -50,7 +50,7 @@
                                     class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
                                     Clear
                                 </button>
-                                <button mat-flat-button color="primary" (click)="SearchAndClear('search')"
+                                <button mat-flat-button color="primary" (click)="search()"
                                     class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
                                     Search
                                 </button>
@@ -71,6 +71,6 @@
         <app-form-footer></app-form-footer>
     </div>
 </div>
-<div *ngIf="loader">
+<!-- <div *ngIf="loader">
     <app-loader></app-loader>
-</div>
+</div> -->

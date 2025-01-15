@@ -1,0 +1,22 @@
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+    .desktop {
+      display: none; 
+    }
+  
+    .mobile {
+      display: block; 
+    }
+  }
+  
+
+  @media (min-width: 768px) {
+    .desktop {
+      display: block; 
+    }
+  
+    .mobile {
+      display: none; 
+    }
+  }
+  

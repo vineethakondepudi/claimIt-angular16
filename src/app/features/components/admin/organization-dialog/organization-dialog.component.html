@@ -9,43 +9,13 @@
       <h2 class="text-xl font-semibold mb-6 text-gray-800">Add an Item</h2>
       <mat-divider></mat-divider>
       <div class="mt-4">
-        <div *ngIf="organizationList.length > 0; else noData">
+        <div>
           <div class="flex flex-col space-y-4">
-            <div class="w-full">
-              <mat-form-field class="w-full">
-                <mat-label>Select an Organization</mat-label>
-                <mat-select [(value)]="selected" [disabled]="true">
-                  <mat-option value="{{ selected }}" disabled>{{ organizationList[0]?.orgName }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="w-full">
-              <mat-form-field class="w-full">
-                <mat-label>Select Location</mat-label>
-                <mat-select [(ngModel)]="selectedLocation" (selectionChange)="onLocationChange()">
-                  <mat-option value="Miracle City">Miracle City</mat-option>
-                  <mat-option value="Miracle Valley">Miracle Valley</mat-option>
-                  <mat-option value="Miracle Heights">Miracle Heights</mat-option>
-                  <mat-option value="Miracle Global HQ">Miracle Global HQ</mat-option>
-                </mat-select>
-              </mat-form-field>
-              
-            </div>
-            <div *ngIf="selectedLocation === 'userSelected'" class="w-full">
-              <mat-form-field class="w-full">
-                <mat-label>Latitude</mat-label>
-                <input matInput [(ngModel)]="latitude" type="number" placeholder="Enter latitude" />
-              </mat-form-field>
-              <mat-form-field class="w-full">
-                <mat-label>Longitude</mat-label>
-                <input matInput [(ngModel)]="longitude" type="number" placeholder="Enter longitude" />
-              </mat-form-field>
-            </div>
-          
             <div class="w-full">
               <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
                 <ngx-dropzone-label class="text-gray-500 text-center">
-                  Drag and drop an image here or click to upload
+                  <span [ngClass]="{'hidden': isMobileScreen, 'block': !isMobileScreen}">Drag and drop an image here or click to upload</span>
+                  <span [ngClass]="{'hidden': !isMobileScreen, 'block': isMobileScreen}">Tap to upload an image from your gallery or camera</span>
                 </ngx-dropzone-label>
                 <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" (removed)="onRemove(f)">
                   <img [src]="f.preview" alt="Image Preview" class="w-32 h-32 object-cover rounded-md" />

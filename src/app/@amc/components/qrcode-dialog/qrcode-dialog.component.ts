@@ -27,9 +27,8 @@ export class QrcodeDialogComponent {
       this.title = data.title;
     }
   generateQrCodeData(element: any): string {
-    console.log(element,'element')
     return JSON.stringify({
-      id: element.itemId,
+      id: element.uniqueId,
       name: element.name,
       status: element.status,
        verificationLink:  element.status === "UNCLAIMED" ? `http://localhost:4200/assets/verification.html?itemId=${element.itemId}` : 'Item is Claimed'

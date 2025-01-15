@@ -1,15 +1,18 @@
 <div class="min-h-screen flex flex-col">
+    <!-- Top Section -->
     <div class="flex-none px-gutter pt-5 bg-[#E8F2F3]">
         <div @fadeInRight class="flex flex-row justify-between px-5">
             <div class="flex flex-col">
-                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Add-Item</h1>
+                <span class="max-w-3xs mr-6 font-bold text-xl  font-weight: 900">Add-Item</span>
             </div>
         </div>
         <div class="flex-grow px-5">
             <div class="flex items-center justify-between shadow">
                 <p class="text-gray-600 text-sm">{{ currentDate | date: 'dd MMMM yyyy' }}</p>
-                <button mat-raised-button color="primary" (click)="onAddItemClick()"
-                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600">
+                <!-- Add Item Button for Desktop -->
+                <button mat-raised-button color="primary" 
+                    (click)="onAddItemClick()" 
+                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600 hidden md:flex">
                     <mat-icon>add</mat-icon>
                     <span class="text-sm font-medium">Add Item</span>
                 </button>
@@ -18,13 +21,43 @@
             </div>
         </div>
     </div>
+    <!-- Data Table Section -->
     <div class="flex-grow mt-14 mx-3">
-        <app-data-table (previewImage)="previewImage($event)"  [tableColumns]="displayColumns" (sort)="handleSort($event)" [isPageable]="true" [tableData]="searchResults"
-            [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        <app-data-table 
+            (previewImage)="previewImage($event)" 
+            [tableColumns]="displayColumns" 
+            (sort)="handleSort($event)" 
+            [isPageable]="true" 
+            [tableData]="searchResults"
+            [paginationSizes]="[5, 10, 15, 20]" 
+            [defaultPageSize]="15">
         </app-data-table>
     </div>
     <div class="flex-none">
         <app-form-footer></app-form-footer>
     </div>
+    <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
+        <div class="flex justify-between items-center h-16 px-4 ">
+            <!-- Notification Icon -->
+            <button class="flex flex-col items-center mx-[50px] hover:text-teal-500">
+                <mat-icon class="text-[#00897b] text-2xl">home</mat-icon>
+                <span class="text-sm">Home</span>
+              </button>
+            <button mat-fab color="primary" 
+                    (click)="onAddItemClick()" 
+                    class="w-12 h-12 bg-teal-500 text-white rounded-full shadow hover:bg-teal-600  mx-[50px] mb-[67px] flex justify-center items-center">
+                <mat-icon>camera_alt</mat-icon>
+            </button>
+            <!-- Home Icon -->
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 ">
+                <mat-icon class="text-[#00897b] ">notifications</mat-icon>
+                <span class="text-xs">Notifications</span>
+            </button>
+              
+        </div>
+    </div>
+    
+    
+
     <app-loader *ngIf="loader"></app-loader>
 </div>
