@@ -107,3 +107,115 @@
 .flex-col::-webkit-scrollbar-track {
   background-color: #f3f3f3; 
 }
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// .category-scroll-container {
+//   overflow-x: auto;
+//   padding: 10px 0;
+// }
+
+.category-scroll {
+  display: flex;
+  gap: 16px;
+}
+
+.category-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px;
+  background-color: #f8f9f9;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-title {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .filter-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  // .category-scroll-container {
+  //   width: 60%;
+  // }
+
+  .search-section {
+    width: 35%;
+  }
+}
+/* Hide ngx-dropzone on mobile screens */
+.desktop-dropzone {
+  display: block;
+}
+
+/* For screens less than 768px wide (mobile and tablet) */
+@media (max-width: 768px) {
+  .desktop-dropzone {
+    display: none;
+  }
+}
+mat-form-field .mat-icon-button {
+  margin-right: 8px;
+}
+/* Ensure container takes the full width and uses flex layout */
+.category-scroll-container {
+  width: 100%;
+  overflow-x: auto;  /* Enable horizontal scrolling */
+}
+
+.category-scroll {
+  display: flex; /* Horizontal layout */
+  gap: 16px; /* Space between items */
+}
+
+/* Category item styling */
+.category-item {
+  flex: 1; /* Makes items equally share available space */
+  min-width: 150px; /* Ensure minimum width for each item */
+  max-width: 200px; /* Limit the maximum width */
+  padding: 4px;
+  text-align: center;
+  border: 2px solid #388d97; /* Add borders to each item */
+  border-radius: 8px; /* Optional: add rounded corners */
+  background-color: #f8f9f9; /* Optional: add background color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.category-item:hover {
+  background-color: #e0f7fa; /* Hover effect */
+}
+
+.category-title {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
