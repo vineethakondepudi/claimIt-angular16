@@ -27,14 +27,9 @@ export default class PendingClaimComponent {
     this.claimService.getNotifications().subscribe(
       (res: any) => {
         if (res && res.data) {
-          this.notifications = res.data; // Assign data to notifications
-          console.log('Notifications fetched:', this.notifications);
-  
-          // Filter notifications where read is false
+          this.notifications = res.data; 
           const unreadNotifications = this.notifications.filter(notification => !notification.read);
           const unreadCount = unreadNotifications.length;
-  
-          // Update the notification count in the service
           this.claimService.setNotificationCount(unreadCount);
         }
       },
@@ -51,11 +46,9 @@ export default class PendingClaimComponent {
   }
     this.claimService.updateNotification(reqbody).subscribe(
       (res: any) => {
-        console.log(res);
         if(res){
           this.loadNotifications()
         }else{
-          console.log("method error");   
         }
       })
   }

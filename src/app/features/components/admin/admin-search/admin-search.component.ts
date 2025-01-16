@@ -163,7 +163,6 @@ export default class AdminSearchComponent {
     }
 
     this.service.adminSearch(reqbody).subscribe((res: any) => {
-      console.log('res',res)
       this.searchResults = res.data
       this.loader = false
     })
@@ -212,12 +211,10 @@ export default class AdminSearchComponent {
 
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
-        const itemId = event.itemId; // Ensure itemId is correctly extracted
-        console.log('ItemId being removed:', itemId); // Debug log for itemId
+        const itemId = event.itemId; 
         this.loader = true;
         this.service.adminRemoveItem(itemId).subscribe(
           (res: any) => {
-            console.log('Remove success response:', res); // Debug success
             this.search(); // Refresh the data table
             this.loader = false;
           },

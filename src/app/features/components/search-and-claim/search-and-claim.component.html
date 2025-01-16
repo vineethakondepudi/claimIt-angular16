@@ -25,10 +25,13 @@
 
       <div class="grid grid-cols-5 items-center gap-4 mb-6">
         <span class="text-lg col-span-3">Search with a picture</span>
-        <button  color="primary" (click)="triggerFileInput()" aria-label="Upload Image"
-          class="flex justify-center items-center">
-          <mat-icon>camera_alt</mat-icon>
-        </button>
+        <button mat-fab color="primary" (click)="triggerFileInput()" aria-label="Upload Image"
+        class="flex justify-center items-center"
+        matTooltip="Upload an image"
+        [matTooltipShowDelay]="showDelay.value"
+        [matTooltipHideDelay]="hideDelay.value">
+  <mat-icon>camera_alt</mat-icon>
+</button>
         <input #fileInput type="file" (change)="onSelect($event)" class="hidden" />
         <button *ngIf="files.length > 0" mat-icon-button matSuffix (click)="clearSearch()"
           class="flex justify-center items-center">
@@ -41,10 +44,10 @@
           [tableData]="matchedItems" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
       </div>
-      <span class="search-text text-lg mb-2">Search in the below category</span>
+      <!-- <span class="search-text text-lg mb-2">Search in the below category</span> -->
       <!-- <div class="category-dropdown-container"> -->
         <mat-form-field appearance="fill" class="category-dropdown">
-          <mat-label>Select Category</mat-label>
+          <mat-label>Search with category</mat-label>
           <mat-select [(value)]="selectedCategory" (selectionChange)="onCategorySelect($event.value)">
             <mat-option *ngFor="let category of categories" [value]="category.name">
               {{ category.name }}

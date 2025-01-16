@@ -36,12 +36,10 @@ export class OrganizationDialogComponent {
     private matDialog: MatDialog,
   ) {
     this.organizationList = data.organizationList;
-    console.log(this.organizationList);
     
     if (this.organizationList.length > 0) {
       this.selected = this.organizationList[0].orgId;      
       this.selectedOrgId = this.selected; 
-      console.log(this.selectedOrgId);   
     }
     this.onUploadImage();
     
@@ -130,7 +128,6 @@ export class OrganizationDialogComponent {
   
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
-          console.log('File uploaded successfully:', response);
           this.isOrganizationSelected = false;
           this.files = [];
           
@@ -154,7 +151,6 @@ export class OrganizationDialogComponent {
   
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
-          console.log('File uploaded successfully:', response);
           this.isOrganizationSelected = false;
           this.files = [];
           this.dialogRef.close();  

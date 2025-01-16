@@ -162,9 +162,7 @@ export default class ViewOrUnclaimComponent {
     });
 
     dialogRef.afterClosed().subscribe((confirmed: any) => {
-      console.log('confirmed', confirmed)
       if (confirmed === 'yes') {
-        console.log(event,'event.claimId')
         const params = {
           status:'UNCLAIMED',
           claimId:event.requestId
@@ -189,7 +187,6 @@ export default class ViewOrUnclaimComponent {
     });
   }
   previewImage(event: any) {
-    console.log(event)
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {

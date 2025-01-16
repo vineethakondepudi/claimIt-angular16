@@ -133,12 +133,10 @@ export default class AdditemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
           if (selectedOrgId) {
-            console.log('Selected Organization ID:', selectedOrgId);
             this.selectedOrgId = selectedOrgId; 
             this.isOrganizationSelected = true; 
             
           } else {
-            console.log('Dialog closed without selection.');
             this.isOrganizationSelected = false; 
             this.fetchData();
             this.loader = true;
@@ -187,7 +185,6 @@ export default class AdditemComponent implements OnInit {
   
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
-          console.log('File uploaded successfully:', response);
           this.isOrganizationSelected = false; 
           this.files = []; 
         },
@@ -202,12 +199,10 @@ export default class AdditemComponent implements OnInit {
 
   onImportToExcel(): void {
    
-    console.log('Files to upload:', this.files);
   }
   
 
   previewImage(event: any) {
-    console.log(event)
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {

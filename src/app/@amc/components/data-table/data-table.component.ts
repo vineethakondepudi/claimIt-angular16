@@ -89,7 +89,6 @@ export class DataTableComponent<T> {
   isMobileView = false;
   constructor(public readonly router: Router, private datePipe: DatePipe, private dialog: MatDialog) { }
   ngOnInit() {
-    console.log('showUnClaim', this.showUnClaim)
     this.displayedColumns = this.tableColumns.map((col) => col.name);
 
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
@@ -99,7 +98,6 @@ export class DataTableComponent<T> {
       (tableColumn: TableColumn) => tableColumn.name
     );
     this.displayedColumns = columnNames;
-    console.log('displayedColumns', this.displayedColumns);
     this.checkViewport();
   }
 
@@ -150,8 +148,6 @@ export class DataTableComponent<T> {
   }
 
   viewDetails(element: any) {
-    // Logic to display more details
-    console.log('View details for:', element);
   }
   public handleToggleColumns(col: TableColumn) {
     const isChecked = col.isChecked;

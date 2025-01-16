@@ -33,13 +33,11 @@ export class CreateClaimComponent {
   enableSave: boolean = true
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   constructor(private claimService: ClaimitService,@Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<CreateClaimComponent>,private fb: FormBuilder) {
-    console.log('data',data)
 
   }
   ngOnInit(){
     this.initializeContactForm()
     this.claimForm.statusChanges.subscribe((res: any) => {
-      console.log('res', res)
       if (res === 'VALID') {
         this.enableSave = false
       } else {

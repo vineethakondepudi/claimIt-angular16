@@ -33,14 +33,10 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
     
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log('url ', request.url);
-        console.log('Intercepted Error:', error); 
         let errorMessage = "";
         if (error.error instanceof ErrorEvent) {
-          console.log("This is client side error");
           errorMessage = `Error: ${error.error.message}`;
         } else {
-          console.log("This is server side error", error.status);
           switch (error.status) {
             case 0:
               errorMessage = STATUS_0;
@@ -80,7 +76,6 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
               break;
           }
         }
-        console.log(errorMessage);
         return throwError(() => new Error(errorMessage));
       })
     );

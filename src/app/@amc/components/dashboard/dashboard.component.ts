@@ -235,7 +235,6 @@ export default class DashboardComponent {
     this.displayTwoRandomCharities();
     this.currentMonth = (this.selectedMonth.getMonth() + 1).toString().padStart(2, '0');
     const currentYear = this.selectedMonth.getFullYear();
-    console.log(this.currentMonth,currentYear,163);
     
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
@@ -475,7 +474,6 @@ export default class DashboardComponent {
     const lon = item.longitude;
     if (lat && lon && !isNaN(lat) && !isNaN(lon)) {
       this.fetchLocationName(lat, lon, item);
-      // console.log(lat,lon,'latitiude')
     } else {
       item.locationName = 'Invalid coordinates';
     }
@@ -484,7 +482,6 @@ export default class DashboardComponent {
   private fetchLocationName(lat: number, lon: number, item: any): void {
     
     const apiUrl = `https://api.maptiler.com/geocoding/${lon},${lat}.json?key=xJWFJF5JvkaPr6hJCReR`;
-    console.log(lat,lon,'latitiude')
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
@@ -590,7 +587,6 @@ forceUpdate(): void {
           this.currentMonthData.unclaimed = data.unclaimed;
           this.currentMonthData.donated = data.rejected+data.archived
           this.updateDoughnutChartData();
-          console.log(res,409);
           
         } else {
 
@@ -636,7 +632,6 @@ forceUpdate(): void {
   };
 
   updatedPieChartData(labels: string[], dataPoints: number[]): void {
-    console.log('Updating chart data:', labels, dataPoints);
 
     this.PieChartData.labels = [...labels];
     this.PieChartData.datasets[0].data = [...dataPoints];
@@ -648,7 +643,6 @@ forceUpdate(): void {
     this.PieChartData = { ...this.PieChartData };
   }
   updatedBarChartData(labels: string[], dataPoints: number[]): void {
-    console.log('Updating bar chart data:', labels, dataPoints);
   
     this.barChartData.labels = [...labels];
     this.barChartData.datasets.label = [...dataPoints];
@@ -660,13 +654,9 @@ forceUpdate(): void {
     this.barChartData = { ...this.barChartData };
   }
   categoryItems(month: number, year: number): void {
-    console.log('Fetching data for month:', month, 'year:', year);
-
     this.claimService.categoryItems(month.toString(), year).subscribe((res: any) => {
       const labels = res.map((item: any) => item.categoryName);
       const dataPoints = res.map((item: any) => item.itemCount);
-
-      console.log('Labels:', labels, 'Data Points:', dataPoints);
       this.updatedPieChartData(labels, dataPoints);
       this.updatedBarChartData(labels, dataPoints);
     });

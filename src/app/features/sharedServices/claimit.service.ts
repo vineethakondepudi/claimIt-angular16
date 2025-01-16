@@ -51,7 +51,6 @@ export class ClaimitService {
   //Admin remove item 
   public adminRemoveItem(itemId: number): Observable<any> {
     const url = `${environment.adminRemoveItem}?itemId=${itemId}`;
-    console.log('ItemId being sent in the request:', itemId);
     return this.http.put(url, {});
   }
 
@@ -62,7 +61,6 @@ export class ClaimitService {
     return this.http.get(environment.userSlides)
   }
   public adminSearch(params:any){
-    console.log('params',params)
     return this.http.get(environment.adminSearch+'?mail='+params.mail+'&status='+params.status+'&to='+params.to+'&from='+params.from)
   }
   public approveOrRejectClaim(reqbody:any){

@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -24,6 +24,7 @@ import { CreateClaimComponent } from '../create-claim/create-claim.component';
 import { ClaimitService } from '../../sharedServices/claimit.service';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 interface Item {
@@ -49,6 +50,7 @@ interface Item {
     MatButtonModule,
     MatIconModule,
     MatTableModule,
+    MatTooltipModule,
     MatCardModule,
     FormFooterComponent,
     MatExpansionModule,
@@ -119,6 +121,7 @@ export default class SearchAndClaimComponent implements OnInit {
   matchedItems: any = [];
   loader:boolean = false
   items: any[] = [];
+  showTooltip = true;
   searchResults: any = [];
   categeoryerror: boolean = false
   searchQuery: string = ''; // Current search query
@@ -172,6 +175,8 @@ export default class SearchAndClaimComponent implements OnInit {
     'Plants & Gardening Tools': 'yard',
     'Kitchen Appliances': 'kitchen'
   };
+  showDelay = { value: 0 }; // Delay in milliseconds
+  hideDelay = { value: 200 };
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.itemName = params['id']; 
@@ -182,6 +187,8 @@ export default class SearchAndClaimComponent implements OnInit {
     });
     this.loadCategories();
     this.checkViewport();
+    this.showDelay.value = 0; // Set show delay to 500ms
+    this.hideDelay.value = 200;
   }
   @HostListener('window:resize', ['$event'])
     onResize() {
@@ -204,9 +211,7 @@ export default class SearchAndClaimComponent implements OnInit {
             const ignoreWords = ["i", "lost", "my", "missed", "the", "a", "and", "to", "is", "on", "of", "in", "for", "with"];
             const queryWords = normalizedQuery
               .split(' ')
-              .filter(word => word && !ignoreWords.includes(word));
-  
-            console.log('Filtered Query Words:', queryWords);  
+              .filter(word => word && !ignoreWords.includes(word)); 
   
             this.searchResults = response.filter(item => {
               const { dominantColor, title, description, itemName } = item;
@@ -228,6 +233,9 @@ export default class SearchAndClaimComponent implements OnInit {
       );
     }
   }
+  closeTooltip() {
+    this.showTooltip = false;
+  }
   fetchCategories(): void {
     this.http.get<{ id: number; name: string }[]>('http://172.17.12.38:8081/api/admin/getcategories')
       .subscribe(
@@ -240,7 +248,6 @@ export default class SearchAndClaimComponent implements OnInit {
       );
   }
   onCategorySelect(categoryName: string): void {
-    console.log('Selected category:', categoryName);
   this.selectedCategory = categoryName
     this.categerorydata = this.categories.filter(category => category.name === categoryName);
   this.search()
@@ -267,19 +274,13 @@ export default class SearchAndClaimComponent implements OnInit {
       (data: any) => {
         if (Array.isArray(data)) {
           this.categerorydata = data; 
-          console.log(this.categerorydata, 'matcheditems1');
           this.loader = false;
-          console.log(this.categerorydata, 'categerorydata');
-  
-          // Check if the array is empty
           if (this.categerorydata.length === 0) {
-            this.categeoryerror = true; // No items found
+            this.categeoryerror = true; 
           } else {
-            this.categeoryerror = false; // Items found
+            this.categeoryerror = false; 
           }
         } else {
-          // If data is not an array, handle the unexpected response
-          console.error('Unexpected API response format:', data);
           this.loader = false;
           this.categeoryerror = true;
         }
@@ -358,8 +359,7 @@ export default class SearchAndClaimComponent implements OnInit {
     this.search();
   }
   public onSelect(event: any): void {
-    const files = event.target.files; // For traditional file input, access files here
-    console.log(files, 'files'); // Check if files are correctly passed
+    const files = event.target.files; 
     if (files && files.length > 0) {
       const file = files[0];
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/jfif'];
@@ -391,7 +391,6 @@ export default class SearchAndClaimComponent implements OnInit {
       this.uploadImage(file).subscribe(
         (response) => {
           this.matchedItems = response.matchedItems;
-          console.log(this.matchedItems, 'matcheditems');
         },
         (error) => {
           console.error('Error uploading image:', error);
@@ -419,7 +418,6 @@ export default class SearchAndClaimComponent implements OnInit {
     formData.append('image', file, file.name);
 
     const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
-    console.log('Uploading file:', file); // Debugging line to check if file is passed correctly
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });
@@ -429,7 +427,6 @@ export default class SearchAndClaimComponent implements OnInit {
     this.files = []
   }
   claimItem(item: Item) {
-    console.log('item', item)
     const dialogRef = this.matDialog.open(CreateClaimComponent, {
       width: "500px",
       height:'250px',
@@ -440,7 +437,6 @@ export default class SearchAndClaimComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
-      console.log(data,'datadata')
       if(data){
         const REQBODY = {
           userName:data.value.name,
@@ -449,7 +445,6 @@ export default class SearchAndClaimComponent implements OnInit {
         }
         this.loader = true
         this.claimService.createClaimRequest(REQBODY).subscribe((Res:any)=>{
-          console.log(Res)
           if(Res){
             const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
               width: "500px",
@@ -469,7 +464,6 @@ export default class SearchAndClaimComponent implements OnInit {
     });
   }
   previewImage(event: any) {
-    console.log(event)
     const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
