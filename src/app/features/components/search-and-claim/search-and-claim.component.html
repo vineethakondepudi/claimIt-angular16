@@ -4,29 +4,53 @@
     <div class="filter-container">
       <div class="search-section">
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Enter item name</mat-label>
+          <mat-label>Search your lost item</mat-label>
           <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery" (keyup.enter)="searchItems()" />
           <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
             <mat-icon>search</mat-icon>
           </button>
-          <!-- Camera Button for Image Upload -->
-          <button mat-icon-button matSuffix (click)="triggerFileInput()" aria-label="Upload Image">
-            <mat-icon>camera_alt</mat-icon>
+         
+          <button  *ngIf="searchQuery && searchQuery.trim().length > 0"  mat-icon-button matSuffix (click)="clearSearch()">
+            <mat-icon>clear</mat-icon>
           </button>
-          <input #fileInput type="file" (change)="onSelect($event)" style="display:none" />
         </mat-form-field>
       </div>
-    
-      <div class="category-scroll-container">
-        <div class="category-scroll">
-          <div *ngFor="let item of categories" class="category-item" (click)="selectCategory(item.name)">
-            <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
-              {{ getCategoryIcon(item.name) }}
-            </mat-icon>
-            <p class="category-title">{{ item.name }}</p>
-          </div>
-        </div>
+
+      <div *ngIf="searchResults?.length > 0" class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
+        <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
+          [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
+          [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
       </div>
+ <!-- Camera Button for Image Upload -->
+ <div class="example-button-container">
+  <span class="text-lg"> search with a picture:</span>
+  <button mat-fab matSuffix (click)="triggerFileInput()" aria-label="Upload Image">
+    <mat-icon>camera_alt</mat-icon>
+  </button>
+  <input #fileInput type="file" (change)="onSelect($event)" class="hidden" />
+  <button *ngIf="files.length > 0" mat-icon-button matSuffix (click)="clearSearch()" class=" items-center">
+    <mat-icon>clear_all</mat-icon>
+  </button>
+</div>
+      <div class="flex-grow mt-5 bg-[#E8F2F3]" *ngIf="matchedItems?.length > 0">
+        <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+          [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
+          [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+        </app-data-table>
+      </div>
+
+      <span class="search-text text-lg">Search in the below category</span>
+      <div class="category-dropdown-container">
+        <mat-form-field appearance="fill" class="category-dropdown">
+          <mat-label>Select Category</mat-label>
+          <mat-select [(value)]="selectedCategory" (selectionChange)="onCategorySelect($event.value)">
+            <mat-option *ngFor="let category of categories" [value]="category.name">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
       <!-- Dropzone for Image Upload (Visible only on Desktop) -->
       <ngx-dropzone (change)="onSelect($event)" class="desktop-dropzone">
         <ngx-dropzone-label>
@@ -149,17 +173,8 @@
       </mat-accordion>
     </mat-card>
   </div>
-  <div *ngIf="searchResults?.length > 0" class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
-    <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
-      [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
-      [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
-  </div>
-  <div class="flex-grow mt-5 bg-[#E8F2F3]" *ngIf="matchedItems?.length > 0">
-    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
-      [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
-      [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
-    </app-data-table>
-  </div>
+
+  
   <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length"
     class="flex-grow mt-5 bg-[#E8F2F3]">
     <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"

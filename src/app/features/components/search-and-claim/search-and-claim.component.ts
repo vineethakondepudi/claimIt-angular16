@@ -228,6 +228,24 @@ export default class SearchAndClaimComponent implements OnInit {
       );
     }
   }
+  fetchCategories(): void {
+    this.http.get<{ id: number; name: string }[]>('http://172.17.12.38:8081/api/admin/getcategories')
+      .subscribe(
+        (response) => {
+          this.categories = response;
+        },
+        (error) => {
+          console.error('Error fetching categories:', error);
+        }
+      );
+  }
+  onCategorySelect(categoryName: string): void {
+    console.log('Selected category:', categoryName);
+  this.selectedCategory = categoryName
+    this.categerorydata = this.categories.filter(category => category.name === categoryName);
+  this.search()
+  }
+  
   public triggerFileInput(): void {
     if (this.fileInput && this.fileInput.nativeElement) {
       this.fileInput.nativeElement.click();

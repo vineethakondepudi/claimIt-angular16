@@ -183,39 +183,17 @@ mat-form-field .mat-icon-button {
   margin-right: 8px;
 }
 /* Ensure container takes the full width and uses flex layout */
-.category-scroll-container {
+.category-dropdown-container {
   width: 100%;
-  overflow-x: auto;  /* Enable horizontal scrolling */
+  max-width: 300px;
+  margin: 10px auto;
 }
 
-.category-scroll {
-  display: flex; /* Horizontal layout */
-  gap: 16px; /* Space between items */
+.category-dropdown {
+  width: 100%;
 }
-
-/* Category item styling */
-.category-item {
-  flex: 1; /* Makes items equally share available space */
-  min-width: 150px; /* Ensure minimum width for each item */
-  max-width: 200px; /* Limit the maximum width */
-  padding: 4px;
-  text-align: center;
-  border: 2px solid #388d97; /* Add borders to each item */
-  border-radius: 8px; /* Optional: add rounded corners */
-  background-color: #f8f9f9; /* Optional: add background color */
+.example-button-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s ease;
-}
-
-.category-item:hover {
-  background-color: #e0f7fa; /* Hover effect */
-}
-
-.category-title {
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: bold;
+  justify-content: flex-start;
+  width: 63px;
 }
