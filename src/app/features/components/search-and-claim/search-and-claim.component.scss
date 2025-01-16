@@ -110,7 +110,6 @@
 .filter-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .search-section {
@@ -185,7 +184,7 @@ mat-form-field .mat-icon-button {
 /* Ensure container takes the full width and uses flex layout */
 .category-dropdown-container {
   width: 100%;
-  max-width: 300px;
+  flex-direction: column;
   margin: 10px auto;
 }
 
