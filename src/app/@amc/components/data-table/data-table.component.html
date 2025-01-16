@@ -111,16 +111,12 @@
   </div>
 </div>
 <div *ngIf="isMobileView && dataSource.data.length > 0"
-  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-2" style="margin-top: -30px;">
   <div class="card border rounded-lg shadow-md p-1" *ngFor="let element of dataSource.data">
     <div class="grid grid-cols-2 gap-4">
       <div class="flex flex-col justify-between ml-4">
         <div class="flex flex-col justify-start items-start">
           <h3 class="font-bold text-sm truncate mb-2">{{ element.title }}</h3>
-          <!-- <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-            (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4">
-            Claim
-          </button> -->
           <div *ngIf="!removeArchive && showUnClaim">
             <button
               *ngIf="element.status === 'UNCLAIMED'"
@@ -135,7 +131,6 @@
               Claimed
             </span>
           </div>
-       
         </div>        
         <div *ngFor="let column of tableColumns">
           <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
