@@ -26,6 +26,7 @@ import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submi
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 // import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
 interface Item {
   itemId: number;
   itemName: string;
@@ -58,7 +59,7 @@ interface Item {
     CreateClaimComponent,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    NgxDropzoneModule, MatSelectModule, FormsModule, HttpClientModule],
+    NgxDropzoneModule, MatSelectModule, FormsModule, HttpClientModule, RouterModule],
   templateUrl: './search-and-claim.component.html',
   styleUrls: ['./search-and-claim.component.scss']
 })

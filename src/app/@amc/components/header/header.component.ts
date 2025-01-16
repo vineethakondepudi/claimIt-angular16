@@ -97,7 +97,7 @@ export class HeaderComponent {
     this.tabRoutes = [
       { route: '/claimit/searchAndClaim', icon: 'search', label: 'Search and Claim' },
       { route: '/claimit/about', icon: 'info', label: 'About' },
-      { route: '/claimit/notifications', icon: 'notifications', label: 'Notifications' },
+      { route: '/claimit/pendingClaim', icon: 'notifications', label: 'Notifications' },
       { route: '/claimit/help', icon: 'help', label: 'Help' },
     ];
   } else {
@@ -137,6 +137,7 @@ public isTabActive(tab: string): boolean {
     }
   }
   resetNotificationCount() {
+    this.router.navigateByUrl('/claimit/pendingClaim')
     if (this.notificationCount > 0) {
       this.notificationCount = 0;
       this.updateNotificationLabel();

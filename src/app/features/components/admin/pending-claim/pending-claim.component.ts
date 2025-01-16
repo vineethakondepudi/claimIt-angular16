@@ -1,18 +1,21 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
-
+import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
+import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { FormFooterComponent } from 'src/app/@amc/components/form-footer/form-footer.component';
 @Component({
   selector: 'app-pending-claim',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,LoaderComponent,MatIconModule,RouterModule,FormFooterComponent],
   templateUrl: './pending-claim.component.html',
   styleUrls: ['./pending-claim.component.scss'],
 })
 export default class PendingClaimComponent {
   pendingClaims: any[] = [];
   notifications: any[] = []; // Holds the notification data
-
+  loader:boolean=true;
   constructor(private claimService: ClaimitService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
@@ -36,6 +39,7 @@ export default class PendingClaimComponent {
   
           // Update the notification count in the service
           this.claimService.setNotificationCount(unreadCount);
+          this.loader = false;
         }
       },
       (error) => {

@@ -39,7 +39,7 @@
     <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
         <div class="flex justify-between items-center h-16 px-4 ">
             <!-- Notification Icon -->
-            <button class="flex flex-col items-center mx-[50px] hover:text-teal-500">
+            <button class="flex flex-col items-center mx-[50px] hover:text-teal-500" [routerLink]="'/claimit/dashboard'" >
                 <mat-icon class="text-[#00897b] text-2xl">home</mat-icon>
                 <span class="text-sm">Home</span>
               </button>
@@ -48,8 +48,12 @@
                     class="w-12 h-12 bg-teal-500 text-white rounded-full shadow hover:bg-teal-600  mx-[50px] mb-[67px] flex justify-center items-center">
                 <mat-icon>camera_alt</mat-icon>
             </button>
-            <!-- Home Icon -->
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 ">
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/search'" >
+                <mat-icon class="text-[#00897b] ">rule</mat-icon>
+                <span class="text-xs">Approve / Reject Claim</span>
+            </button>
+           
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/pendingClaim'" >
                 <mat-icon class="text-[#00897b] ">notifications</mat-icon>
                 <span class="text-xs">Notifications</span>
             </button>

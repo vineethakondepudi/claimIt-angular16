@@ -19,6 +19,7 @@ import { ClaimitService } from '../../sharedServices/claimit.service';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-view-or-unclaim',
   standalone: true,
@@ -39,7 +40,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     ReactiveFormsModule,
     FormsModule,
-    MatSelectModule],
+    MatSelectModule,
+    RouterModule],
   templateUrl: './view-or-unclaim.component.html',
   styleUrls: ['./view-or-unclaim.component.scss'],
   animations: [fadeInRight400ms, fadeInUp400ms],
@@ -138,6 +140,7 @@ export default class ViewOrUnclaimComponent {
     }
     this.service.getAllItems(reqbody).subscribe((res: any) => {
       this.searchResults = res.itemRequests
+      this.loader = false;
     })
 
   }

@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
-
+import { RouterModule } from '@angular/router';
 export interface TableColumn {
   label: string;
   name: string;
@@ -41,7 +41,8 @@ export interface TableColumn {
     MatCardModule,
     MatDialogModule,
     NgxDropzoneModule,
-    LoaderComponent
+    LoaderComponent,
+    RouterModule
   ],
   templateUrl: './additem.component.html',
   styleUrls: ['./additem.component.scss']
@@ -206,6 +207,7 @@ export default class AdditemComponent implements OnInit {
   }
   
 
+  
   previewImage(event: any) {
     console.log(event)
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
