@@ -41,7 +41,6 @@ export default class ClaimRequestComponent implements OnInit {
   ngOnInit(){
     this.claimService.getCategories().subscribe((data: any) => {
       this.categories = data;
-      console.log(this.categories,41); 
     });
   }
 

@@ -75,9 +75,7 @@ export class SearchResultsDialogComponent {
   ]
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private router: Router,  private dialogRef: MatDialogRef<SearchResultsDialogComponent> ) {}
   claimItem(item: Item): void {
-    console.log('Claiming item:', item);
     this.dialogRef.close();
-    // Redirect to the "search and claim" page with the itemId as part of the route
     this.router.navigate(['claimit/searchAndClaim'], { queryParams: { id: item.itemName } });
   }
 }

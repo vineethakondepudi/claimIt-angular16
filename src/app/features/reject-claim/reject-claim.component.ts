@@ -33,7 +33,6 @@ export class RejectClaimComponent {
 ngOnInit(){
   this.initalizeRejectForm()
   this.rejectClaimForm.statusChanges.subscribe((res: any) => {
-    console.log('res', res)
     if (res === 'VALID') {
       this.enableSave = false
     } else {

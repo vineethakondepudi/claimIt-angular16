@@ -52,7 +52,6 @@ export default class ContactComponent {
     return this.contactForm.get('email');
   }
   contactUs() {
-    console.log(this.contactForm)
  
     const reqbody = {
       name: this.contactForm.value.name ? this.contactForm.value.name : '',
@@ -61,7 +60,6 @@ export default class ContactComponent {
     }
     this.service.contactUs(reqbody).subscribe(
       (res: any) => {
-        console.log(res);
         
       })
    

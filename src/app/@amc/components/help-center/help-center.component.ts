@@ -41,7 +41,6 @@ export default class HelpCenterComponent {
   }
 
   submitRequest() {
-    console.log('Request submitted:', this.helpForm.value);
     this.helpForm.reset();
   }
 }

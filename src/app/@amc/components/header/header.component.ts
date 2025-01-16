@@ -56,7 +56,6 @@ export class HeaderComponent {
 
   constructor(public router: Router, private route: ActivatedRoute,private service:ClaimitService,private breakpointObserver: BreakpointObserver) {
     this.service.loginResponse_Triggered.subscribe((res:any)=>{
-      console.log(res)
       this.userRole = localStorage.getItem('role');
       this.getMenuItems()
       this.setTabRoutes()

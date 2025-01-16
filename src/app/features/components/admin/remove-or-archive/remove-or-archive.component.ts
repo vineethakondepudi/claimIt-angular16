@@ -121,8 +121,6 @@ export default class RemoveOrArchiveComponent implements OnInit {
 
 
   confirmRemove(event: any) {
-    console.log(116, event.itemId); 
-  
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
@@ -132,17 +130,13 @@ export default class RemoveOrArchiveComponent implements OnInit {
     });
   
     dialogRef.afterClosed().subscribe((confirmed: any) => {
-      console.log('confirmed', confirmed);
       if (confirmed === 'yes') {
-        // Use itemId here instead of claimId
         const params = {
-          itemId: event.itemId // Pass itemId to the service
+          itemId: event.itemId 
         };
   
         this.loader = true;
         this.service.adminRemoveItem(params.itemId).subscribe((res: any) => {
-         
-          console.log(145);
           this.fetchData();
           this.loader = false;
         }, (error) => {
@@ -153,7 +147,6 @@ export default class RemoveOrArchiveComponent implements OnInit {
   }
   
   previewImage(event: any) {
-    console.log(event)
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
