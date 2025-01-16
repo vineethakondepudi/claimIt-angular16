@@ -35,13 +35,6 @@
                                         <mat-icon>search</mat-icon>
                                     </button>
                                 </mat-form-field>
-                                <!-- <mat-form-field appearance="outline" class="flex-auto">
-                                    <mat-label>Status</mat-label>
-                                    <mat-select formControlName="status" class="custom-mat-input">
-                                        <mat-option *ngFor="let options of statusDropDown" [value]="options.label">{{
-                                            options.value }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field> -->
                             </form>
                         
                             <!-- Buttons Container -->
@@ -56,6 +49,8 @@
                                 </button>
                             </div>
                         </div>
+                        
+                        
                     </mat-expansion-panel>
                 </mat-accordion>
             </mat-card>
@@ -67,7 +62,7 @@
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
-    <div class="fixed bottom-0 w-full bg-white">
+    <div class="flex-none">
         <app-form-footer></app-form-footer>
     </div>
 </div>
