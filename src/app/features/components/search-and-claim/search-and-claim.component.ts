@@ -64,6 +64,7 @@ interface Item {
 })
 export default class SearchAndClaimComponent implements OnInit {
   @Input() containerPanelOpened: boolean = true;
+  isSearchView: boolean = true;
   displaycoloums: any[] = [
     {
       label: "Image Data",
