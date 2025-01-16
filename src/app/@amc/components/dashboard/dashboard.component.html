@@ -5,7 +5,7 @@
       (click)="openCalendarDialog()"
     >
       <mat-icon class="mr-2" style="color: #007BFF;">calendar_today</mat-icon> <!-- Calendar Icon -->
-      Report for the month of
+      Report for the month of 
       <span class="italic font-semibold" style="color: #007BFF; text-decoration: underline; cursor: pointer;">
         {{ selectedMonth | date: 'MMMM' }}
       </span>
@@ -193,7 +193,25 @@
       </div>
     </div>
   </div>
-
+  <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
+    <div class="flex justify-between items-center h-16 px-4 ">
+        <!-- Notification Icon -->
+        <button class="flex flex-col items-center mx-[50px] hover:text-teal-500" [routerLink]="'/claimit/addItem'" >
+            <mat-icon class="text-[#00897b] text-2xl">add_circle</mat-icon>
+            <span class="text-sm">Add Item</span>
+          </button>
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/search'" >
+            <mat-icon class="text-[#00897b] ">rule</mat-icon>
+            <span class="text-xs">Approve / Reject Claim</span>
+        </button>
+       
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/pendingClaim'" >
+            <mat-icon class="text-[#00897b] ">notifications</mat-icon>
+            <span class="text-xs">Notifications</span>
+        </button>
+          
+    </div>
+</div>
 </div>
 
 <div *ngIf="role !== 'admin'" class="min-h-screen overflow-x-hidden flex flex-col bg-gray-50">
@@ -343,6 +361,20 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+  <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
+    <div class="flex justify-between items-center h-16 px-4 ">
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/searchAndClaim'" >
+            <mat-icon class="text-[#00897b] ">search</mat-icon>
+            <span class="text-xs">Search And Claim</span>
+        </button>
+       
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
+            <mat-icon class="text-[#00897b] ">visibility</mat-icon>
+            <span class="text-xs">View/Unclaim</span>
+        </button>
+          
+    </div>
+</div>
 </div>
 
 <!-- Floating Chat Icon -->

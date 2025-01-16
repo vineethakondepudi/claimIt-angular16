@@ -18,7 +18,7 @@ import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RejectClaimComponent } from '../../../reject-claim/reject-claim.component';
-
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-admin-search',
   standalone: true,
@@ -40,7 +40,9 @@ import { RejectClaimComponent } from '../../../reject-claim/reject-claim.compone
     LoaderComponent,
     MatDatepickerModule,
     MatIconModule,
-    FormsModule,], templateUrl: './admin-search.component.html',
+    FormsModule,
+    RouterModule], 
+  templateUrl: './admin-search.component.html',
   styleUrls: ['./admin-search.component.scss'],
   providers: [DatePipe],
 

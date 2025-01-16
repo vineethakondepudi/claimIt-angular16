@@ -180,4 +180,19 @@
   <div *ngIf="!isMobileView" class="fixed bottom-0 w-full bg-white">
     <app-form-footer></app-form-footer>
   </div>
+  <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
+    <div class="flex justify-between items-center h-16 px-4 ">
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/dashboard'" >
+            <mat-icon class="text-[#00897b] ">home</mat-icon>
+            <span class="text-xs">Home</span>
+        </button>
+       
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
+            <mat-icon class="text-[#00897b] ">visibility</mat-icon>
+            <span class="text-xs">View/Unclaim</span>
+        </button>
+          
+    </div>
+</div>
+  <app-loader *ngIf="loader"></app-loader>
 </div>

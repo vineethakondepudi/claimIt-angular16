@@ -34,7 +34,8 @@ import {  MatDialogRef } from '@angular/material/dialog';
 import { fadeInRight400ms } from '../../animations/fade-in-right.animation'
 import { fadeInUp400ms } from '../../animations/fade-in-up.animation'
 import { MatExpansionModule } from '@angular/material/expansion'
-import { ChatService } from '../service/chat.service'
+import { ChatService } from '../service/chat.service';
+import { RouterModule } from '@angular/router';
 interface CheckIn {
   name: string
   type: string
@@ -74,7 +75,8 @@ interface Item {
     FormsModule,
     MatInputModule,
     MatExpansionModule,
-    MatIconModule,],
+    MatIconModule,
+    RouterModule,],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   animations: [fadeInRight400ms, fadeInUp400ms],
