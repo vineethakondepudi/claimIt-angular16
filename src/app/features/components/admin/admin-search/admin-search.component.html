@@ -90,21 +90,16 @@
             <!-- Notification Icon -->
             <button class="flex flex-col items-center mx-[50px] hover:text-teal-500" [routerLink]="'/claimit/dashboard'" >
                 <mat-icon class="text-[#00897b] text-2xl">home</mat-icon>
-                <span class="text-sm">Home</span>
+                <span class="text-xs">Home</span>
               </button>
-            <!-- <button mat-fab color="primary" 
-                    (click)="onAddItemClick()" 
-                    class="w-12 h-12 bg-teal-500 text-white rounded-full shadow hover:bg-teal-600  mx-[50px] mb-[67px] flex justify-center items-center">
-                <mat-icon>camera_alt</mat-icon>
-            </button> -->
             <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/addItem'" >
                 <mat-icon class="text-[#00897b] ">add_circle</mat-icon>
                 <span class="text-xs">Add Item</span>
             </button>
            
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/pendingClaim'" >
-                <mat-icon class="text-[#00897b] ">notifications</mat-icon>
-                <span class="text-xs">Notifications</span>
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" [routerLink]="'/claimit/search'">
+                <mat-icon class="text-[#00897b] text-xl">rule</mat-icon>
+                <span class="text-xs mt-1">Approve/Claim</span>
             </button>
               
         </div>
