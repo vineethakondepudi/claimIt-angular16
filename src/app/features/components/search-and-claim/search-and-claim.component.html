@@ -1,5 +1,5 @@
 <div class="min-h-screen flex flex-col">
-  <div *ngIf="isMobileView" class="px-5 pt-5 pb-5 bg-[#E8F2F3]">
+  <div *ngIf="isMobileView" class="px-5 pt-5 bg-[#E8F2F3]">
     <span class="font-bold max-w-3xs mr-6 text-2xl">Search and Claim</span>
     <div class="filter-container">
       <div class="search-section">
@@ -25,8 +25,8 @@
 
       <div class="grid grid-cols-5 items-center gap-4 mb-6">
         <span class="text-lg col-span-3">Search with a picture</span>
-        <button  (click)="triggerFileInput()" aria-label="Upload Image"
-          class="flex justify-center items-center">
+        <button  (click)="triggerFileInput()" aria-label="Upload Image" 
+          class="flex justify-center items-center -ml-2">
           <mat-icon>camera_alt</mat-icon>
         </button>
         <input #fileInput type="file" (change)="onSelect($event)" class="hidden" />
@@ -65,7 +65,7 @@
     </div>
 
   </div>
-  <div *ngIf="!isMobileView" class="px-5 pt-5 pb-5 bg-[#E8F2F3]">
+  <div *ngIf="!isMobileView" class=" bg-[#E8F2F3]">
     <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
     <mat-card>
       <mat-accordion>
@@ -76,19 +76,14 @@
             </mat-panel-title>
             <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
           </mat-expansion-panel-header>
-
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Item Type Search -->
             <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
-              <!-- Header -->
               <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
                 style="background-color: #1E959B">
                 <p class="text-xs font-semibold" style="margin-top: 6px">Item Type Search</p>
               </div>
-              <!-- Grid Content -->
               <ng-container>
                 <div class="text-center p-6 mt-[30px]">
-                  <!-- <h3 class="font-medium text-lg mb-4">Item Type Search</h3> -->
                   <mat-form-field appearance="outline" class="w-full ">
                     <mat-label>Enter item name</mat-label>
                     <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery"
@@ -164,8 +159,6 @@
       </mat-accordion>
     </mat-card>
   </div>
-
-
   <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length"
     class="flex-grow mt-5 bg-[#E8F2F3]">
     <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
