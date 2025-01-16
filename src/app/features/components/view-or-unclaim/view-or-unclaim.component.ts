@@ -137,9 +137,7 @@ export default class ViewOrUnclaimComponent {
     
     }
     this.service.getAllItems(reqbody).subscribe((res: any) => {
-      console.log('res', res)
-      this.searchResults = res.claimHistory.concat(res.itemRequests)
-      this.loader = false
+      this.searchResults = res.itemRequests
     })
 
   }
@@ -166,9 +164,10 @@ export default class ViewOrUnclaimComponent {
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       console.log('confirmed', confirmed)
       if (confirmed === 'yes') {
+        console.log(event,'event.claimId')
         const params = {
           status:'UNCLAIMED',
-          claimId:event.claimId
+          claimId:event.requestId
         }
         this.loader = true
         this.service.unClaimItem(params).subscribe((res:any)=>{

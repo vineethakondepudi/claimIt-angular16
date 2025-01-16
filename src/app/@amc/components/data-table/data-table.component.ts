@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { HttpClientModule } from '@angular/common/http';
@@ -86,6 +86,7 @@ export class DataTableComponent<T> {
   @Output() exportData = new EventEmitter();
   displayedColumns: Array<string> = [];
   isOpen = false;
+  isMobileView = false;
   constructor(public readonly router: Router, private datePipe: DatePipe, private dialog: MatDialog) { }
   ngOnInit() {
     console.log('showUnClaim', this.showUnClaim)
@@ -98,6 +99,8 @@ export class DataTableComponent<T> {
       (tableColumn: TableColumn) => tableColumn.name
     );
     this.displayedColumns = columnNames;
+    console.log('displayedColumns', this.displayedColumns);
+    this.checkViewport();
   }
 
   setTableDataSource(data: T[]) {
@@ -114,7 +117,7 @@ export class DataTableComponent<T> {
   }
   generateQrCodeData(element: any): string {
     return JSON.stringify({
-      id: element.itemId,
+      id: element.uniqueId,
       name: element.name,
       status: element.status,
        verificationLink: `http://localhost:4200/assets/verification.html?itemId=${element.itemId}`
@@ -137,7 +140,19 @@ export class DataTableComponent<T> {
   applyFilter() {
     this.dataSource.filter = this.searchKeyword.trim().toLowerCase();
   }
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkViewport();
+  }
 
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
+  }
+
+  viewDetails(element: any) {
+    // Logic to display more details
+    console.log('View details for:', element);
+  }
   public handleToggleColumns(col: TableColumn) {
     const isChecked = col.isChecked;
     if (isChecked) {

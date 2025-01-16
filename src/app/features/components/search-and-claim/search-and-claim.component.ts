@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -64,6 +64,7 @@ interface Item {
 })
 export default class SearchAndClaimComponent implements OnInit {
   @Input() containerPanelOpened: boolean = true;
+  isSearchView: boolean = true;
   displaycoloums: any[] = [
     {
       label: "Image Data",
@@ -113,7 +114,7 @@ export default class SearchAndClaimComponent implements OnInit {
 
   ]
   itemName: string | null = null;
-  files: { file: File, preview: string }[] = [];
+  files: any[] = [];
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
   loader:boolean = false
@@ -135,7 +136,9 @@ export default class SearchAndClaimComponent implements OnInit {
     sortBy: "desc",
     sortId: "foundDate",
   };
+  isMobileView = false;
   selectedCategory: string = '';
+  @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
   constructor(private http: HttpClient, private route: ActivatedRoute,private snackBar: MatSnackBar, private matDialog: MatDialog,private claimService:ClaimitService) {
     this.loadSavedSearches(); 
    }
@@ -178,67 +181,15 @@ export default class SearchAndClaimComponent implements OnInit {
       }
     });
     this.loadCategories();
+    this.checkViewport();
   }
-  // getCategoryIcon(categoryName: string): string {
-  //   const defaultIcon = 'category';  
-  //   if (categoryName.includes('Electronics')) {
-  //     return 'tv';
-  //   } else if (categoryName.includes('Personal Accessories')) {
-  //     return 'accessibility';
-  //   } else if (categoryName.includes('Clothes') || categoryName.includes('Fashion')) {
-  //     return 'shopping_bag';
-  //   } else if (categoryName.includes('Work Tools')) {
-  //     return 'build';
-  //   } else if (categoryName.includes('Storage')) {
-  //     return 'storage';
-  //   } else if (categoryName.includes('Groceries')) {
-  //     return 'local_grocery_store';
-  //   } else if (categoryName.includes('Expensive')) {
-  //     return 'attach_money';
-  //   } else if (categoryName.includes('Uncategorized')) {
-  //     return 'category';
-  //   } else if (categoryName.includes('Toys') || categoryName.includes('Baby')) {
-  //     return 'toys';
-  //   } else if (categoryName.includes('Bags')) {
-  //     return 'backpack';
-  //   } else if (categoryName.includes('Documents')) {
-  //     return 'description';
-  //   } else if (categoryName.includes('Home') || categoryName.includes('Furniture')) {
-  //     return 'home';
-  //   } else if (categoryName.includes('Vehicles')) {
-  //     return 'directions_car';
-  //   } else if (categoryName.includes('Childcare')) {
-  //     return 'child_care';
-  //   } else if (categoryName.includes('Pets')) {
-  //     return 'pets';
-  //   } else if (categoryName.includes('Books')) {
-  //     return 'book';
-  //   } else if (categoryName.includes('Musical Instruments')) {
-  //     return 'music_note';
-  //   } else if (categoryName.includes('Art') || categoryName.includes('Craft')) {
-  //     return 'palette';
-  //   } else if (categoryName.includes('Fitness')) {
-  //     return 'fitness_center';
-  //   } else if (categoryName.includes('Medical')) {
-  //     return 'medication';
-  //   } else if (categoryName.includes('Tech Accessories')) {
-  //     return 'devices';
-  //   } else if (categoryName.includes('Travel')) {
-  //     return 'directions_walk';
-  //   } else if (categoryName.includes('Food') || categoryName.includes('Beverage')) {
-  //     return 'food_bank';
-  //   } else if (categoryName.includes('Gaming')) {
-  //     return 'games';
-  //   } else if (categoryName.includes('Event')) {
-  //     return 'event';
-  //   } else if (categoryName.includes('Plants') || categoryName.includes('Gardening')) {
-  //     return 'eco';
-  //   } else if (categoryName.includes('Kitchen')) {
-  //     return 'kitchen';
-  //   }
-  //   return defaultIcon;
-  // }
-  
+  @HostListener('window:resize', ['$event'])
+    onResize() {
+      this.checkViewport();
+    }
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
+  }
   onRemove(file: any) {
     this.files = this.files.filter(f => f !== file);
   }
@@ -275,6 +226,13 @@ export default class SearchAndClaimComponent implements OnInit {
           console.error('Error fetching search results:', error);
         }
       );
+    }
+  }
+  public triggerFileInput(): void {
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.click();
+    } else {
+      console.error('File input reference is null');
     }
   }
   public handleSort(sortParams: any) {
@@ -382,37 +340,40 @@ export default class SearchAndClaimComponent implements OnInit {
     this.search();
   }
   public onSelect(event: any): void {
-    this.searchResults = [];
-    const files = event.addedFiles;
+    const files = event.target.files; // For traditional file input, access files here
+    console.log(files, 'files'); // Check if files are correctly passed
     if (files && files.length > 0) {
       const file = files[0];
-      const allowedTypes = ['image/jpeg','image/png', 'image/gif', 'image/bmp', 'image/jfif'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/jfif'];
+  
       if (!allowedTypes.includes(file.type)) {
         const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
-          width: "500px",
+          width: '500px',
           data: {
             status: 'Error',
             msg: 'Only JPG, JPEG, PNG, GIF, BMP, and JFIF image formats are allowed.',
-            btnName: "OK",
+            btnName: 'OK',
           },
         });
-        
-        dialogRef.afterClosed().subscribe(() => {
-        });
+  
+        dialogRef.afterClosed().subscribe(() => {});
+        return;
       }
+  
       const reader = new FileReader();
       reader.onload = () => {
         this.files.push({
           file: file,
-          preview: reader.result as string  
+          preview: reader.result as string,
         });
       };
-      reader.readAsDataURL(file);  
-      
+      reader.readAsDataURL(file);
+  
+      // Upload image
       this.uploadImage(file).subscribe(
         (response) => {
-          this.matchedItems = response.matchedItems; 
-          console.log(this.matchedItems,'matcheditems')
+          this.matchedItems = response.matchedItems;
+          console.log(this.matchedItems, 'matcheditems');
         },
         (error) => {
           console.error('Error uploading image:', error);
@@ -435,16 +396,16 @@ export default class SearchAndClaimComponent implements OnInit {
       });
   }
 
-  uploadImage(file: File): Observable<any> {
+  public uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
 
     const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
+    console.log('Uploading file:', file); // Debugging line to check if file is passed correctly
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });
   }
-
 
   public onImportToExcel() {
     this.files = []

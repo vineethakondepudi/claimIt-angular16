@@ -1,5 +1,46 @@
 <div class="min-h-screen flex flex-col">
-  <div class="px-5 pt-5 pb-5 bg-[#E8F2F3]">
+  <div  *ngIf="isMobileView" class="px-5 pt-5 pb-5 bg-[#E8F2F3]">
+    <span class="font-bold max-w-3xs mr-6 text-2xl">Search and Claim</span>
+    <div class="filter-container">
+      <div class="search-section">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Enter item name</mat-label>
+          <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery" (keyup.enter)="searchItems()" />
+          <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
+            <mat-icon>search</mat-icon>
+          </button>
+          <!-- Camera Button for Image Upload -->
+          <button mat-icon-button matSuffix (click)="triggerFileInput()" aria-label="Upload Image">
+            <mat-icon>camera_alt</mat-icon>
+          </button>
+          <input #fileInput type="file" (change)="onSelect($event)" style="display:none" />
+        </mat-form-field>
+      </div>
+    
+      <div class="category-scroll-container">
+        <div class="category-scroll">
+          <div *ngFor="let item of categories" class="category-item" (click)="selectCategory(item.name)">
+            <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
+              {{ getCategoryIcon(item.name) }}
+            </mat-icon>
+            <p class="category-title">{{ item.name }}</p>
+          </div>
+        </div>
+      </div>
+      <!-- Dropzone for Image Upload (Visible only on Desktop) -->
+      <ngx-dropzone (change)="onSelect($event)" class="desktop-dropzone">
+        <ngx-dropzone-label>
+          Drag and drop image here or click to upload
+        </ngx-dropzone-label>
+        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+          *ngFor="let f of files" [file]="f.file" (removed)="onRemove(f)">
+          <ngx-dropzone-label class="block text-sm">{{ f.file.name }}</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+      </ngx-dropzone>
+    </div>
+    
+  </div>
+  <div   *ngIf="!isMobileView" class="px-5 pt-5 pb-5 bg-[#E8F2F3]">
     <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
     <mat-card>
       <mat-accordion>
@@ -16,7 +57,7 @@
             <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
               <!-- Header -->
               <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
-                style="background-color: #3e969f">
+                style="background-color: #1E959B">
                 <p class="text-xs font-semibold" style="margin-top: 6px">Item Type Search</p>
               </div>
 
@@ -34,14 +75,6 @@
                       <mat-icon>search</mat-icon>
                     </button>
                   </mat-form-field>
-                  <mat-form-field appearance="outline" class="w-full mt-4 ">
-                    <mat-label>Saved Searches</mat-label>
-                    <mat-select [(ngModel)]="selectedSavedSearch" (selectionChange)="applySavedSearch()">
-                      <mat-option *ngFor="let search of savedSearches" [value]="search">
-                        {{ search }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
                 </div>
               </ng-container>
 
@@ -52,7 +85,7 @@
             <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
               <!-- Header -->
               <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
-                style="background-color: #3e969f">
+                style="background-color: #1E959B">
                 <p class="text-xs font-semibold" style="margin-top: 6px">Picture Upload Search</p>
               </div>
               <ng-container>
@@ -73,16 +106,12 @@
 
 
             </div>
-
             <!-- Category Section -->
             <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
               <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
-                style="background-color: #3e969f">
+                style="background-color: #1E959B">
                 <p class="text-xs font-semibold" style="margin-top: 6px">Category Search</p>
               </div>
-
-
-
               <!-- Grid Content -->
               <ng-container>
                 <div class="text-center   p-6  mt-[30px]">
@@ -120,7 +149,6 @@
       </mat-accordion>
     </mat-card>
   </div>
-
   <div *ngIf="searchResults?.length > 0" class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
     <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
       [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
@@ -145,4 +173,7 @@
       No Records Found
     </p>
   </div>
+  <div *ngIf="!isMobileView" class="fixed bottom-0 w-full bg-white">
+    <app-form-footer></app-form-footer>
+</div>
 </div>

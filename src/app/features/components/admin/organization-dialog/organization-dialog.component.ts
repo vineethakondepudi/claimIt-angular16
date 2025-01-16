@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
@@ -26,9 +26,9 @@ export class OrganizationDialogComponent {
   selectedLocation!: string;
   latitude: number | null = null;
   longitude: number | null = null;
-  selectedOrgId: string = '';
+  selectedOrgId: string = 'Miracle';
   selected: any;
-
+  isMobileScreen: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
@@ -46,9 +46,18 @@ export class OrganizationDialogComponent {
     this.onUploadImage();
     
   }
-
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
   onOrganizationSelect(orgId: string): void {
     this.selectedOrgId = orgId;
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenSize();
+  }
+  private checkScreenSize(): void {
+    this.isMobileScreen = window.innerWidth <= 768; // Adjust breakpoint as needed
   }
   onSelectFile(event: any): void {
     const allowedTypes = ['image/jpeg','image/png', 'image/gif', 'image/bmp', 'image/jfif'];
@@ -84,29 +93,29 @@ export class OrganizationDialogComponent {
     }
   }
   
-  onLocationChange(): void {
-    switch (this.selectedLocation) {
-      case 'Miracle City':
-        this.latitude = 17.739707548305788;
-        this.longitude = 83.3433213167522;
-        break;
-      case 'Miracle Valley': 
-        this.latitude = 17.814901263799708;
-        this.longitude =  83.39172982091242;
-        break;
-      case 'Miracle Heights': 
-        this.latitude = 17.809998290809897;
-        this.longitude =  83.39687966178053; 
-        break;
-      case 'Miracle Global HQ':
-        this.latitude = 42.48540914670753;
-        this.longitude = -83.49780041745922;
-        break;
-      default:
-        this.latitude = null;
-        this.longitude = null;
-    }
-  }
+  // onLocationChange(): void {
+  //   switch (this.selectedLocation) {
+  //     case 'Miracle City':
+  //       this.latitude = 17.739707548305788;
+  //       this.longitude = 83.3433213167522;
+  //       break;
+  //     case 'Miracle Valley': 
+  //       this.latitude = 17.814901263799708;
+  //       this.longitude =  83.39172982091242;
+  //       break;
+  //     case 'Miracle Heights': 
+  //       this.latitude = 17.809998290809897;
+  //       this.longitude =  83.39687966178053; 
+  //       break;
+  //     case 'Miracle Global HQ':
+  //       this.latitude = 42.48540914670753;
+  //       this.longitude = -83.49780041745922;
+  //       break;
+  //     default:
+  //       this.latitude = null;
+  //       this.longitude = null;
+  //   }
+  // }
   
 
   onRemove(file: any): void {
@@ -114,39 +123,34 @@ export class OrganizationDialogComponent {
   }
 
   onUploadImage(): void {
-    if (this.files.length > 0 && this.selected) {
-      if (this.latitude === null || this.longitude === null) {
-        console.error('Latitude or Longitude is not set. Please select a valid location.');
-        return;
-      }
-  
+    if (this.files.length > 0 && this.selectedOrgId) {
       const formData = new FormData();
       formData.append('image', this.files[0].file);
       formData.append('orgId', this.selectedOrgId);
-      formData.append('latitude', this.latitude.toString());
-      formData.append('longitude', this.longitude.toString());
   
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
           console.log('File uploaded successfully:', response);
           this.isOrganizationSelected = false;
           this.files = [];
-          this.dialogRef.close();
+          
+         
+          this.dialogRef.close();  
         },
         (error) => {
           console.error('Error uploading file:', error);
         }
       );
     } else {
-      console.warn('No file selected for upload or organization not selected.');
+      console.warn('No file selected for upload.');
     }
+    
   }
-  
   submit(): void {
     if (this.files.length > 0 && this.selectedOrgId) {
       const formData = new FormData();
       formData.append('image', this.files[0].file);
-      formData.append('orgId', this.selectedOrgId);
+      // formData.append('orgId', this.selectedOrgId);
   
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
