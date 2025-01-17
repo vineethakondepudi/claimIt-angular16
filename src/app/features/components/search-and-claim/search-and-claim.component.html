@@ -191,7 +191,7 @@
     <app-form-footer></app-form-footer>
   </div>
 </div>
-<div 
+<div *ngIf="!searchResults?.length && !categerorydata?.length && !matchedItems?.length"
 class="relative flex flex-col items-center justify-center">
 <img src="assets/claimitsearch.PNG" class="absolute w-56 mt-[28rem] object-contain bg-[#E8F2F3]" alt="Image" />
 </div>
