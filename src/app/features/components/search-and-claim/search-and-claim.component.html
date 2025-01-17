@@ -17,8 +17,9 @@
           </button>
         </mat-form-field>
       </div>
-      <div *ngIf="searchCompleted && searchResults.length === 0" class="no-results">
-        <p>No results found. Please try a different query.</p>
+      <div *ngIf="searchCompleted && searchResults.length === 0" class="no-results-container">
+        <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+        <p class="pl-[100px]">No results found</p>
       </div>
       <div *ngIf="searchResults?.length > 0" class="flex-grow mt-14 mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
         <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
@@ -47,8 +48,9 @@
           [tableData]="matchedItems" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
       </div>
-      <div *ngIf="pictureSearchCompleted" class="no-results">
-        <p>No results found. Please try a different query.</p>
+      <div *ngIf="pictureSearchCompleted"  class="no-results-container">
+        <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+        <p class="pl-[100px]">No results found.</p>
       </div>
       <!-- <span class="search-text text-lg mb-2">Search in the below category</span> -->
       <!-- <div class="category-dropdown-container"> -->
@@ -60,8 +62,9 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <div *ngIf="categeoryerror" class="no-results">
-          <p>No results found. Please try a different query.</p>
+        <div *ngIf="categeoryerror" class="no-results-container">
+          <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+          <p class="pl-[100px]">No results found.</p>
         </div>
         <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length"
           class="flex-grow mt-5 bg-[#E8F2F3]">
