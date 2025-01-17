@@ -173,17 +173,16 @@
           <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
           <div class="grid grid-cols-2 gap-4 items-center">
             <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-                    (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4">
+                    (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4 mb-2">
               Claim
             </button>
             <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-                    class="text-sm py-2 px-4" (click)="openQrDialog(element)">
+                    class="text-sm py-2 px-4 mt-4" (click)="openQrDialog(element)">
               <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
               <span class="text-xs">QR Code</span>
             </button>
           </div>
         </div>
-
         <div class="flex justify-between items-center">
           <div *ngIf="column.type === 'text'" class="flex-1">
             <strong>{{ column.label }}:</strong> {{ element[column.name] }}
@@ -203,12 +202,12 @@
 
 <div *ngIf="showImagePreview" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
   <div class="bg-white p-4 rounded-lg">
-    <img [src]="selectedImage" alt="Image Preview" class="max-w-full max-h-full"/>
-    <button (click)="closeImagePreview()" class="mt-4 bg-red-500 text-white p-2 rounded-md">Close</button>
+    <button (click)="closeImagePreview()"  >
+      <mat-icon  class="bg-red-500 text-white " >close_small</mat-icon>
+    </button>
+    <img [src]="selectedImage" alt="Image Preview" class="w-60 h-60 object-cover"/>
   </div>
 </div>
-
-
 <!-- No Data Placeholder -->
 <div *ngIf="dataSource.data.length === 0" class="text-center">
   <img src="assets/noresults.png" alt="No Results" class="w-32 mx-auto" />
