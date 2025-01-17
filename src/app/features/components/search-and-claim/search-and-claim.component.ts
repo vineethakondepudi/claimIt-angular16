@@ -360,6 +360,9 @@ export default class SearchAndClaimComponent implements OnInit {
       this.searchItems()
     }
   }
+  clearcategory(){
+    this.categerorydata = []
+  }
   selectCategory(category: string) {
     this.searchResults = [];
     this.matchedItems = [];
