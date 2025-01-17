@@ -164,32 +164,33 @@
   class="grid grid-cols-2 gap-2 p-2" style="margin-top: -15px;"  >
   <div class="card border rounded-lg shadow-md p-2" *ngFor="let element of dataSource.data">
     <img *ngIf="element.image" [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image"
-  class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto" />
+         class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto"
+         (click)="openImagePreview('data:image/jpeg;base64,' + element.image)" />
+    
     <div *ngFor="let column of tableColumns">
       <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
-        <div class="flex flex-col space-y-2">          
-            <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
-          <div class="grid grid-cols-2 gap-4 items-center">           
+        <div class="flex flex-col space-y-2">
+          <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
+          <div class="grid grid-cols-2 gap-4 items-center">
             <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-              (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4">
+                    (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4">
               Claim
             </button>
             <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-            class="text-sm py-2 px-4" (click)="openQrDialog(element)">
-            <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-            <span class="text-xs">QR Code</span>
-          </button>
+                    class="text-sm py-2 px-4" (click)="openQrDialog(element)">
+              <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+              <span class="text-xs">QR Code</span>
+            </button>
           </div>
         </div>
-        
+
         <div class="flex justify-between items-center">
           <div *ngIf="column.type === 'text'" class="flex-1">
             <strong>{{ column.label }}:</strong> {{ element[column.name] }}
           </div>
 
           <div *ngIf="column.name === 'name'" class="flex items-center">
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
-              (click)="openQrDialog(element)">
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" (click)="openQrDialog(element)">
               <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
               <span class="text-xs">QR Code</span>
             </button>
@@ -199,6 +200,14 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="showImagePreview" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white p-4 rounded-lg">
+    <img [src]="selectedImage" alt="Image Preview" class="max-w-full max-h-full"/>
+    <button (click)="closeImagePreview()" class="mt-4 bg-red-500 text-white p-2 rounded-md">Close</button>
+  </div>
+</div>
+
 
 <!-- No Data Placeholder -->
 <div *ngIf="dataSource.data.length === 0" class="text-center">
