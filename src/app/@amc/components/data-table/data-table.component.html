@@ -166,6 +166,11 @@
     <img *ngIf="element.image" [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image"
   class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto" />
     <div *ngFor="let column of tableColumns">
+      <button *ngIf="column.name === 'qrcode'" class="text-sm py-2 px-4"
+      (click)="openQrDialog(element)">
+      <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+      <span class="text-xs">QR Code</span>
+    </button>
       <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
         <div class="flex justify-between items-center">
           <h3 class="font-bold text-sm truncate flex-1">{{ element.title }}</h3>
@@ -173,6 +178,7 @@
             (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4">
             Claim
           </button>
+        
         </div>
         <div class="flex justify-between items-center">
           <div *ngIf="column.type === 'text'" class="flex-1">

@@ -87,6 +87,15 @@ export default class SearchAndClaimComponent implements OnInit {
       isChecked: true,
       index: 2,
     },
+    {
+      label: 'QR Code',
+      name: 'qrcode',
+      type: 'qrcode',  
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 4,
+    },
     // {
     //   label: "FoundDate",
     //   name: "foundDate",
@@ -143,6 +152,9 @@ export default class SearchAndClaimComponent implements OnInit {
   isMobileView = false;
   selectedCategory: string = '';
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+  searchCompleted!: boolean;
+  pictureSearchCompleted!: boolean;
+  categeorySearchCompleted!: boolean;
   constructor(private http: HttpClient, private route: ActivatedRoute,private snackBar: MatSnackBar, private matDialog: MatDialog,private claimService:ClaimitService) {
     this.loadSavedSearches(); 
    }
@@ -203,37 +215,29 @@ export default class SearchAndClaimComponent implements OnInit {
   }
   searchItems() {
     if (this.searchQuery.trim() !== '') {
+      this.searchResults = []; // Clear previous results
+      this.searchCompleted = false; // Reset search completion status
+  
       const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
   
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
           if (Array.isArray(response)) {
-            const normalizedQuery = this.searchQuery.trim().toLowerCase();
-            const ignoreWords = ["i", "lost", "my", "missed", "the", "a", "and", "to", "is", "on", "of", "in", "for", "with"];
-            const queryWords = normalizedQuery
-              .split(' ')
-              .filter(word => word && !ignoreWords.includes(word)); 
-  
-            this.searchResults = response.filter(item => {
-              const { dominantColor, title, description, itemName } = item;
-              const isMatch = queryWords.some(queryWord =>
-                (dominantColor && dominantColor.toLowerCase().includes(queryWord)) ||
-                (title && title.toLowerCase().includes(queryWord)) ||
-                (description && description.toLowerCase().includes(queryWord)) ||
-                (itemName && itemName.toLowerCase().includes(queryWord))
-              );
-              return isMatch;
-            });
+            // Filter results for items with status "UNCLAIMED"
+            this.searchResults = response.filter(item => item.status === "UNCLAIMED");
           } else {
             console.error('API response is not an array', response);
           }
+          this.searchCompleted = true; // Mark search as completed
         },
         (error) => {
           console.error('Error fetching search results:', error);
+          this.searchCompleted = true; // Mark search as completed even on error
         }
       );
     }
   }
+  
   closeTooltip() {
     this.showTooltip = false;
   }
@@ -274,8 +278,9 @@ export default class SearchAndClaimComponent implements OnInit {
     this.http.get<any[]>(apiUrl).subscribe(
       (data: any) => {
         if (Array.isArray(data)) {
-          this.categerorydata = data; 
+          this.categerorydata = data.filter(item => item.status === "UNCLAIMED");
           this.loader = false;
+  
           if (this.categerorydata.length === 0) {
             this.categeoryerror = true; 
           } else {
@@ -292,7 +297,7 @@ export default class SearchAndClaimComponent implements OnInit {
       }
     );
   }
-  
+
   saveSearch() {
     if (this.searchQuery.trim() !== '') {
       if (!this.savedSearches.includes(this.searchQuery)) {
@@ -329,7 +334,9 @@ export default class SearchAndClaimComponent implements OnInit {
     this.searchResults = [];
     this.matchedItems = [];
     this.categerorydata = [];
-    this.files = []
+    this.files = [];
+    this.searchCompleted = false;
+    this.pictureSearchCompleted = false;
   }
   loadSavedSearches() {
     const storedSearches = localStorage.getItem('savedSearches');
@@ -387,11 +394,15 @@ export default class SearchAndClaimComponent implements OnInit {
         });
       };
       reader.readAsDataURL(file);
-  
-      // Upload image
+     this.pictureSearchCompleted = false
       this.uploadImage(file).subscribe(
         (response) => {
-          this.matchedItems = response.matchedItems;
+          if(response.success){
+            this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED");
+          }else {
+            this.pictureSearchCompleted = true
+          }
+          
         },
         (error) => {
           console.error('Error uploading image:', error);
