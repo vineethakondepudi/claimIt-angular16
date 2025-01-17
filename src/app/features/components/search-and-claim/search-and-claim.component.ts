@@ -24,7 +24,7 @@ import { CreateClaimComponent } from '../create-claim/create-claim.component';
 import { ClaimitService } from '../../sharedServices/claimit.service';
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
@@ -90,7 +90,7 @@ export default class SearchAndClaimComponent implements OnInit {
     {
       label: 'QR Code',
       name: 'qrcode',
-      type: 'qrcode',  
+      type: 'qrcode',
       isSortable: true,
       position: "left",
       isChecked: true,
@@ -129,7 +129,7 @@ export default class SearchAndClaimComponent implements OnInit {
   files: any[] = [];
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
-  loader:boolean = false
+  loader: boolean = false
   items: any[] = [];
   showTooltip = true;
   searchResults: any = [];
@@ -138,7 +138,7 @@ export default class SearchAndClaimComponent implements OnInit {
   savedSearches: string[] = []; // List of saved searches
   selectedSavedSearch: string | null = null; // Currently selected saved search
 
-  categories: any[] = []; 
+  categories: any[] = [];
 
   displayedColumns: string[] = ['itemId', 'itemName', 'status', 'foundDate', 'categoryId', 'actions'];
   dataSource: any = [];
@@ -155,10 +155,10 @@ export default class SearchAndClaimComponent implements OnInit {
   searchCompleted!: boolean;
   pictureSearchCompleted!: boolean;
   categeorySearchCompleted!: boolean;
-  constructor(private http: HttpClient, private route: ActivatedRoute,private snackBar: MatSnackBar, private matDialog: MatDialog,private claimService:ClaimitService) {
-    this.loadSavedSearches(); 
-   }
-   private categoryIcons: { [key: string]: string } = {
+  constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar, private matDialog: MatDialog, private claimService: ClaimitService) {
+    this.loadSavedSearches();
+  }
+  private categoryIcons: { [key: string]: string } = {
     'Electronics': 'devices',
     'Personal Accessories': 'watch',
     'Clothes & Accessories': 'checkroom',
@@ -192,10 +192,10 @@ export default class SearchAndClaimComponent implements OnInit {
   hideDelay = { value: 200 };
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.itemName = params['id']; 
+      this.itemName = params['id'];
       if (this.itemName) {
         this.searchQuery = this.itemName.toString();
-        this.searchItems(); 
+        this.searchItems();
       }
     });
     this.loadCategories();
@@ -204,9 +204,9 @@ export default class SearchAndClaimComponent implements OnInit {
     this.hideDelay.value = 200;
   }
   @HostListener('window:resize', ['$event'])
-    onResize() {
-      this.checkViewport();
-    }
+  onResize() {
+    this.checkViewport();
+  }
   checkViewport() {
     this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
   }
@@ -216,10 +216,9 @@ export default class SearchAndClaimComponent implements OnInit {
   searchItems() {
     if (this.searchQuery.trim() !== '') {
       this.searchResults = []; // Clear previous results
-      this.searchCompleted = false; // Reset search completion status
-  
+      this.searchCompleted = false; // Reset search completion status  
       const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
-  
+
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
           if (Array.isArray(response)) {
@@ -237,7 +236,7 @@ export default class SearchAndClaimComponent implements OnInit {
       );
     }
   }
-  
+
   closeTooltip() {
     this.showTooltip = false;
   }
@@ -253,11 +252,11 @@ export default class SearchAndClaimComponent implements OnInit {
       );
   }
   onCategorySelect(categoryName: string): void {
-  this.selectedCategory = categoryName
+    this.selectedCategory = categoryName
     this.categerorydata = this.categories.filter(category => category.name === categoryName);
-  this.search()
+    this.search()
   }
-  
+
   public triggerFileInput(): void {
     if (this.fileInput && this.fileInput.nativeElement) {
       this.fileInput.nativeElement.click();
@@ -273,18 +272,18 @@ export default class SearchAndClaimComponent implements OnInit {
   search(): void {
     this.searchResults = [];
     this.loader = true;
-  
+
     const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${this.selectedCategory}`;
     this.http.get<any[]>(apiUrl).subscribe(
       (data: any) => {
         if (Array.isArray(data)) {
           this.categerorydata = data.filter(item => item.status === "UNCLAIMED");
           this.loader = false;
-  
+
           if (this.categerorydata.length === 0) {
-            this.categeoryerror = true; 
+            this.categeoryerror = true;
           } else {
-            this.categeoryerror = false; 
+            this.categeoryerror = false;
           }
         } else {
           this.loader = false;
@@ -305,8 +304,8 @@ export default class SearchAndClaimComponent implements OnInit {
         localStorage.setItem('savedSearches', JSON.stringify(this.savedSearches));
         this.snackBar.open('Search saved successfully!', 'Close', {
           duration: 3000,
-          horizontalPosition: 'right', 
-          verticalPosition: 'top',    
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
         });
       } else {
         this.snackBar.open('This search is already saved.', 'Close', {
@@ -349,7 +348,6 @@ export default class SearchAndClaimComponent implements OnInit {
       this.searchQuery = '';
       this.searchResults = [];
     } else {
-
     }
 
   }
@@ -360,7 +358,7 @@ export default class SearchAndClaimComponent implements OnInit {
       this.searchItems()
     }
   }
-  clearcategory(){
+  clearcategory() {
     this.categerorydata = []
   }
   selectCategory(category: string) {
@@ -370,11 +368,10 @@ export default class SearchAndClaimComponent implements OnInit {
     this.search();
   }
   public onSelect(event: any): void {
-    const files = event.target.files; 
+    const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/jfif'];
-  
       if (!allowedTypes.includes(file.type)) {
         const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
           width: '500px',
@@ -384,11 +381,11 @@ export default class SearchAndClaimComponent implements OnInit {
             btnName: 'OK',
           },
         });
-  
-        dialogRef.afterClosed().subscribe(() => {});
+
+        dialogRef.afterClosed().subscribe(() => { });
         return;
       }
-  
+
       const reader = new FileReader();
       reader.onload = () => {
         this.files.push({
@@ -397,15 +394,15 @@ export default class SearchAndClaimComponent implements OnInit {
         });
       };
       reader.readAsDataURL(file);
-     this.pictureSearchCompleted = false
+      this.pictureSearchCompleted = false
       this.uploadImage(file).subscribe(
         (response) => {
-          if(response.success){
+          if (response.success) {
             this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED");
-          }else {
+          } else {
             this.pictureSearchCompleted = true
           }
-          
+
         },
         (error) => {
           console.error('Error uploading image:', error);
@@ -414,7 +411,7 @@ export default class SearchAndClaimComponent implements OnInit {
     }
   }
   getCategoryIcon(name: string): string {
-    return this.categoryIcons[name] || 'help'; 
+    return this.categoryIcons[name] || 'help';
   }
   loadCategories(): void {
     this.http.get<any[]>('http://172.17.12.38:8081/api/admin/getcategories')
@@ -431,7 +428,6 @@ export default class SearchAndClaimComponent implements OnInit {
   public uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
-
     const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
@@ -444,7 +440,7 @@ export default class SearchAndClaimComponent implements OnInit {
   claimItem(item: Item) {
     const dialogRef = this.matDialog.open(CreateClaimComponent, {
       width: "500px",
-      height:'250px',
+      height: '250px',
       data: {
         requiredData: item,
         title: 'Request Claim'
@@ -452,19 +448,19 @@ export default class SearchAndClaimComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
-      if(data){
+      if (data) {
         const REQBODY = {
-          userName:data.value.name,
-          userEmail:data.value.email,
-          itemId:item.itemId
+          userName: data.value.name,
+          userEmail: data.value.email,
+          itemId: item.itemId
         }
         this.loader = true
-        this.claimService.createClaimRequest(REQBODY).subscribe((Res:any)=>{
-          if(Res){
+        this.claimService.createClaimRequest(REQBODY).subscribe((Res: any) => {
+          if (Res) {
             const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
               width: "500px",
               data: {
-                status:'Success',
+                status: 'Success',
                 msg: 'Claim Request Created successfully',
                 btnName: "OK",
               },
