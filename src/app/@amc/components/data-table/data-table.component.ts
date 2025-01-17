@@ -83,6 +83,8 @@ export class DataTableComponent<T> {
   @Input() pageSizeOptions: number[] = [5, 10, 15];
   @Input() tableColumns: Array<TableColumn> = [];
   @Input() showExport = false;
+  selectedImage: string | null = null; 
+  showImagePreview: boolean = false;
   @Output() exportData = new EventEmitter();
   displayedColumns: Array<string> = [];
   isOpen = false;
@@ -112,6 +114,16 @@ export class DataTableComponent<T> {
   }
 
   handlePage(params: PageEvent) {
+  }
+  openImagePreview(imageSrc: string) {
+    this.selectedImage = imageSrc;
+    this.showImagePreview = true;
+  }
+
+  // Method to close the image preview modal
+  closeImagePreview() {
+    this.selectedImage = null;
+    this.showImagePreview = false;
   }
   generateQrCodeData(element: any): string {
     return JSON.stringify({
