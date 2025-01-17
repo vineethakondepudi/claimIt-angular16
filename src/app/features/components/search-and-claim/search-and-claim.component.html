@@ -17,7 +17,7 @@
     </div>
     <div *ngIf="searchCompleted && searchResults.length === 0" class="no-results-container">
       <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-      <p class="pl-[100px]">No results found</p>
+      <p class="pl-[100px] font-bold text-lg">No results found</p>
     </div>
     <div *ngIf="searchResults?.length > 0" class="flex-grow  mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
       <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
@@ -46,7 +46,7 @@
     </div>
     <div *ngIf="pictureSearchCompleted" class="no-results-container">
       <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-      <p class="pl-[100px]">No results found.</p>
+      <p class="pl-[100px] font-bold text-lg">No results found.</p>
     </div>
     <mat-form-field appearance="fill" class="category-dropdown">
       <mat-label>Search with category</mat-label>
@@ -58,7 +58,7 @@
     </mat-form-field>
     <div *ngIf="categeoryerror" class="no-results-container">
       <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-      <p class="pl-[100px]">No results found.</p>
+      <p class="pl-[100px] font-bold text-lg">No results found.</p>
     </div>
     <div *ngIf="!categeoryerror && categerorydata?.length > 0" class="flex-grow mt-5 bg-[#E8F2F3]">
       <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
