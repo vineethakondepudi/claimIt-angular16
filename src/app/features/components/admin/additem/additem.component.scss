@@ -3,23 +3,11 @@
     overflow-y: auto;
     overflow-x: hidden; 
 }
-/* Tailwind Breakpoints */
 @media (min-width: 768px) {
-    .hidden.md\:flex {
-        display: flex !important;
-    }
     .md\:hidden {
         display: none !important;
     }
 }
-@media (max-width: 767px) {
-    .hidden.md\:flex {
-        display: none !important;
-    }
-    .md\:hidden {
-        display: flex !important;
-    }
-}
-.table{
-    margin-bottom: -40px
+.table {
+    margin-bottom: -40px;
 }

@@ -1,22 +1,10 @@
 <div class="min-h-screen flex flex-col">
-    <!-- Top Section -->
     <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] mb-[-40px]">
-        <div @fadeInRight class="flex flex-row justify-end px-5">
-            <button 
-              class="flex items-center bg-[#00897b] text-white px-4 py-2 rounded shadow hover:bg-[#00695c]" 
-              (click)="onAddItemClick()">
-              <mat-icon class="text-white mr-2">add</mat-icon>
-              <span class="font-bold text-l">Add-Item</span>
-            </button>
-          </div>
-          
-          
         <div class="flex-grow px-5">
             <div class="flex items-center justify-between shadow">
                 <p class="text-gray-600 text-sm">{{ currentDate | date: 'dd MMMM yyyy' }}</p>
-                <!-- Add Item Button for Desktop -->
                 <button mat-raised-button color="primary" (click)="onAddItemClick()"
-                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600 hidden md:flex">
+                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600">
                     <mat-icon>add</mat-icon>
                     <span class="text-sm font-medium">Add Item</span>
                 </button>
@@ -36,7 +24,7 @@
         <app-form-footer></app-form-footer>
     </div>
     <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
-        <div class="flex justify-between items-center h-16 px-4 mx-4">
+        <div class="grid grid-cols-2 items-center h-16 px-4 mx-4">
             <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
                 [routerLink]="'/claimit/dashboard'">
                 <mat-icon class="text-[#00897b] text-xl">home</mat-icon>
