@@ -1,36 +1,35 @@
 <div class="min-h-screen flex flex-col">
     <!-- Top Section -->
     <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] mb-[-40px]">
-        <div @fadeInRight class="flex flex-row justify-between px-5">
-            <div class="flex flex-col">
-                <span class="max-w-3xs mr-6 font-bold text-xl  font-weight: 900">Add-Item</span>
-            </div>
-        </div>
+        <div @fadeInRight class="flex flex-row justify-end px-5">
+            <button 
+              class="flex items-center bg-[#00897b] text-white px-4 py-2 rounded shadow hover:bg-[#00695c]" 
+              (click)="onAddItemClick()">
+              <mat-icon class="text-white mr-2">add</mat-icon>
+              <span class="font-bold text-l">Add-Item</span>
+            </button>
+          </div>
+          
+          
         <div class="flex-grow px-5">
             <div class="flex items-center justify-between shadow">
                 <p class="text-gray-600 text-sm">{{ currentDate | date: 'dd MMMM yyyy' }}</p>
                 <!-- Add Item Button for Desktop -->
-                <button mat-raised-button color="primary" 
-                    (click)="onAddItemClick()" 
+                <button mat-raised-button color="primary" (click)="onAddItemClick()"
                     class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md shadow hover:bg-teal-600 hidden md:flex">
                     <mat-icon>add</mat-icon>
                     <span class="text-sm font-medium">Add Item</span>
                 </button>
             </div>
-            <div *ngIf="isOrganizationSelected" class="flex flex-col items-center lablestyle space-y-4">            
+            <div *ngIf="isOrganizationSelected" class="flex flex-col items-center lablestyle space-y-4">
             </div>
         </div>
     </div>
     <!-- Data Table Section -->
     <div class="flex-grow mt-14 mx-3 table">
-        <app-data-table 
-            (previewImage)="previewImage($event)" 
-            [tableColumns]="displayColumns" 
-            (sort)="handleSort($event)" 
-            [isPageable]="true" 
-            [tableData]="searchResults"
-            [paginationSizes]="[5, 10, 15, 20]" 
-            [defaultPageSize]="15">
+        <app-data-table (previewImage)="previewImage($event)" [tableColumns]="displayColumns"
+            (sort)="handleSort($event)" [isPageable]="true" [tableData]="searchResults"
+            [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
     <div class="flex-none">
@@ -38,30 +37,17 @@
     </div>
     <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
         <div class="flex justify-between items-center h-16 px-4 mx-4">
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" [routerLink]="'/claimit/dashboard'">
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
+                [routerLink]="'/claimit/dashboard'">
                 <mat-icon class="text-[#00897b] text-xl">home</mat-icon>
                 <span class="text-xs mt-1">Home</span>
             </button>
-            <!-- <button class="flex flex-col items-center mx-6 hover:text-teal-500" [routerLink]="'/claimit/addItem'">
-                <mat-icon class="text-[#00897b] text-2xl">add_circle</mat-icon>
-                <span class="text-sm mt-1">Add Item</span>
-            </button> -->
-            <button mat-fab color="primary" 
-            (click)="onAddItemClick()" 
-            class="w-12 h-12 bg-teal-500 text-white rounded-full shadow hover:bg-teal-600  mx-[50px] mb-[60px] flex justify-center items-center">
-        <mat-icon>camera_alt</mat-icon>
-    </button>
-    <!-- <button class="flex flex-col items-center mx-6 hover:text-teal-500"  (click)="onAddItemClick()" >
-        <mat-icon class="text-[#00897b] text-2xl">camera_alt</mat-icon>
-    </button> -->
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" [routerLink]="'/claimit/search'">
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
+                [routerLink]="'/claimit/search'">
                 <mat-icon class="text-[#00897b] text-xl">rule</mat-icon>
                 <span class="text-xs mt-1">Approve/Claim</span>
             </button>
         </div>
     </div>
-    
-    
-
     <app-loader *ngIf="loader"></app-loader>
 </div>
