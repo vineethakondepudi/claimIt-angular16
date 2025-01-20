@@ -24,7 +24,7 @@
         [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
     </div>
     <hr *ngIf="searchResults.length === 0" class="my-4 border-gray-300" />
-    <div class="grid grid-cols-5 items-center gap-4 mb-6">
+    <div class="grid grid-cols-5 items-center gap-4 ">
       <span class="text-lg col-span-3">Search with a picture</span>
       <button mat-fab color="primary" (click)="triggerFileInput()" aria-label="Upload Image"
         class="flex justify-center items-center" matTooltip="Upload an image" [matTooltipShowDelay]="showDelay.value"
@@ -188,7 +188,7 @@
 </div>
 <div *ngIf="isMobileView && !searchResults?.length && !categerorydata?.length && !matchedItems?.length"
   class="relative flex flex-col items-center justify-center">
-  <img src="assets/claimitsearch.PNG" class="absolute w-35 h-35 mt-[28rem] object-contain bg-[#E8F2F3]" alt="Image" />
+  <img src="assets/claimitsearch.PNG" class="absolute w-35 h-35 mt-[18rem] object-contain bg-[#E8F2F3]" alt="Image" />
 </div>
 <!-- <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
     <div class="flex justify-between items-center h-16 px-4 ">
