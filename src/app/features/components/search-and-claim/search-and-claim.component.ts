@@ -241,7 +241,7 @@ export default class SearchAndClaimComponent implements OnInit {
     this.showTooltip = false;
   }
   fetchCategories(): void {
-    this.http.get<{ id: number; name: string }[]>('http://172.17.12.38:8081/api/admin/getcategories')
+    this.http.get<{ id: number; name: string }[]>('http://172.17.12.101:8081/api/admin/getcategories')
       .subscribe(
         (response) => {
           this.categories = response;
@@ -359,6 +359,7 @@ export default class SearchAndClaimComponent implements OnInit {
     }
   }
   clearcategory() {
+    this.categories = []
     this.categerorydata = []
   }
   selectCategory(category: string) {
@@ -414,7 +415,7 @@ export default class SearchAndClaimComponent implements OnInit {
     return this.categoryIcons[name] || 'help';
   }
   loadCategories(): void {
-    this.http.get<any[]>('http://172.17.12.38:8081/api/admin/getcategories')
+    this.http.get<any[]>('http://172.17.12.101:8081/api/admin/getcategories')
       .subscribe({
         next: (data) => {
           this.categories = data;
