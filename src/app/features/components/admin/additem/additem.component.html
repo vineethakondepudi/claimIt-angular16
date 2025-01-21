@@ -13,6 +13,10 @@
             </div>
         </div>
     </div>
+    <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
+        <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+      </div>
+      
     <!-- Data Table Section -->
     <div class="flex-grow mt-14 mx-3 table">
         <app-data-table (previewImage)="previewImage($event)" [tableColumns]="displayColumns"
@@ -20,6 +24,9 @@
             [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
+    <!-- <div *ngIf="isLoading" class="flex-grow  mt-14 mx-3 table">
+        <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+      </div> -->
     <div class="flex-none">
         <app-form-footer></app-form-footer>
     </div>

@@ -134,6 +134,7 @@ export default class SearchAndClaimComponent implements OnInit {
   showTooltip = true;
   searchResults: any = [];
   categeoryerror: boolean = false
+  isLoading :boolean =  false;
   searchQuery: string = ''; // Current search query
   savedSearches: string[] = []; // List of saved searches
   selectedSavedSearch: string | null = null; // Currently selected saved search
@@ -217,7 +218,7 @@ export default class SearchAndClaimComponent implements OnInit {
     if (this.searchQuery.trim() !== '') {
       this.searchResults = []; // Clear previous results
       this.searchCompleted = false; // Reset search completion status  
-      const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
+      const apiUrl = `http://172.17.12.101:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
 
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
@@ -271,14 +272,14 @@ export default class SearchAndClaimComponent implements OnInit {
   //categeory integration
   search(): void {
     this.searchResults = [];
-    this.loader = true;
+       this.isLoading = true;
 
-    const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${this.selectedCategory}`;
+    const apiUrl = `http://172.17.12.101:8081/api/users/search?query=${this.selectedCategory}`;
     this.http.get<any[]>(apiUrl).subscribe(
       (data: any) => {
         if (Array.isArray(data)) {
           this.categerorydata = data.filter(item => item.status === "UNCLAIMED");
-          this.loader = false;
+             this.isLoading = false;
 
           if (this.categerorydata.length === 0) {
             this.categeoryerror = true;
@@ -286,13 +287,13 @@ export default class SearchAndClaimComponent implements OnInit {
             this.categeoryerror = false;
           }
         } else {
-          this.loader = false;
+             this.isLoading = false;
           this.categeoryerror = true;
         }
       },
       (error: any) => {
         console.error('API Error:', error);
-        this.loader = false;
+           this.isLoading = false;
       }
     );
   }
@@ -429,7 +430,7 @@ export default class SearchAndClaimComponent implements OnInit {
   public uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
-    const picUrl = 'http://172.17.12.38:8081/api/users/search-by-image';
+    const picUrl = 'http://172.17.12.101:8081/api/users/search-by-image';
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });
@@ -455,7 +456,7 @@ export default class SearchAndClaimComponent implements OnInit {
           userEmail: data.value.email,
           itemId: item.itemId
         }
-        this.loader = true
+           this.isLoading = true
         this.claimService.createClaimRequest(REQBODY).subscribe((Res: any) => {
           if (Res) {
             const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
@@ -467,7 +468,7 @@ export default class SearchAndClaimComponent implements OnInit {
               },
             });
             dialogRef.afterClosed().subscribe((result) => {
-              this.loader = true
+                 this.isLoading = true
               this.search()
             });
           }

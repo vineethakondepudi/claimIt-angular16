@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RejectClaimComponent } from '../../../reject-claim/reject-claim.component';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-admin-search',
   standalone: true,
@@ -39,6 +40,7 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     LoaderComponent,
     MatDatepickerModule,
+    MatProgressSpinnerModule,
     MatIconModule,
     FormsModule,
     RouterModule], 
@@ -55,6 +57,7 @@ export default class AdminSearchComponent {
   showNoResults: boolean = true;
   adminSearch!: FormGroup
   loader: boolean = true;
+  isLoading :boolean =  false;
   displaycoloums: any = [
     {
       label: "Item Id",
@@ -156,7 +159,7 @@ export default class AdminSearchComponent {
   }
   
   search() {
-    this.loader = true
+       this.isLoading = true
     const reqbody = {
       mail: this.adminSearch.value.email ? this.adminSearch.value.email : '',
       status: this.adminSearch.value.status ? this.adminSearch.value.status : '',
@@ -166,7 +169,7 @@ export default class AdminSearchComponent {
 
     this.service.adminSearch(reqbody).subscribe((res: any) => {
       this.searchResults = res.data
-      this.loader = false
+         this.isLoading = false
     })
 
   }
@@ -174,7 +177,7 @@ export default class AdminSearchComponent {
 
   SearchAndClear(type: any) {
     if (type === 'clear') {
-      this.loader = true
+         this.isLoading = true
       this.searchResults = [];
       this.showNoResults = false;
       this.adminSearch.reset()
@@ -214,11 +217,11 @@ export default class AdminSearchComponent {
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
         const itemId = event.itemId; 
-        this.loader = true;
+           this.isLoading = true;
         this.service.adminRemoveItem(itemId).subscribe(
           (res: any) => {
             this.search(); // Refresh the data table
-            this.loader = false;
+               this.isLoading = false;
           },
           (error) => {
             console.error('Error removing item:', error); // Debug API error
@@ -244,7 +247,7 @@ export default class AdminSearchComponent {
           itemId: event.itemId ,
           "status": "PENDING_PICKUP",
         };
-        this.loader = true;
+           this.isLoading = true;
         this.service.approveOrRejectClaim(params).subscribe((res: any) => {
           const dialogRef = this.dialog.open(ConfirmationModalComponent, {
             width: "500px",
@@ -257,7 +260,7 @@ export default class AdminSearchComponent {
           dialogRef.afterClosed().subscribe((confirmed: any) => {
             this.search();
           });
-          this.loader = false;
+             this.isLoading = false;
         }, (error) => {
         });
       }
@@ -281,7 +284,7 @@ export default class AdminSearchComponent {
           reasonForReject:confirmed
         };
 
-        this.loader = true;
+           this.isLoading = true;
         this.service.approveOrRejectClaim(params).subscribe((res: any) => {
           const dialogRef = this.dialog.open(ConfirmationModalComponent, {
             width: "500px",
@@ -294,7 +297,7 @@ export default class AdminSearchComponent {
           dialogRef.afterClosed().subscribe((confirmed: any) => {
             this.search();
           });
-          this.loader = false;
+             this.isLoading = false;
         }, (error) => {
           console.error('Error removing item:', error);
         });
@@ -319,7 +322,7 @@ export default class AdminSearchComponent {
           userId:event.userId
         };
 
-        this.loader = true;
+           this.isLoading = true;
         this.service.markASClaimed(params).subscribe((res: any) => {
           const dialogRef = this.dialog.open(ConfirmationModalComponent, {
             width: "500px",
@@ -332,7 +335,7 @@ export default class AdminSearchComponent {
           dialogRef.afterClosed().subscribe((confirmed: any) => {
             this.search();
           });
-          this.loader = false;
+             this.isLoading = false;
         }, (error) => {
           console.error('Error removing item:', error);
         });

@@ -38,6 +38,7 @@
       </button>
     </div>
     <hr *ngIf="!pictureSearchCompleted" class="my-4 border-gray-700" />
+   
     <div class="flex-grow  bg-[#E8F2F3]" *ngIf="matchedItems?.length > 0">
       <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
         [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
@@ -63,6 +64,7 @@
       <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
       <p class="pl-[100px] font-bold text-lg">No results found.</p>
     </div>
+   
     <div *ngIf="!categeoryerror && categerorydata?.length > 0" class="flex-grow mt-5 bg-[#E8F2F3]">
       <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
         [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"
@@ -175,6 +177,9 @@
       [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)"
       (sort)="handleSort($event)"></app-data-table>
   </div>
+  <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
+    <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+  </div>
   <div *ngIf="isMobileView &&!searchResults?.length && !categerorydata?.length && !matchedItems?.length"
     class="relative flex flex-col items-center justify-center">
     <img src="assets/noresults.png" class="absolute w-56 mt-36 object-contain bg-[#E8F2F3]" alt="Image" />
@@ -208,6 +213,9 @@
           
     </div>
 </div> -->
+  <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
+      <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+    </div>
 <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
   <div class="grid grid-cols-3 items-center h-16 px-4">
       <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" [routerLink]="'/claimit/dashboard'">

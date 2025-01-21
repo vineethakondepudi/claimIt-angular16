@@ -16,6 +16,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export interface TableColumn {
   label: string;
   name: string;
@@ -42,7 +43,8 @@ export interface TableColumn {
     MatDialogModule,
     NgxDropzoneModule,
     LoaderComponent,
-    RouterModule
+    RouterModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './additem.component.html',
   styleUrls: ['./additem.component.scss']
@@ -54,6 +56,7 @@ export default class AdditemComponent implements OnInit {
   searchQuery: string = '';
   isMobileView = false;
   currentDate: Date = new Date();
+  isLoading :boolean =  false;
   @Input() containerPanelOpened: boolean = false;
   loader:boolean=true;
 
@@ -136,7 +139,7 @@ export default class AdditemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
           this.fetchData();
-          this.loader = true;
+          this.isLoading  = true;
         });
       },
       (error) => {
@@ -147,14 +150,16 @@ export default class AdditemComponent implements OnInit {
 
   fetchData(): void {
     const query = this.searchQuery.trim();
+    this.isLoading  = true;
     this.service.listOfItems(query).subscribe(
       (res: any) => {
         if (res?.data) {
           this.searchResults = res.data;
+          this.isLoading  = false;
           this.tableData = res.data;
           this.loader = false
         } else {
-          this.loader = false
+          this.isLoading  = false;
           console.error('Unexpected API response format:', res);
           this.searchResults = [];
           this.tableData = [];

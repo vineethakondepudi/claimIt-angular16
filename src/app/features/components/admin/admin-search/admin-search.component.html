@@ -73,7 +73,9 @@
             </mat-card>
         </div>
     </div>
-
+    <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
+        <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+      </div>
     <div class="flex-grow mt-14 mx-3">
         <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)"
             (sort)="handleSort($event)" (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)"
@@ -104,5 +106,5 @@
               
         </div>
     </div>
-    <app-loader *ngIf="loader"></app-loader>
+    <!-- <app-loader *ngIf="loader"></app-loader> -->
 </div>
