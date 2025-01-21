@@ -21,6 +21,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
+import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
 @Component({
   selector: 'app-data-table',
   standalone: true,
@@ -58,9 +59,9 @@ export class DataTableComponent<T> {
   @Input() set tableData(data: []) {
     this.setTableDataSource(data);
   }
-  @Input() showUnClaim:boolean = false
-  @Input() removeArchive:boolean = false
-  @Input() adminActions:boolean = false
+  @Input() showUnClaim: boolean = false
+  @Input() removeArchive: boolean = false
+  @Input() adminActions: boolean = false
   @Output() unClaim = new EventEmitter()
   @Output() ClaimItem = new EventEmitter()
   @Output() remove = new EventEmitter()
@@ -83,16 +84,24 @@ export class DataTableComponent<T> {
   @Input() pageSizeOptions: number[] = [5, 10, 15];
   @Input() tableColumns: Array<TableColumn> = [];
   @Input() showExport = false;
-  selectedImage: string | null = null; 
+  selectedImage: string | null = null;
   showImagePreview: boolean = false;
   @Output() exportData = new EventEmitter();
   displayedColumns: Array<string> = [];
   isOpen = false;
   isMobileView = false;
-  constructor(public readonly router: Router, private datePipe: DatePipe, private dialog: MatDialog) { }
+  searchQuery: string = '';
+  addItemSearchResults: any
+  currentRoute: any
+  getData: any
+  constructor(public router: Router, private datePipe: DatePipe, private dialog: MatDialog, private service: ClaimitService) { }
   ngOnInit() {
+    this.currentRoute = this.router.url;
+    console.log(this.currentRoute);
+    this.currentRoute.includes("/addItem")
+    this.getData = this.currentRoute.includes("/addItem")
+    this.addItem()
     this.displayedColumns = this.tableColumns.map((col) => col.name);
-
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
       return col.isChecked === true;
     });
@@ -100,9 +109,25 @@ export class DataTableComponent<T> {
       (tableColumn: TableColumn) => tableColumn.name
     );
     this.displayedColumns = columnNames;
+
     this.checkViewport();
   }
+  addItem() {
+    const query = this.searchQuery.trim();
+    this.service.listOfItemsAddItem(query).subscribe(
+      (res: any) => {
+        this.addItemSearchResults = Object.keys(res).map((key) => ({
+          date: key.split(":")[1], // Extract the date part from "date:YYYY/MM/DD"
+          items: res[key]
+        }));
+        console.log(this.addItemSearchResults);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
 
+  }
   setTableDataSource(data: T[]) {
     this.dataSource = new MatTableDataSource<T>(data);
     this.dataSource.paginator = this.paginator;
@@ -130,23 +155,23 @@ export class DataTableComponent<T> {
       id: element.uniqueId,
       name: element.name,
       status: element.status,
-       verificationLink: `http://localhost:4200/assets/verification.html?itemId=${element.itemId}`
+      verificationLink: `http://localhost:4200/assets/verification.html?itemId=${element.itemId}`
     });
   }
 
   openQrDialog(element: any): void {
     const dialogRef = this.dialog.open(QrcodeDialogComponent, {
-          width: "300px",
-          data: {
-            requiredData:  element,
-            title: 'qrcode'
-          },
-        });
-    
-        dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-        });
-      }
-  
+      width: "300px",
+      data: {
+        requiredData: element,
+        title: 'qrcode'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    });
+  }
+
   applyFilter() {
     this.dataSource.filter = this.searchKeyword.trim().toLowerCase();
   }
@@ -159,8 +184,7 @@ export class DataTableComponent<T> {
     this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
   }
 
-  viewDetails(element: any) {
-  }
+
   public handleToggleColumns(col: TableColumn) {
     const isChecked = col.isChecked;
     if (isChecked) {
@@ -232,13 +256,13 @@ export class DataTableComponent<T> {
   removeItem(data: any) {
     this.remove.emit(data)
   }
-  approveClaimReq(data:any){
+  approveClaimReq(data: any) {
     this.approveClaim.emit(data)
   }
-  rejectClaimReq(data:any){
+  rejectClaimReq(data: any) {
     this.rejectClaim.emit(data)
   }
-  markAsClaimed(data:any){
+  markAsClaimed(data: any) {
     this.markClaimed.emit(data)
   }
   openPreviewImage(data: any) {

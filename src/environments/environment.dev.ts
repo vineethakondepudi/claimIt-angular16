@@ -4,6 +4,7 @@ export const environment = {
     getAllItems:'http://172.17.12.101:8081/api/users/claim-history',
     unClaim:'http://172.17.12.101:8081/api/users/updateStatus',
     listOfItems:'http://172.17.12.101:8081/api/admin/listOfItems',
+    listOfItemsAddItem:'http://172.17.12.101:8081/api/admin/grouped-items',
     organizationList:'http://172.17.12.101:8081/api/admin/listOfOrganisation',
     adminUploadItem:'http://172.17.12.101:8081/api/admin/upload',
     adminRemoveItem:'http://172.17.12.101:8081/api/admin/archive-expired-items',

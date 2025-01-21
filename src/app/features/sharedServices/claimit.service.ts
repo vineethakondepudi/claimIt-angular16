@@ -31,7 +31,9 @@ export class ClaimitService {
   public listOfItems(query: any) {
     return this.http.get(environment.listOfItems);
   }
-
+  public listOfItemsAddItem(query: any) {
+    return this.http.get(environment.listOfItemsAddItem);
+  }
   //Admin login 
   public adminLogin(email: string, password: string) {
     const loginData = { email, password };
