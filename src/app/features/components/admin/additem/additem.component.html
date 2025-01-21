@@ -13,18 +13,14 @@
             </div>
         </div>
     </div>
-    <div *ngIf="isMobileView" class="mt-14">
-        <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-        <p class="pl-[100px] font-bold text-lg">No results found</p>
-      </div>
     <!-- Data Table Section -->
-    <div  *ngIf="!isMobileView" class="flex-grow mt-14 mx-3 table">
+    <div class="flex-grow mt-14 mx-3 table">
         <app-data-table (previewImage)="previewImage($event)" [tableColumns]="displayColumns"
             (sort)="handleSort($event)" [isPageable]="true" [tableData]="searchResults"
             [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
     </div>
-    <div *ngIf="!isMobileView" class="flex-none">
+    <div class="flex-none">
         <app-form-footer></app-form-footer>
     </div>
     <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
@@ -41,5 +37,5 @@
             </button>
         </div>
     </div>
-    <app-loader *ngIf="loader && !isMobileView"></app-loader>
+    <!-- <app-loader *ngIf="loader"></app-loader> -->
 </div>
