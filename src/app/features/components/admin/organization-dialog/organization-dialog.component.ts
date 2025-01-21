@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject } from '@angular/core';
+import { Component, HostListener, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
@@ -10,16 +10,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from "@angular/material/divider";
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
 export class OrganizationDialogComponent {
+  @ViewChild(MatStepper) stepper!: MatStepper;
   organizationList: any[] = [];
   isOrganizationSelected: boolean = false;
   files: { file: File, preview: string }[] = [];
@@ -28,12 +30,15 @@ export class OrganizationDialogComponent {
   longitude: number | null = null;
   selectedOrgId: string = 'Miracle';
   selected: any;
+  step1Form!: FormGroup;
+  step2Form!: FormGroup;
   isMobileScreen: boolean = false;
+  uploaddata: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
     private service: ClaimitService,
-    private matDialog: MatDialog,
+    private matDialog: MatDialog,  private fb: FormBuilder,
   ) {
     this.organizationList = data.organizationList;
     
@@ -46,6 +51,13 @@ export class OrganizationDialogComponent {
   }
   ngOnInit(): void {
     this.checkScreenSize();
+    this.step1Form = this.fb.group({
+      image: ['', Validators.required]
+    });
+
+    this.step2Form = this.fb.group({
+      preview: ['', Validators.required]
+    });
   }
   onOrganizationSelect(orgId: string): void {
     this.selectedOrgId = orgId;
@@ -91,29 +103,6 @@ export class OrganizationDialogComponent {
     }
   }
   
-  // onLocationChange(): void {
-  //   switch (this.selectedLocation) {
-  //     case 'Miracle City':
-  //       this.latitude = 17.739707548305788;
-  //       this.longitude = 83.3433213167522;
-  //       break;
-  //     case 'Miracle Valley': 
-  //       this.latitude = 17.814901263799708;
-  //       this.longitude =  83.39172982091242;
-  //       break;
-  //     case 'Miracle Heights': 
-  //       this.latitude = 17.809998290809897;
-  //       this.longitude =  83.39687966178053; 
-  //       break;
-  //     case 'Miracle Global HQ':
-  //       this.latitude = 42.48540914670753;
-  //       this.longitude = -83.49780041745922;
-  //       break;
-  //     default:
-  //       this.latitude = null;
-  //       this.longitude = null;
-  //   }
-  // }
   
 
   onRemove(file: any): void {
@@ -121,6 +110,7 @@ export class OrganizationDialogComponent {
   }
 
   onUploadImage(): void {
+    this.files = [];
     if (this.files.length > 0 && this.selectedOrgId) {
       const formData = new FormData();
       formData.append('image', this.files[0].file);
@@ -131,7 +121,6 @@ export class OrganizationDialogComponent {
           this.isOrganizationSelected = false;
           this.files = [];
           
-         
           this.dialogRef.close();  
         },
         (error) => {
@@ -143,17 +132,37 @@ export class OrganizationDialogComponent {
     }
     
   }
+  // submit(): void {
+  //   if (this.files.length > 0 && this.selectedOrgId) {
+  //     const formData = new FormData();
+  //     formData.append('image', this.files[0].file);
+  //     // formData.append('orgId', this.selectedOrgId);
+  
+  //     this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
+  //       (response) => {
+  //         this.isOrganizationSelected = false;
+  //         this.files = [];
+  //         this.dialogRef.close();  
+  //       },
+  //       (error) => {
+  //         console.error('Error uploading file:', error);
+  //       }
+  //     );
+  //   } else {
+  //     console.warn('No file selected for upload.');
+  //   }
+  // }
   submit(): void {
     if (this.files.length > 0 && this.selectedOrgId) {
       const formData = new FormData();
       formData.append('image', this.files[0].file);
-      // formData.append('orgId', this.selectedOrgId);
-  
+      formData.append('orgId', this.selectedOrgId);
+
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
-          this.isOrganizationSelected = false;
-          this.files = [];
-          this.dialogRef.close();  
+          // this.files = [];
+          // this.dialogRef.close();
+          this.uploaddata= response.description
         },
         (error) => {
           console.error('Error uploading file:', error);
@@ -163,9 +172,8 @@ export class OrganizationDialogComponent {
       console.warn('No file selected for upload.');
     }
   }
-
   onCloseDialog() {
-    this.dialogRef.close('no');
+    this.dialogRef.close();
   }
   
  

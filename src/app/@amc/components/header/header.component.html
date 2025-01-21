@@ -2,7 +2,7 @@
   <!-- Sidebar -->
   <mat-sidenav 
     [mode]="isMobile ? 'over' : 'side'" 
-    [opened]="!isMobile || opened" 
+    [opened]="!isMobile" 
     class="bgcolor" 
     *ngIf="authSuccess && !router.url.includes('login')"
     [ngClass]="{ 'mobile-sidebar': isMobile }">
