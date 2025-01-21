@@ -74,28 +74,31 @@
                 (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
                 Claim
               </button>
-              <button *ngIf="removeArchive" (click)="removeItem(element)" [disabled]="element.status === 'PENDING_PICKUP'"
-                mat-raised-button color="warn" class="txt-button">
+              <button *ngIf="removeArchive" (click)="removeItem(element)"
+                [disabled]="element.status === 'PENDING_PICKUP'" mat-raised-button color="warn" class="txt-button">
                 Remove
               </button>
               <div *ngIf="adminActions">
-                <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" matTooltip=""
-                  matTooltipHideDelay="100">
+                <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu"
+                  matTooltip="" matTooltipHideDelay="100">
                   <mat-icon>more_vert</mat-icon>
                 </button>
-                <mat-menu #menu="matMenu"  class="px-4 py-2" (click)="$event.stopPropagation()" style="width: 150px;">
-                  <button   [disabled]="element.status !== 'PENDING_APPROVAL'" 
-                  mat-stroked-button color="primary" class="cancel-button" (click)="approveClaimReq(element)">
+                <mat-menu #menu="matMenu" class="px-4 py-2" (click)="$event.stopPropagation()" style="width: 150px;">
+                  <button [disabled]="element.status !== 'PENDING_APPROVAL'" mat-stroked-button color="primary"
+                    class="cancel-button" (click)="approveClaimReq(element)">
                     Approve
                   </button><br><br>
-                  <button   [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'"  mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
+                  <button [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'"
+                    mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
                     Reject
                   </button><br><br>
-                  <button [disabled]="element.status !== 'REJECTED' && element.status !== 'UNCLAIMED'" (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
+                  <button [disabled]="element.status !== 'REJECTED' && element.status !== 'UNCLAIMED'"
+                    (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
                     Remove
                   </button><br><br>
-                  <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)" mat-stroked-button color="primary" class="cancel-button">
-                   Claimed
+                  <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)"
+                    mat-stroked-button color="primary" class="cancel-button">
+                    Claimed
                   </button>
                 </mat-menu>
               </div>
@@ -165,39 +168,39 @@
     <h2 class="text-lg font-bold">{{ group.date }}</h2>
     <div class="grid grid-cols-2 gap-4 mt-2">
       <div *ngFor="let item of group.items" class="card border rounded-lg shadow-md p-4">
-        <img *ngIf="item.image" [src]="'data:image/jpeg;base64,' + item.image" (click)="openImagePreview('data:image/jpeg;base64,' + item.image)" 
-             alt="Item Image" 
-             class="w-full h-[150px] object-contain rounded-md" />
-              <h3 class="font-bold text-sm">{{ item.name }}</h3>              
-            <div class="grid-cols-2  items-center">
-              <h3 class="font-bold text-sm">{{ item.uniqueId }}</h3>
-              <button (click)="openQrDialog(item)" class="flex flex-col items-center text-gray-600 hover:text-teal-500">
-                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-                <span class="text-xs">QR Code</span>
-              </button>
-            </div>
+        <img *ngIf="item.image" [src]="'data:image/jpeg;base64,' + item.image"
+          (click)="openImagePreview('data:image/jpeg;base64,' + item.image)" alt="Item Image"
+          class="w-full h-[150px] object-contain rounded-md" />
+        <!-- <h3 class="font-bold text-sm">{{ item.name }}</h3>               -->
+        <div class="grid grid-cols-2 items-center gap-4 mt-2">
+          <h3 class="font-bold text-sm">{{ item.name }}</h3>
+          <button (click)="openQrDialog(item)" class="flex flex-col items-center text-gray-600 hover:text-teal-500">
+            <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+            <span class="text-xs">QR Code</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
-
-<div *ngIf="isMobileView && dataSource.data.length > 0 && !getData"
-  class="grid grid-cols-2 gap-2 p-2" style="margin-top: -15px;"  >
+<div *ngIf="isMobileView && dataSource.data.length > 0 && !getData" class="grid grid-cols-2 gap-2 p-2"
+  style="margin-top: -15px;">
   <div class="card border rounded-lg shadow-md p-2" *ngFor="let element of dataSource.data">
     <img *ngIf="element.image" [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image"
-         class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto"
-         (click)="openImagePreview('data:image/jpeg;base64,' + element.image)" />
+      class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto"
+      (click)="openImagePreview('data:image/jpeg;base64,' + element.image)" />
     <div *ngFor="let column of tableColumns">
       <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
         <div class="flex flex-col space-y-2">
           <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
           <div class="grid grid-cols-2 gap-4 items-center">
             <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-                    (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4 mb-2">
+              (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4 mb-2">
               Claim
             </button>
             <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-                    class="text-sm py-2 px-4 mt-4" (click)="openQrDialog(element)">
+              class="text-sm py-2 px-4 mt-4" (click)="openQrDialog(element)">
               <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
               <span class="text-xs">QR Code</span>
             </button>
@@ -208,23 +211,24 @@
             <strong>{{ column.label }}:</strong> {{ element[column.name] }}
           </div>
           <div *ngIf="column.name === 'name'" class="flex items-center">
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" (click)="openQrDialog(element)">
+            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
+              (click)="openQrDialog(element)">
               <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
               <span class="text-xs">QR Code</span>
             </button>
           </div>
-        </div>        
+        </div>
       </div>
-    </div>    
+    </div>
   </div>
 </div>
 
 <div *ngIf="showImagePreview" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
   <div class="bg-white p-4 rounded-lg">
-    <button (click)="closeImagePreview()"  >
-      <mat-icon  class="bg-red-500 text-white " >close_small</mat-icon>
+    <button (click)="closeImagePreview()">
+      <mat-icon class="bg-red-500 text-white ">close_small</mat-icon>
     </button>
-    <img [src]="selectedImage" alt="Image Preview" class="w-60 h-60 object-cover"/>
+    <img [src]="selectedImage" alt="Image Preview" class="w-60 h-60 object-cover" />
   </div>
 </div>
 <!-- No Data Placeholder -->

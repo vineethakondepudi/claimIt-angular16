@@ -119,8 +119,7 @@ export default class AdditemComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkViewport();
-    // this.fetchData();
-    
+    this.fetchData();    
   }
   public handleSort(sortParams: any) {
     this.defaultSearchQuery.sortBy = sortParams.direction;
@@ -166,12 +165,6 @@ export default class AdditemComponent implements OnInit {
       }
     );
   }
-  
-
- 
-  
-  
-  
 
   onUploadImage(): void {
     if (this.files.length > 0) {
