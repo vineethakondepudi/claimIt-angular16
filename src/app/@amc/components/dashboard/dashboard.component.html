@@ -242,6 +242,9 @@
   <div class="swiper-container px-6 py-4">
     <h2 class="font-bold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] mb-4">Recently Reported Items</h2>
     <div class="swiper-wrapper flex md:flex-row flex-col">
+      <div *ngIf="isLoading" class="flex justify-center mt-4 mx-4">
+        <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+      </div>
       <div *ngFor="let item of filteredSlides.slice(0, showMore ? filteredSlides.length : 2)"
         class="swiper-slide p-4 flex justify-center items-start w-full md:w-auto">
         <mat-card
@@ -375,6 +378,3 @@
 <div class="flex-none">
   <app-form-footer></app-form-footer>
 </div>
-<!-- <div *ngIf="loader">
-  <app-loader></app-loader>
-</div> -->

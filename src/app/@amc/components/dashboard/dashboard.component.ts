@@ -36,6 +36,7 @@ import { fadeInUp400ms } from '../../animations/fade-in-up.animation'
 import { MatExpansionModule } from '@angular/material/expansion'
 import { ChatService } from '../service/chat.service';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 interface CheckIn {
   name: string
   type: string
@@ -72,6 +73,7 @@ interface Item {
     LoaderComponent,
     MatTooltipModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     FormsModule,
     MatInputModule,
     MatExpansionModule,
@@ -98,6 +100,7 @@ export default class DashboardComponent {
   customWasteInput: string = '';
   suggestions: string[] = [];
   userLocation: string = ''; 
+  isLoading: boolean = false;
   // cdRef: any
   constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef,private chatService: ChatService) {
     this.role = localStorage.getItem('role');
@@ -433,7 +436,7 @@ export default class DashboardComponent {
     this.searchQuery = input.value;
   }
   fetchSlides(): void {
-    this.loader = true;
+    this.isLoading = true;
     const apiUrl = 'http://172.17.12.38:8081/api/users/search';
     
     this.claimService.getUSerSlides().subscribe({
@@ -455,10 +458,11 @@ export default class DashboardComponent {
           };
         });
         this.slides.forEach((item: any) => this.startCountdown1(item));
-        this.loader = false;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error fetching slides:', err);
+        this.isLoading = false;
       }
     });
   }
