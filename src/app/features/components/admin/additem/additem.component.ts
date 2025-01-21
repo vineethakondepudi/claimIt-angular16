@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { DataTableComponent } from 'src/app/@amc/components/data-table/data-table.component'; 
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -52,6 +52,7 @@ export default class AdditemComponent implements OnInit {
   tableData: any[] = [];
   searchResults: any = [];
   searchQuery: string = '';
+  isMobileView = false;
   currentDate: Date = new Date();
   @Input() containerPanelOpened: boolean = false;
   loader:boolean=true;
@@ -117,7 +118,9 @@ export default class AdditemComponent implements OnInit {
   constructor(private service: ClaimitService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.fetchData();
+    this.checkViewport();
+    // this.fetchData();
+    
   }
   public handleSort(sortParams: any) {
     this.defaultSearchQuery.sortBy = sortParams.direction;
@@ -133,16 +136,8 @@ export default class AdditemComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
-          if (selectedOrgId) {
-            this.selectedOrgId = selectedOrgId; 
-            this.isOrganizationSelected = true; 
-            
-          } else {
-            this.isOrganizationSelected = false; 
-            this.fetchData();
-            this.loader = true;
-            
-          }
+          this.fetchData();
+          this.loader = true;
         });
       },
       (error) => {
@@ -202,6 +197,14 @@ export default class AdditemComponent implements OnInit {
    
   }
   
+@HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkViewport();
+  }
+
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
+  }
 
   
   previewImage(event: any) {

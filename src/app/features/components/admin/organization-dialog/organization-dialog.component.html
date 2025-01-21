@@ -1,4 +1,4 @@
-<mat-card class="w-full max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+<mat-card class="w-full max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg relative" style="max-height: 90vh; overflow-y: auto;">
   <button
     class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center border border-red-500 rounded-full text-red-500 hover:bg-red-100 focus:outline-none"
     (click)="onCloseDialog()"
@@ -7,47 +7,74 @@
   </button>
 
   <mat-card-content>
-    <h2 class="text-xl font-semibold mb-6 text-gray-800">Add an Item</h2>
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Add an Item</h2>
     <mat-divider></mat-divider>
 
     <mat-horizontal-stepper #stepper linear>
       <!-- Step 1: Image Upload -->
-      <mat-step label="Upload">
+      <mat-step>
+        <ng-template matStepLabel>Upload</ng-template>
         <div>
           <ngx-dropzone class="w-full" (change)="onSelectFile($event)" [multiple]="false" accept="image/*">
             <ngx-dropzone-label class="text-gray-500 text-center">
-              <span [ngClass]="{'hidden': isMobileScreen, 'block': !isMobileScreen}">Drag and drop an image here or click to upload</span>
-              <span [ngClass]="{'hidden': !isMobileScreen, 'block': isMobileScreen}">Tap to upload an image from your gallery or camera</span>
+              <span>Drag and drop an image here or click to upload</span>
             </ngx-dropzone-label>
             <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" (removed)="onRemove(f)">
               <img [src]="f.preview" alt="Image Preview" class="w-32 h-32 object-cover rounded-md" />
             </ngx-dropzone-preview>
           </ngx-dropzone>
         </div>
-        <div class="w-full">
-          <button mat-raised-button color="primary" class="mt-6 w-full" [disabled]="!files.length" (click)="stepper.next();submit()">
+        <div class="w-full flex justify-end">
+          <button mat-raised-button color="primary" class="mt-4" [disabled]="!files.length" (click)="stepper.next();submit()">
             <mat-icon>arrow_forward</mat-icon> Next
           </button>
         </div>
       </mat-step>
-
+    
       <!-- Step 2: Image Preview -->
-      <mat-step label="Preview">
+      <mat-step>
+        <ng-template matStepLabel>Preview</ng-template>
         <div class="mt-4">
           <div *ngIf="files.length > 0">
             <img [src]="files[0].preview" alt="Preview" class="w-full max-w-xs mx-auto rounded-md" />
           </div>
           <p *ngIf="files.length === 0" class="text-gray-500 text-center">No image selected.</p>
         </div>
-        <p>{{uploaddata}}</p>
-        <div class="w-full flex justify-between">
+        <div *ngIf="isLoading" class="flex justify-center mt-4">
+          <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+        </div>
+        <div *ngIf="!isLoading; else loading">
+          <ul>
+            <li *ngFor="let item of formattedData">
+              <strong>{{ item.key }}:</strong>
+              <span>
+                {{ isTruncated && item.key === 'description' ? (item.value | slice: 0: 100) + '...' : item.value }}
+                <a
+                  *ngIf="item.key === 'description'"
+                  href="javascript:void(0)"
+                  (click)="toggleTruncate()"
+                >
+                  {{ isTruncated ? 'Read More' : 'Show Less' }}
+                </a>
+              </span>
+            </li>
+          </ul>
+        </div>
         
-          <!-- <button mat-button (click)="stepper.previous()">Back</button> -->
-          <button mat-raised-button color="primary" class="mt-6 w-full" [disabled]="!files.length" (click)="onCloseDialog()">
+        <ng-template #loading>
+          <div class="flex justify-center mt-4">
+            <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
+          </div>
+        </ng-template>
+        
+        <div class="w-full flex justify-between">
+          <button mat-raised-button color="primary" class="mt-4 ml-auto" [disabled]="!files.length" (click)="onCloseDialog()">
             <mat-icon>check_circle</mat-icon> Submit
           </button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>
+    
+    
   </mat-card-content>
 </mat-card>
