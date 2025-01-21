@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -26,7 +26,7 @@ export default class LoginComponent {
   loginForm!: FormGroup;
   errMsg: any;
   hidePassword = true;
-
+  isMobileView = false;
   
   constructor(private router: Router, private fb: FormBuilder, private service: ClaimitService,
               private snackBar: MatSnackBar
@@ -79,9 +79,16 @@ export default class LoginComponent {
         }
       );
     }
+    this.checkViewport();
   }
   
-  
+  @HostListener('window:resize', ['$event'])
+    onResize() {
+      this.checkViewport();
+    }
+    checkViewport() {
+      this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
+    }
   userNavigate(){
     localStorage.setItem('isLogin', 'true');
     localStorage.setItem('role', 'user');
