@@ -19,4 +19,20 @@
       display: none; 
     }
   }
+  mat-step-header {
+    white-space: nowrap; /* Prevent truncation */
+    text-overflow: ellipsis;
+    overflow: visible; /* Ensure visibility */
+    min-width: 100px; /* Adjust based on label length */
+    flex-grow: 1; /* Allow labels to grow if needed */
+  }
+  
+  mat-horizontal-stepper {
+    width: 100%; /* Make the stepper take full width */
+  }
+  
+  mat-step-label {
+    font-size: 14px;
+    text-align: center;
+  }
   

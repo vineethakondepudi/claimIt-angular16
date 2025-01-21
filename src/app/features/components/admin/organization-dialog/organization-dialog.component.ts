@@ -12,11 +12,12 @@ import { MatDividerModule } from "@angular/material/divider";
 import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submission-modal/form-submission-modal.component';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatProgressSpinnerModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
@@ -33,7 +34,11 @@ export class OrganizationDialogComponent {
   step1Form!: FormGroup;
   step2Form!: FormGroup;
   isMobileScreen: boolean = false;
-  uploaddata: any;
+  uploaddata: string = '';
+  isTruncated: boolean = true;
+  isLoading: boolean = false;
+  formattedData:any;
+showFullData: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
@@ -103,7 +108,9 @@ export class OrganizationDialogComponent {
     }
   }
   
-  
+  toggleTruncate(): void {
+    this.isTruncated = !this.isTruncated;
+  }
 
   onRemove(file: any): void {
     this.files = this.files.filter(f => f !== file);
@@ -154,23 +161,34 @@ export class OrganizationDialogComponent {
   // }
   submit(): void {
     if (this.files.length > 0 && this.selectedOrgId) {
+      this.isLoading = true; // Start loading
       const formData = new FormData();
       formData.append('image', this.files[0].file);
       formData.append('orgId', this.selectedOrgId);
-
+  
       this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
         (response) => {
-          // this.files = [];
-          // this.dialogRef.close();
-          this.uploaddata= response.description
+          this.formatResponse(response);
+          this.isLoading = false;
         },
         (error) => {
           console.error('Error uploading file:', error);
+          this.isLoading = false;
         }
       );
     } else {
       console.warn('No file selected for upload.');
     }
+  }
+  
+  formatResponse(response: any): void {
+    const allowedKeys = ['description', 'title'];
+    this.formattedData = Object.entries(response)
+      .filter(([key]) => allowedKeys.includes(key))
+      .map(([key, value]) => ({ key, value }));
+  }
+  toggleReadMore(): void {
+    this.showFullData = !this.showFullData;
   }
   onCloseDialog() {
     this.dialogRef.close();

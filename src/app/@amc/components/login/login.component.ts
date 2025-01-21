@@ -37,6 +37,7 @@ export default class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+    this.checkViewport();
   }
 
   get email() {
@@ -68,7 +69,7 @@ export default class LoginComponent {
           if (response.isAdmin) {
             localStorage.setItem('isLogin', 'true');
             localStorage.setItem('role', 'admin');
-            this.router.navigate(['/claimit/dashboard']);
+            this.router.navigate(['/claimit/addItem']);
             this.service.loginResponse.next(true)
           } else {
             this.showToast(response.message);
@@ -79,7 +80,7 @@ export default class LoginComponent {
         }
       );
     }
-    this.checkViewport();
+  
   }
   
   @HostListener('window:resize', ['$event'])
