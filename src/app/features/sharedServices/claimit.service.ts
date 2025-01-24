@@ -111,5 +111,10 @@ export class ClaimitService {
     const url = `${environment.searchItems}?query=${encodeURIComponent(query)}`;
     return this.http.get<any[]>(url);
   }
-  
+  getadminData(): Observable<any> {
+    return this.http.get(environment.adminSearch);
+  }
+  getuserHistory(): Observable<any> {
+    return this.http.get(environment.userHistory);
+  }
 }

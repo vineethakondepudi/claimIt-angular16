@@ -1,9 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DataTableComponent } from '../data-table/data-table.component';
 import { MatButtonModule } from '@angular/material/button';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 interface Item {
   itemId: number;
   itemName: string;
@@ -73,9 +74,21 @@ export class SearchResultsDialogComponent {
       index: 1,
     },
   ]
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private router: Router,  private dialogRef: MatDialogRef<SearchResultsDialogComponent> ) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private router: Router, public dialog: MatDialog, private dialogRef: MatDialogRef<SearchResultsDialogComponent> ) {}
   claimItem(item: Item): void {
     this.dialogRef.close();
     this.router.navigate(['claimit/searchAndClaim'], { queryParams: { id: item.itemName } });
   }
+    previewImage(event: any) {
+      const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+        width: "500px",
+        data: {
+          requiredData: event,
+          title: 'Preview Image'
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      });
+    }
 }

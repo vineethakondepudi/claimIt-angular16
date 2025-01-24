@@ -54,6 +54,7 @@ export default class ViewOrUnclaimComponent {
   searchQuery: string = '';
   searchResults: any = [];
   initalDataResults: any = [];
+  initalData:any = [];
   showNoResults: boolean = true;
   isLoading:boolean=true;
   displaycoloums: any = [
@@ -87,7 +88,7 @@ export default class ViewOrUnclaimComponent {
     },
     {
       label: "Status",
-      name: "status",
+      name: "claimStatus",
       type: "text",
       isSortable: true,
       position: "left",
@@ -102,16 +103,7 @@ export default class ViewOrUnclaimComponent {
       position: "left",
       isChecked: true,
       index: 3,
-    },
-    {
-      label: "Action",
-      name: "action",
-      type: "text",
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 4,
-    },
+    }
   ]
   public statusDropDown: any = [
     { label: 'REJECTED', value: 'REJECTED' },
@@ -125,7 +117,15 @@ export default class ViewOrUnclaimComponent {
   }
   ngOnInit() {
     this.initialForm( )
-    this.search()
+    this.isLoading = true
+    this.initalDatatable()
+  }
+
+  initalDatatable(){
+    this.service.getuserHistory().subscribe((res: any) => {
+      this.initalData = res.claimHistory
+      this.isLoading = false;
+    })
   }
   initialForm() {
     this.viewUnclaimForm = this.fb.group({
@@ -148,18 +148,18 @@ export default class ViewOrUnclaimComponent {
     })
 
   }
-  listOfItems(){
-    this.isLoading = true
-    this.service.listOfItems(this.searchQuery).subscribe(
-      (res: any) => {
-        this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED");
-        this.isLoading = false
-      },
-      (error) => {
-        console.error('Error fetching search results:', error);
-      }
-    );
-  }
+  // listOfItems(){
+  //   this.isLoading = true
+  //   this.service.listOfItems(this.searchQuery).subscribe(
+  //     (res: any) => {
+  //       this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED");
+  //       this.isLoading = false
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching search results:', error);
+  //     }
+  //   );
+  // }
   SearchAndClear(type: any) {
     if (type === 'clear') {
       this.viewUnclaimForm.reset() 

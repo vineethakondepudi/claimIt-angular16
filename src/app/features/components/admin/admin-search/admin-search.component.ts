@@ -54,6 +54,7 @@ export default class AdminSearchComponent {
   @Input() containerPanelOpened: boolean = false;
   searchQuery: string = '';
   searchResults: any = [];
+  initalData: any = [];
   showNoResults: boolean = true;
   adminSearch!: FormGroup
   loader: boolean = true;
@@ -142,7 +143,13 @@ export default class AdminSearchComponent {
   }
   ngOnInit() {
     this.initializeAdminForm()
-    this.search()
+    // this.search()
+    this.isLoading = true
+    this.service.getadminData().subscribe((res: any) => {
+      this.initalData = res.data
+         this.isLoading = false
+    })
+
   }
   initializeAdminForm() {
     this.adminSearch = this.fb.group({
@@ -162,7 +169,7 @@ export default class AdminSearchComponent {
     const reqbody = {
       mail: this.adminSearch.value.email ? this.adminSearch.value.email : '',
       status: this.adminSearch.value.status ? this.adminSearch.value.status : '',
-      receivedDate: this.adminSearch.value.to ? this.dp.transform(this.adminSearch.value.to, 'yyyy-m-dd') : '',
+      receivedDate: this.adminSearch.value.to ? this.dp.transform(this.adminSearch.value.to) : '',
     }
 
     this.service.adminSearch(reqbody).subscribe((res: any) => {

@@ -79,6 +79,14 @@
             [defaultPageSize]="15">
         </app-data-table>
     </div>
+    <div *ngIf="!searchResults"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+        <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)"
+            (sort)="handleSort($event)" (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)"
+            [tableColumns]="displaycoloums" [adminActions]="true" (previewImage)="previewImage($event)"
+            [showUnClaim]="false" [isPageable]="true" [tableData]="initalData" [paginationSizes]="[5, 10, 15, 20]"
+            [defaultPageSize]="15">
+        </app-data-table>
+    </div>
     <div class="flex-none">
         <app-form-footer></app-form-footer>
     </div>
