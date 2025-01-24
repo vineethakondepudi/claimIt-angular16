@@ -147,7 +147,6 @@ export default class AdminSearchComponent {
   initializeAdminForm() {
     this.adminSearch = this.fb.group({
       email: (''),
-      from: (''),
       to: (''),
       status: (''),
       name:('')

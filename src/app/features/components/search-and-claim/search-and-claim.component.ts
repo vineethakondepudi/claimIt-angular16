@@ -433,7 +433,7 @@ listOfItems(){
     return this.categoryIcons[name] || 'help';
   }
   loadCategories(): void {
-    this.http.get<any[]>('http://172.17.12.38:8081/claimit/lookup')
+    this.http.get<any[]>('http://172.17.12.101:8081/api/admin/getcategories')
       .subscribe({
         next: (data) => {
           this.categories = data;

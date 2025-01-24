@@ -35,9 +35,10 @@
     <table mat-table [dataSource]="dataSource" matSort matSortDirection="asc" matTableFilter>
       <!-- Table Columns -->
       <ng-container class="font-bold" *ngFor="let tableColumn of tableColumns" [matColumnDef]="tableColumn.name">
-        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="tableColumn.name" disableClear>
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="tableColumn.name" disableClear style="color: #383945;">
           {{ tableColumn.label }}
         </th>
+      
         <td mat-cell *matCellDef="let element let i = index" class="col-data">
           <!-- Render Data Based on Type -->
           <div>
@@ -59,12 +60,16 @@
             </div>
             <div *ngIf="tableColumn.label === 'Status'">
               <div class="rounded column-overflow px-2 py-1 font-medium text-xs flex-none max-w-fit"
-                [ngStyle]="{'background-color': getColor(element, tableColumn.name)}"
+                [ngStyle]="{
+                  'background-color': getColor(element, tableColumn.name).backgroundColor,
+                  'color': getColor(element, tableColumn.name).textColor
+                }"
                 matTooltip="{{ element | dataPropertyGetter : tableColumn.name }}" appTooltip
                 matTooltipClass="custom-tooltip">
                 {{ element | dataPropertyGetter : tableColumn.name }}
               </div>
             </div>
+            
             <div *ngIf="tableColumn.label === 'Action'">
               <button *ngIf="!removeArchive && !showUnClaim && !adminActions" (click)="unClaimItem(element)"
                 [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary" class="txt-button">

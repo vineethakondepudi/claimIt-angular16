@@ -231,30 +231,29 @@ export class DataTableComponent<T> {
       return data.skills.split(',').slice(0, 2)
     }
   }
-  getColor(element: any, columnName: string): string {
+  getColor(element: any, columnName: string): { backgroundColor: string, textColor: string } {
     const value = this.dataPropertyGetter(element, columnName);
-    if (value === 'CLAIMED') {
-      return '#219C90'
-    } else if (value === 'PENDING_PICKUP') {
-      return '#FEE2E2';
+
+    switch (value) {
+        case 'CLAIMED':
+            return { backgroundColor: '#B2EDE8', textColor: '#13776F' }; // Teal
+        case 'PENDING_PICKUP':
+            return { backgroundColor: '#FEE9E9', textColor: '#A33333' }; // Red
+        case 'OPEN':
+            return { backgroundColor: '#FEFCE5', textColor: '#A69B00' }; // Yellow
+        case 'UNCLAIMED':
+            return { backgroundColor: '#FCA5A5', textColor: '#B91C1C' }; // Red
+        case 'Archived':
+            return { backgroundColor: '#A7C8A1', textColor: '#4A683E' }; // Green
+        case 'PENDING_APPROVAL':
+            return { backgroundColor: '#FAF9E1', textColor: '#857C00' }; // Yellow
+        case 'REJECTED':
+            return { backgroundColor: '#FFCCCC', textColor: '#991B1B' }; // Red
+        default:
+            return { backgroundColor: '#F8A8A8', textColor: '#B91C1C' }; // Default Red
     }
-    else if (value === 'OPEN') {
-      return '#FEF9C3'
-    } else if (value === 'UNCLAIMED') {
-      return '#F87171'
-    } else if (value === 'Archived') {
-      return '#77a36f'
-    }
-    else if (value === 'PENDING_APPROVAL') {
-      return '#f5f3cb'
-    }
-    else if (value === 'REJCTED') {
-      return 'Red'
-    }
-    else {
-      return '#EE4E4E';
-    }
-  }
+}
+
   dataPropertyGetter(element: any, property: string) {
     return element[property];
   }

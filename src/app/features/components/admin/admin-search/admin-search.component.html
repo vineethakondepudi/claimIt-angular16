@@ -7,64 +7,69 @@
         </div>
         <div class="flex-grow px-5">
             <mat-card class="w-full">
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle [expanded]="true" (opened)="containerPanelOpened = true"
-                        (closed)="containerPanelOpened = false">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title class="text-lg">
-                                <span class="font-semibold">Search</span>
-                            </mat-panel-title>
-                            <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
-                        </mat-expansion-panel-header>
-                        <div class="flex flex-wrap items-center gap-5">
-                            <!-- Input Field -->
-                            <form [formGroup]="adminSearch" class="flex flex-wrap items-center gap-5">
-                                <mat-form-field appearance="outline" class="flex-auto">
-                                    <mat-label>Email</mat-label>
-                                    <input formControlName="email" matInput type="text" placeholder="Email" />
-                                    <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
-                                        <!-- <mat-icon>search</mat-icon> -->
-                                    </button>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" class="flex-auto">
-                                    <mat-label>Name</mat-label>
-                                    <input formControlName="name" matInput type="text" placeholder="Name" />
-                                    <button mat-icon-button matSuffix aria-label="Search">
-                                    </button>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" class="flex-auto">
-                                    <mat-label>Received Date</mat-label>
-                                    <input formControlName="to" matInput [matDatepicker]="toPicker"
-                                        (dateChange)="dateFilter($event)" />
-                                    <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
-                                    <mat-datepicker #toPicker></mat-datepicker>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" class="flex-auto">
-                                    <mat-label>Status</mat-label>
-                                    <mat-select formControlName="status" class="custom-mat-input">
-                                        <mat-option *ngFor="let options of statusDropDown" [value]="options.label">{{
-                                            options.value }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </form>
-                            <!-- Buttons Container -->
-                            <div class="flex flex-row justify-end gap-2 ml-auto">
-                                <button mat-button color="warn" (click)="SearchAndClear('clear')"
-                                    class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
-                                    Clear
-                                </button>
-                                <button mat-flat-button color="primary" (click)="SearchAndClear('search')"
-                                    class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
-                                    Search
-                                </button>
-                            </div>
-                        </div>
-
-
-                    </mat-expansion-panel>
-                </mat-accordion>
+              <mat-accordion>
+                <mat-expansion-panel 
+                  hideToggle 
+                  [expanded]="true" 
+                  (opened)="containerPanelOpened = true" 
+                  (closed)="containerPanelOpened = false">
+                  
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="text-lg">
+                      <span class="font-semibold">Search</span>
+                    </mat-panel-title>
+                    <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
+                  </mat-expansion-panel-header>
+          
+                  <div class="flex flex-wrap gap-5">
+                    <!-- Input Field -->
+                    <form [formGroup]="adminSearch" class="flex flex-wrap gap-5 w-full">
+                      <mat-form-field appearance="outline" class="flex-auto">
+                        <mat-label>Email</mat-label>
+                        <input formControlName="email" matInput type="text" placeholder="Email" />
+                        <button mat-icon-button matSuffix (click)="search()" aria-label="Search">
+                          <mat-icon>search</mat-icon>
+                        </button>
+                      </mat-form-field>
+          
+                      <mat-form-field appearance="outline" class="flex-auto">
+                        <mat-label>Received Date</mat-label>
+                        <input 
+                          formControlName="to" 
+                          matInput 
+                          [matDatepicker]="toPicker" 
+                          (dateChange)="dateFilter($event)" 
+                        />
+                        <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #toPicker></mat-datepicker>
+                      </mat-form-field>
+          
+                      <mat-form-field appearance="outline" class="flex-auto">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="status" class="custom-mat-input">
+                          <mat-option *ngFor="let options of statusDropDown" [value]="options.label">
+                            {{ options.value }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </form>
+          
+                    <!-- Buttons Container -->
+                    <div class="w-full flex justify-end gap-2 mt-4">
+                      <button mat-button color="warn" (click)="SearchAndClear('clear')">
+                        Clear
+                      </button>
+                      <button mat-button color="primary" (click)="SearchAndClear('search')">
+                        Search
+                      </button>
+                    </div>
+                  </div>
+          
+                </mat-expansion-panel>
+              </mat-accordion>
             </mat-card>
-        </div>
+          </div>
+          
     </div>
     <div  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
         <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)"
