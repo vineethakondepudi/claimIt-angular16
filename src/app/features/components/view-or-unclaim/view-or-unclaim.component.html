@@ -8,7 +8,7 @@
         <div class="flex-grow px-5">
             <mat-card class="w-full">
                 <mat-accordion>
-                    <mat-expansion-panel hideToggle [expanded]="false" (opened)="containerPanelOpened = true"
+                    <mat-expansion-panel hideToggle [expanded]="true" (opened)="containerPanelOpened = true"
                         (closed)="containerPanelOpened = false">
                         <mat-expansion-panel-header>
                             <mat-panel-title class="text-lg">
@@ -56,8 +56,7 @@
             </mat-card>
         </div>
     </div>
-
-    <div class="flex-grow mt-14 mx-3">
+    <div  class="flex-grow mt-14 mx-3"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
         <app-data-table [tableColumns]="displaycoloums" (previewImage)="previewImage($event)" [showUnClaim]="false" (unClaim)="confirmUnclaim($event)" 
         [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
         </app-data-table>
@@ -83,5 +82,5 @@
               
         </div>
     </div>
-    <app-loader *ngIf="loader"></app-loader>
 </div>
+<app-loader *ngIf="isLoading"></app-loader>

@@ -113,55 +113,6 @@
       [pageSize]="defaultPageSize"></mat-paginator>
   </div>
 </div>
-<!-- <div *ngIf="isMobileView && dataSource.data.length > 0"
-  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-2" style="margin-top: -30px;">
-  <span class="font-bold text-xl"> Search Results:</span>
-  <div class="card border rounded-lg shadow-md p-1" *ngFor="let element of dataSource.data">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="flex flex-col justify-between ml-4">
-        <div class="flex flex-col justify-start items-start">
-          <h3 class="font-bold text-sm truncate mb-2">{{ element.title }}</h3>
-          <div *ngIf="!removeArchive && showUnClaim">
-            <button
-              *ngIf="element.status === 'UNCLAIMED'"
-              (click)="createClaimItem(element)"
-              mat-raised-button
-              color="primary"
-              class="text-sm py-2 px-4"
-            >
-              Claim
-            </button>
-            <span *ngIf="element.status !== 'UNCLAIMED'" class="text-[#3e969f] font-bold text-sm">
-              Claimed
-            </span>
-          </div>
-        </div>        
-        <div *ngFor="let column of tableColumns">
-          <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
-            <div class="flex flex-col justify-start items-start">
-              <div *ngIf="column.type === 'text'" class="flex items-center mb-2">
-               {{ element[column.name] }}
-              </div>
-              <div *ngIf="column.name === 'name'" class="flex items-center">
-                <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
-                  (click)="openQrDialog(element)">
-                  <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-                  <span class="text-xs">QR Code</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>        
-      </div>
-      <div class="flex justify-center items-center">
-        <img *ngIf="element.image" [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image"
-        class="max-w-[100px] h-[100px] rounded-md object-cover" />
-      
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <!-- below is cards displaying in 2 colomns -->
 <div *ngIf="isMobileView && dataSource.data.length > 0 && getData">
   <div *ngFor="let group of addItemSearchResults" class="mt-4">
@@ -184,12 +135,66 @@
     </div>
   </div>
 </div>
+
 <div *ngIf="isMobileView && dataSource.data.length > 0 && !getData" class="grid grid-cols-2 gap-2 p-2"
   style="margin-top: -15px;">
   <div class="card border rounded-lg shadow-md p-2" *ngFor="let element of dataSource.data">
     <img *ngIf="element.image" [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image"
       class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto"
       (click)="openImagePreview('data:image/jpeg;base64,' + element.image)" />
+      <div class="flex flex-col items-start">
+        <div class="flex-1">
+          <strong>{{ element.status }}</strong>
+        </div>
+        <div class="mt-2">
+          <button
+            *ngIf="!removeArchive && !showUnClaim && !adminActions"
+            (click)="unClaimItem(element)"
+            [disabled]="element.status !== 'PENDING_PICKUP'"
+            mat-raised-button
+            color="primary"
+            class="txt-button">
+            UnClaim
+          </button>
+        
+          <button
+            *ngIf="element.status === 'PENDING_APPROVAL'"
+            mat-stroked-button
+            color="primary"
+            class="cancel-button"
+            (click)="approveClaimReq(element)">
+            Approve
+          </button>
+        
+          <button
+            *ngIf="element.status === 'ARCHIVED' || element.status === 'PENDING_APPROVAL'"
+            mat-stroked-button
+            color="warn"
+            class="cancel-button"
+            (click)="rejectClaimReq(element)">
+            Reject
+          </button>
+        
+          <button
+            *ngIf="element.status === 'REJECTED' || element.status === 'UNCLAIMED'"
+            (click)="removeItem(element)"
+            mat-stroked-button
+            color="warn"
+            class="cancel-button">
+            Remove
+          </button>
+        
+          <button
+            *ngIf="element.status === 'PENDING_PICKUP'"
+            (click)="markAsClaimed(element)"
+            mat-stroked-button
+            color="primary"
+            class="cancel-button">
+            Claimed
+          </button>
+        </div>
+      </div>
+
     <div *ngFor="let column of tableColumns">
       <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
         <div class="flex flex-col space-y-2">
@@ -230,9 +235,9 @@
     </button>
     <img [src]="selectedImage" alt="Image Preview" class="w-60 h-60 object-cover" />
   </div>
-</div>
+</div> 
 <!-- No Data Placeholder -->
-<div *ngIf="dataSource.data.length === 0" class="text-center">
+ <div *ngIf="dataSource.data.length === 0" class="text-center">
   <img src="assets/noresults.png" alt="No Results" class="w-32 mx-auto" />
   <p class="text-teal-600 mt-4">No Records Found</p>
 </div>

@@ -55,6 +55,7 @@
     "ngrx-store-localstorage": "^18.0.0",
     "ngx-dropzone": "^3.1.0",
     "ngx-image-compress": "^18.1.5",
+    "ngx-infinite-scroll": "^19.0.0",
     "ngx-qrcode2": "^9.0.0",
     "ngx-scanner": "^0.0.0",
     "rxjs": "~7.8.0",

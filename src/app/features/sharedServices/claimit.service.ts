@@ -107,4 +107,9 @@ export class ClaimitService {
   getClaims() {
     return this.pendingClaims;
   }
+  searchItems(query: string): Observable<any[]> {
+    const url = `${environment.searchItems}?query=${encodeURIComponent(query)}`;
+    return this.http.get<any[]>(url);
+  }
+  
 }

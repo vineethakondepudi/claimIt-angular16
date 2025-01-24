@@ -83,140 +83,157 @@
   </div>
 
 </div>
-<div *ngIf="!isMobileView" class=" bg-[#E8F2F3]">
-  <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
-  <mat-card>
-    <mat-accordion>
-      <mat-expansion-panel hideToggle [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title class="text-lg">
-            <span class="font-semibold">Filters</span>
-          </mat-panel-title>
-          <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
-        </mat-expansion-panel-header>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
-            <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
-              style="background-color: #1E959B">
-              <p class="text-xs font-semibold" style="margin-top: 6px">Item Type Search</p>
-            </div>
-            <ng-container>
-              <div class="text-center p-6 mt-[30px]">
-                <mat-form-field appearance="outline" class="w-full ">
-                  <mat-label>Enter item name</mat-label>
-                  <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery"
-                    (keyup.enter)="searchItems()" />
-                  <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
-                    <mat-icon>search</mat-icon>
-                  </button>
-                </mat-form-field>
-              </div>
-            </ng-container>
+
+
+<div  *ngIf="!isMobileView" class="min-h-screen flex flex-col">
+  <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] ">
+      <div @fadeInRight class="flex flex-row justify-between px-5">
+          <div class="flex flex-col">
+              <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
           </div>
-          <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
-            <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
-              style="background-color: #1E959B">
-              <p class="text-xs font-semibold" style="margin-top: 6px">Picture Upload Search</p>
-            </div>
-            <ng-container>
-              <div class="text-center  p-6  mt-[30px]">
-                <div class=" border-dashed  rounded-lg p-4 text-center">
-                  <ngx-dropzone (change)="onSelect($event)">
-                    <ngx-dropzone-label>
-                      Drag and drop image here or click to upload
-                    </ngx-dropzone-label>
-                    <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
-                      [file]="f.file" (removed)="onRemove(f)">
-                      <ngx-dropzone-label class="block text-sm">{{ f.file.name }}</ngx-dropzone-label>
-                    </ngx-dropzone-preview>
-                  </ngx-dropzone>
-                </div>
-              </div>
-            </ng-container>
-          </div>
-          <div class="relative bg-[#f8f9f9] rounded-[35px] shadow-md  p-6">
-            <div class="absolute -top-3 left-6 md:left-12 text-white px-2 py-0.5 rounded-full"
-              style="background-color: #1E959B">
-              <p class="text-xs font-semibold" style="margin-top: 6px">Category Search</p>
-            </div>
-            <ng-container>
-              <div class="text-center p-6 mt-[30px]">
-                <div class="h-64 overflow-y-auto p-4">
-                  <div class="grid grid-cols-1 gap-4">
-                    <mat-card *ngFor="let item of categories" class="shadow-md hover:bg-gray-100 cursor-pointer p-4"
-                      (click)="selectCategory(item.name)">
-                      <mat-card-header class="flex justify-center items-center h-12">
-                        <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
-                          {{ getCategoryIcon(item.name) }}
-                        </mat-icon>
-                      </mat-card-header>
-                      <mat-card-title class="text-center text-sm font-medium truncate" [title]="item.name">
-                        {{ item.name }}
-                      </mat-card-title>
-                    </mat-card>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </div>
-        <div class="flex justify-end gap-4 mt-6">
-          <button mat-raised-button color="primary" (click)="searchItems();saveSearch()">
-            <mat-icon>search</mat-icon> Search
-          </button>
-          <button mat-flat-button color="primary" (click)="clearSearch()">
-            Clear
-          </button>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </mat-card>
-  <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length && !isMobileView"
-    class="flex-grow mt-5 bg-[#E8F2F3]">
-    <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
-      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)"
-      (sort)="handleSort($event)"></app-data-table>
-  </div>
-  <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
-    <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
-  </div>
-  <div *ngIf="isMobileView &&!searchResults?.length && !categerorydata?.length && !matchedItems?.length"
-    class="relative flex flex-col items-center justify-center">
-    <img src="assets/noresults.png" class="absolute w-56 mt-36 object-contain bg-[#E8F2F3]" alt="Image" />
-    <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-      No Records Found
-    </p>
-  </div>
-  <div *ngIf="!isMobileView" class="fixed bottom-0 w-full bg-white">
-    <app-form-footer></app-form-footer>
+      </div>
+      <div class="flex-grow px-5">
+          <mat-card class="w-full">
+              <mat-accordion>
+                  <mat-expansion-panel hideToggle [expanded]="true" (opened)="containerPanelOpened = true"
+                      (closed)="containerPanelOpened = false">
+                      <mat-expansion-panel-header>
+                          <mat-panel-title class="text-lg">
+                              <span class="font-semibold">Search</span>
+                          </mat-panel-title>
+                          <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
+                      </mat-expansion-panel-header>
+                      <div class="flex flex-wrap items-center gap-5">
+                          <!-- Input Field -->
+                          <mat-form-field appearance="outline"  class="flex-1">
+                            <mat-label>Enter item name</mat-label>
+                            <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery"
+                              (keyup.enter)="searchItems()" />
+                            <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
+                              <mat-icon>search</mat-icon>
+                            </button>
+                          </mat-form-field>
+                       <!-- Dropdown -->
+                       <mat-form-field appearance="outline" class="flex-1">
+                        <mat-label>Select with in Category</mat-label>
+                        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange($event.value)">
+                          <!-- Customize the display of the selected value -->
+                          <mat-select-trigger>
+                            <span *ngIf="selectedCategory" class="text-sm font-medium">
+                              {{ selectedCategory }}
+                            </span>
+                            <span *ngIf="!selectedCategory" class="text-sm text-gray-500">
+                              Select a category
+                            </span>
+                          </mat-select-trigger>
+                      
+                          <!-- Dropdown options -->
+                          <mat-option *ngFor="let item of categories" [value]="item.name">
+                            <div class="flex items-center gap-2">
+                              <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
+                                {{ getCategoryIcon(item.name) }}
+                              </mat-icon>
+                              <span class="text-sm font-medium truncate">{{ item.name }}</span>
+                            </div>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>                      
+                       <!-- File Upload  -->
+                      <div class="text-center p-6 flex-1">
+  <div class="border-dashed border-2 border-black rounded-lg p-[10px] mb-[29px] flex items-center justify-between">
+    <input
+      type="file"
+      id="fileInput"
+      class="hidden"
+      (change)="onFileSelect($event)"
+    />
+    <label for="fileInput" class="text-left text-gray-500">
+      {{ selectedFileName || 'No file selected' }}
+    </label>
+    <label
+      for="fileInput"
+      class="bg-red-500 text-white rounded px-4 py-2 cursor-pointer"
+    >
+      Upload Picture
+    </label>
   </div>
 </div>
-<!-- <div *ngIf="isMobileView && !searchResults?.length && !categerorydata?.length && !matchedItems?.length"
-  class="relative flex flex-col items-center justify-center">
-  <img src="assets/claimitsearch.PNG" class="absolute w-35 h-35 mt-[18rem] object-contain bg-[#E8F2F3]" alt="Image" />
-</div> -->
-<!-- <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
-    <div class="flex justify-between items-center h-16 px-4 ">
-      <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/dashboard'" >
-        <mat-icon class="text-[#00897b] ">home</mat-icon>
-        <span class="text-xs">Home</span>
-    </button>
-        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/searchAndClaim'" >
-            <mat-icon class="text-[#00897b] ">search</mat-icon>
-            <span class="text-xs">Search And Claim</span>
-        </button>
+                      
+                      
+                          <!-- Buttons Container -->
+                          <div class="flex flex-row justify-end gap-2 ml-auto">
+                              <button mat-button color="warn" (click)="clearSearch()"
+                                  class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
+                                  Clear
+                              </button>
+                              <button mat-flat-button color="primary" (click)="searchItems()"
+                                  class="bg-transparent text-teal-500 font-semibold py-1 px-4 border border-transparent hover:border-teal-500 rounded">
+                                  Search
+                              </button>
+                          </div>
+                      </div>
+                      
+                      
+                  </mat-expansion-panel>
+              </mat-accordion>
+          </mat-card>
+          <div *ngIf="!(searchResults?.length > 0 || categerorydata?.length > 0 || matchedItems?.length > 0)"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+            <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+              [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="initalDataResults"
+              [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+            </app-data-table>
+          </div>
+          <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length && !isMobileView"
+            class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+            <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
+              [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)"
+              (sort)="handleSort($event)"></app-data-table>
+        </div>
+        
+          <div *ngIf="matchedItems?.length > 0"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+            <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+              [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
+              [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+            </app-data-table>
+          </div>
+          <div *ngIf="searchResults?.length > 0"class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+            <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
+              [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
+              [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
+          </div>
+          <div *ngIf="noresultsFound && !(searchResults?.length > 0 ||matchedItems?.length > 0 || categerorydata?.length > 0  || initalDataResults?.length > 0 )" 
+            class="relative flex flex-col items-center justify-center bg-white">
+         <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+         <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+           No Records Found
+         </p>
+       </div>
        
-        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
-            <mat-icon class="text-[#00897b] ">visibility</mat-icon>
-            <span class="text-xs">View/Unclaim</span>
-        </button>
-          
-    </div>
-</div> -->
-  <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
-      <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
-    </div>
-<div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
+       
+      </div>
+    
+  </div>
+ 
+  <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
+      <div class="flex justify-between items-center h-16 px-4 ">
+        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/dashboard'" >
+          <mat-icon class="text-[#00897b] ">home</mat-icon>
+          <span class="text-xs">Home</span>
+      </button>
+          <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/searchAndClaim'" >
+              <mat-icon class="text-[#00897b] ">search</mat-icon>
+              <span class="text-xs">Search And Claim</span>
+          </button>
+         
+          <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
+              <mat-icon class="text-[#00897b] ">visibility</mat-icon>
+              <span class="text-xs">View/Unclaim</span>
+          </button>
+            
+      </div>
+  </div>
+</div>
+<div   class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
   <div class="grid grid-cols-3 items-center h-16 px-4">
       <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" [routerLink]="'/claimit/dashboard'">
           <mat-icon class="text-[#00897b]">home</mat-icon>
@@ -232,5 +249,7 @@
       </button>
   </div>
 </div>
-
-<!-- <app-loader *ngIf="loader"></app-loader> -->
+<div *ngIf="!isMobileView" class="flex-none">
+  <app-form-footer></app-form-footer>
+</div>
+<app-loader *ngIf="isLoading"></app-loader>

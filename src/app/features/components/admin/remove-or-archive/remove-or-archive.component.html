@@ -1,7 +1,7 @@
 <div class="min-h-screen flex flex-col">
    
   
-    <div class="flex-grow mt-14 mx-3">
+    <div  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
       <app-data-table [tableColumns]="displayColumns" (previewImage)="previewImage($event)" 
       [removeArchive]="true" 
       (remove)="confirmRemove($event)"  [isPageable]="true" [tableData]="searchResults"

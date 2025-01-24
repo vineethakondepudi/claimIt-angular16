@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Search Results</h2>
 <mat-dialog-content>
-  <div *ngIf="data.length > 0; else noResults">
+  <div *ngIf="data.length > 0; else noResults"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
     <app-data-table [tableColumns]="displaycoloums" (ClaimItem)="claimItem($event)"  [showUnClaim]="true"
     [isPageable]="true" [tableData]="data" [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
 </app-data-table>

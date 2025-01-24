@@ -22,6 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 import { QrcodeDialogComponent } from '../qrcode-dialog/qrcode-dialog.component';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
+import { LoaderComponent } from '../loader/loader.component';
 @Component({
   selector: 'app-data-table',
   standalone: true,
@@ -38,6 +39,7 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
     MatButtonModule,
     FormsModule,
     MatMenuModule,
+    LoaderComponent,
     MatCheckboxModule, MatTooltipModule,
     OverlayModule,
     TooltipDirective],
@@ -86,6 +88,7 @@ export class DataTableComponent<T> {
   @Input() showExport = false;
   selectedImage: string | null = null;
   showImagePreview: boolean = false;
+  isLoading: boolean = false;
   @Output() exportData = new EventEmitter();
   displayedColumns: Array<string> = [];
   isOpen = false;
@@ -100,7 +103,7 @@ export class DataTableComponent<T> {
     console.log(this.currentRoute);
     this.currentRoute.includes("/addItem")
     this.getData = this.currentRoute.includes("/addItem")
-    this.addItem()
+
     this.displayedColumns = this.tableColumns.map((col) => col.name);
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
       return col.isChecked === true;
@@ -111,8 +114,13 @@ export class DataTableComponent<T> {
     this.displayedColumns = columnNames;
 
     this.checkViewport();
+    if(this.isMobileView){
+      this.addItem()
+     }
+     console.log(this.dataSource.data, 'datasource')
   }
   addItem() {
+    this.isLoading = true
     const query = this.searchQuery.trim();
     this.service.listOfItemsAddItem(query).subscribe(
       (res: any) => {
@@ -121,13 +129,16 @@ export class DataTableComponent<T> {
           items: res[key]
         }));
         console.log(this.addItemSearchResults);
+        this.isLoading = false
       },
       (error) => {
+        this.isLoading = false
         console.error('Error fetching data:', error);
       }
     );
 
   }
+ 
   setTableDataSource(data: T[]) {
     this.dataSource = new MatTableDataSource<T>(data);
     this.dataSource.paginator = this.paginator;

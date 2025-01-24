@@ -13,11 +13,12 @@ import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submi
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule, MatProgressSpinnerModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule,LoaderComponent, MatProgressSpinnerModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
@@ -139,48 +140,42 @@ showFullData: boolean = false;
     }
     
   }
-  // submit(): void {
-  //   if (this.files.length > 0 && this.selectedOrgId) {
-  //     const formData = new FormData();
-  //     formData.append('image', this.files[0].file);
-  //     // formData.append('orgId', this.selectedOrgId);
+  submit(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.files.length > 0 && this.selectedOrgId) {
+        this.isLoading = true; // Start loading
+        const formData = new FormData();
+        formData.append('image', this.files[0].file);
+        formData.append('orgId', this.selectedOrgId);
   
-  //     this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
-  //       (response) => {
-  //         this.isOrganizationSelected = false;
-  //         this.files = [];
-  //         this.dialogRef.close();  
-  //       },
-  //       (error) => {
-  //         console.error('Error uploading file:', error);
-  //       }
-  //     );
-  //   } else {
-  //     console.warn('No file selected for upload.');
-  //   }
-  // }
-  submit(): void {
-    if (this.files.length > 0 && this.selectedOrgId) {
-      this.isLoading = true; // Start loading
-      const formData = new FormData();
-      formData.append('image', this.files[0].file);
-      formData.append('orgId', this.selectedOrgId);
-  
-      this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
-        (response) => {
-          this.formatResponse(response);
-          this.isLoading = false;
-        },
-        (error) => {
-          console.error('Error uploading file:', error);
-          this.isLoading = false;
-        }
-      );
-    } else {
-      console.warn('No file selected for upload.');
-    }
+        this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
+          (response) => {
+            this.formatResponse(response);
+            this.isLoading = false;
+            resolve(); // Resolve the promise after successful submission
+          },
+          (error) => {
+            console.error('Error uploading file:', error);
+            this.isLoading = false;
+            reject(error); // Reject the promise in case of an error
+          }
+        );
+      } else {
+        console.warn('No file selected for upload.');
+        resolve(); // Resolve immediately if no file is selected
+      }
+    });
   }
   
+  async onNextClick(stepper: MatStepper): Promise<void> {
+    try {
+      await this.submit(); // Wait for the submit process to complete
+      stepper.next(); // Move to the next step
+    } catch (error) {
+      console.error('Submission failed:', error);
+      // Optionally handle errors here (e.g., show a message to the user)
+    }
+  }
   formatResponse(response: any): void {
     const allowedKeys = ['description', 'title'];
     this.formattedData = Object.entries(response)

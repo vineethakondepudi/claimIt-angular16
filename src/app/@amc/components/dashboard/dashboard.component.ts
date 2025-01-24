@@ -75,6 +75,7 @@ interface Item {
     MatButtonModule,
     MatProgressSpinnerModule,
     FormsModule,
+    LoaderComponent,
     MatInputModule,
     MatExpansionModule,
     MatIconModule,
@@ -437,7 +438,7 @@ export default class DashboardComponent {
   }
   fetchSlides(): void {
     this.isLoading = true;
-    const apiUrl = 'http://172.17.12.38:8081/api/users/search';
+    const apiUrl = 'http://172.17.12.101:8081/api/users/search';
     
     this.claimService.getUSerSlides().subscribe({
       next: (data: any) => {
@@ -549,7 +550,7 @@ forceUpdate(): void {
   }
   searchItems() {
     if (this.searchQuery.trim()) {
-      const apiUrl = `http://172.17.12.38:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
+      const apiUrl = `http://172.17.12.101:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
 
       this.http.get<Item[]>(apiUrl).subscribe(
         (response: Item[]) => {

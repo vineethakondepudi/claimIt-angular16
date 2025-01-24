@@ -138,9 +138,11 @@ export default class AdditemComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
-          this.fetchData();
           this.isLoading  = true;
+         this. fetchData()
+          
         });
+        this.isLoading  = false;
       },
       (error) => {
         console.error('Error fetching organizations:', error);

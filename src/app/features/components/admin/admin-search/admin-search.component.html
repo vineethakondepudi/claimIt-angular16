@@ -2,13 +2,13 @@
     <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] ">
         <div @fadeInRight class="flex flex-row justify-between px-5">
             <div class="flex flex-col">
-                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Search and Claim</h1>
+                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Approve/ Reject Claim</h1>
             </div>
         </div>
         <div class="flex-grow px-5">
             <mat-card class="w-full">
                 <mat-accordion>
-                    <mat-expansion-panel hideToggle [expanded]="false" (opened)="containerPanelOpened = true"
+                    <mat-expansion-panel hideToggle [expanded]="true" (opened)="containerPanelOpened = true"
                         (closed)="containerPanelOpened = false">
                         <mat-expansion-panel-header>
                             <mat-panel-title class="text-lg">
@@ -32,13 +32,6 @@
                                     <button mat-icon-button matSuffix aria-label="Search">
                                     </button>
                                 </mat-form-field>
-                                <!-- <mat-form-field appearance="outline" class="flex-auto">
-                                    <mat-label>Found Date</mat-label>
-                                    <input formControlName="from" matInput [matDatepicker]="fromPicker"
-                                        (dateChange)="dateFilter($event)" />
-                                    <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
-                                    <mat-datepicker #fromPicker></mat-datepicker>
-                                </mat-form-field> -->
                                 <mat-form-field appearance="outline" class="flex-auto">
                                     <mat-label>Received Date</mat-label>
                                     <input formControlName="to" matInput [matDatepicker]="toPicker"
@@ -73,10 +66,7 @@
             </mat-card>
         </div>
     </div>
-    <div *ngIf="isLoading" class="flex justify-center mx-4 mt-[172px]">
-        <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
-      </div>
-    <div class="flex-grow mt-14 mx-3">
+    <div  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
         <app-data-table (markClaimed)="markClaimed($event)" (rejectClaim)="rejectClaim($event)"
             (sort)="handleSort($event)" (approveClaim)="approveClaim($event)" (remove)="confirmRemove($event)"
             [tableColumns]="displaycoloums" [adminActions]="true" (previewImage)="previewImage($event)"
@@ -106,5 +96,5 @@
               
         </div>
     </div>
-    <!-- <app-loader *ngIf="loader"></app-loader> -->
+    <app-loader *ngIf="isLoading"></app-loader>
 </div>

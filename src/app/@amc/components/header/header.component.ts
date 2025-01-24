@@ -94,20 +94,21 @@ export class HeaderComponent {
  setTabRoutes() {
   if (this.userRole === 'admin') {
     this.tabRoutes = [
-      { route: '/claimit/searchAndClaim', icon: 'search', label: 'Search and Claim' },
-      { route: '/claimit/about', icon: 'info', label: 'About' },
-      { route: '/claimit/pendingClaim', icon: 'notifications', label: 'Notifications' },
-      { route: '/claimit/help', icon: 'help', label: 'Help' },
+      { route: '/claimit/searchAndClaim', icon: 'search_outline', label: 'Search and Claim' },
+      { route: '/claimit/about', icon: 'info_outline', label: 'About' },
+      { route: '/claimit/pendingClaim', icon: 'notifications_none', label: 'Notifications' },
+      { route: '/claimit/help', icon: 'help_outline', label: 'Help' },
     ];
   } else {
     this.tabRoutes = [
-      { route: '/claimit/searchAndClaim', icon: 'search', label: 'Search and Claim' },
-      { route: '/claimit/about', icon: 'info', label: 'About' },
-      { route: '/claimit/contact', icon: 'contacts', label: 'Contact Us' },
-      { route: '/claimit/help', icon: 'help', label: 'Help' },
+      { route: '/claimit/searchAndClaim', icon: 'search_outline', label: 'Search and Claim' },
+      { route: '/claimit/about', icon: 'info_outline', label: 'About' },
+      { route: '/claimit/contact', icon: 'contacts_outline', label: 'Contact Us' },
+      { route: '/claimit/help', icon: 'help_outline', label: 'Help' },
     ];
   }
 }
+
 public isTabActive(tab: string): boolean {
   const currentUrl = this.router.url;
   return currentUrl === tab; // Exact match check
@@ -115,10 +116,10 @@ public isTabActive(tab: string): boolean {
   getMenuItems() {
     if (this.userRole === 'admin') {
      this.menuItems = [
-        { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
+        { label: 'Dashboard', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Add Item', icon: 'add_circle', route: '/claimit/addItem' },
         { label: 'Approve / Reject Claim', icon: 'rule', route: '/claimit/search' },
-        { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim', isNotification: true },
+        // { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim', isNotification: true },
       ];
     } else {
       this.menuItems = [

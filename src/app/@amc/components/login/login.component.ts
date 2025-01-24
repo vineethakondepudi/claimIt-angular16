@@ -11,12 +11,13 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule, MatFormFieldModule, HeaderComponent, MatInputModule, MatButtonModule, RouterModule, ReactiveFormsModule,
+    CommonModule, MatFormFieldModule, HeaderComponent, MatInputModule, LoaderComponent, MatButtonModule, RouterModule, ReactiveFormsModule,
     MatCheckboxModule, MatSnackBarModule, MatIconModule
   ],
   templateUrl: './login.component.html',
@@ -25,6 +26,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export default class LoginComponent {
   loginForm!: FormGroup;
   errMsg: any;
+  isLoading:boolean = false;
   hidePassword = true;
   isMobileView = false;
   
@@ -63,15 +65,17 @@ export default class LoginComponent {
   onSubmit() { 
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-  
+   this.isLoading = true
       this.service.adminLogin(email, password).subscribe(
         (response: any) => {
+          this.isLoading = false
           if (response.isAdmin) {
             localStorage.setItem('isLogin', 'true');
             localStorage.setItem('role', 'admin');
             this.router.navigate(['/claimit/addItem']);
             this.service.loginResponse.next(true)
           } else {
+            this.isLoading = false
             this.showToast(response.message);
           }
         },

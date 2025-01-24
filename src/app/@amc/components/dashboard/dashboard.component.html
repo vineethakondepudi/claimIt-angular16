@@ -78,74 +78,119 @@
     </div>
   </div>
 
-  <div class="swiper-container px-6 py-4">
-    <h2 class="text-xl font-bold text-gray-700 mb-4">Reported items more than 30 days</h2>
-    <div class="swiper-wrapper flex md:flex-row flex-col">
-      <div *ngFor="let item of slides" class="swiper-slide  flex justify-center items-start w-full md:w-auto">
-        <mat-card *ngIf="isTimeisup(item)"
-          class="w-full md:w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer flex flex-col">
-          <mat-card-header>
-            <mat-card-title class="cursor-pointer text-lg font-semibold text-gray-800" matTooltip="{{item.title}}">
-              {{ item.title.slice(0, 15) }} <span *ngIf="item.title.length > 15">....</span>
-            </mat-card-title>
-            <mat-card-subtitle class="text-sm text-gray-500 cursor-pointer">
-              Reported on: {{ item.foundDate | date: 'MM/dd/yyyy' }}
-            </mat-card-subtitle>
-          </mat-card-header>
+<div class="swiper-container px-6 py-4 relative bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
+  <h2 class="text-xl font-bold text-gray-700 mb-4">Reported items more than 30 days</h2>
+  <div class="swiper-wrapper flex md:flex-row flex-col gap-4">
+    <div
+      *ngFor="let item of slides"
+      class="swiper-slide flex justify-center items-start w-full md:w-auto"
+    >
+      <mat-card
+        *ngIf="isTimeisup(item)"
+        class="w-full md:w-60 h-auto shadow-md rounded-lg overflow-hidden bg-white cursor-pointer flex flex-col"
+      >
+        <mat-card-header>
+          <mat-card-title
+            class="cursor-pointer text-lg font-semibold text-gray-800"
+            matTooltip="{{ item.title }}"
+          >
+            {{ item.title.slice(0, 15) }}
+            <span *ngIf="item.title.length > 15">....</span>
+          </mat-card-title>
+          <mat-card-subtitle class="text-sm text-gray-500 cursor-pointer">
+            Reported on: {{ item.foundDate | date: 'MM/dd/yyyy' }}
+          </mat-card-subtitle>
+        </mat-card-header>
 
-          <mat-card-content class="flex flex-col items-center cursor-pointer space-y-2">
-            <img [src]="'data:image/jpeg;base64,' + item.image" alt="{{ item.title }}"
-              class="w-full h-32 object-cover rounded-md mb-4" style="min-height: 120px;" />
+        <mat-card-content class="flex flex-col items-center cursor-pointer space-y-2">
+          <img
+            [src]="'data:image/jpeg;base64,' + item.image"
+            alt="{{ item.title }}"
+            class="w-full h-32 object-cover rounded-md mb-4"
+            style="min-height: 120px;"
+          />
 
-            <div *ngIf="isTimeisup(item); else timeRemaining"
-              class="text-sm text-center mt-4 text-gray-500 bg-orange-100 text-orange-600 py-2 px-4 rounded-lg">
-              Time is up!
+          <div
+            *ngIf="isTimeisup(item); else timeRemaining"
+            class="text-sm text-center mt-4 text-gray-500 bg-orange-100 text-orange-600 py-2 px-4 rounded-lg"
+          >
+            Time is up!
+          </div>
+
+          <ng-template #timeRemaining>
+            <div
+              class="text-sm text-center mt-4 text-gray-500 bg-blue-100 text-blue-600 py-2 px-4 rounded-lg"
+            >
+              Time remaining:
+              <span class="font-semibold">{{ item.remainingTime }}</span>
             </div>
+          </ng-template>
+        </mat-card-content>
 
-            <ng-template #timeRemaining>
-              <div class="text-sm text-center mt-4 text-gray-500 bg-blue-100 text-blue-600 py-2 px-4 rounded-lg">
-                Time remaining: <span class="font-semibold">{{ item.remainingTime }}</span>
-              </div>
-            </ng-template>
-          </mat-card-content>
-
+        <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
+          <button mat-icon-button [matMenuTriggerFor]="shareMenu">
+            <mat-icon>share</mat-icon>
+          </button>
           <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
-            <button mat-icon-button [matMenuTriggerFor]="shareMenu">
-              <mat-icon>share</mat-icon>
+            <button
+              mat-icon-button
+              *ngIf="!item.locationName"
+              (click)="getLocation(item)"
+            >
+              <mat-icon>location_on</mat-icon>
             </button>
-            <mat-card-actions class="flex justify-between items-center p-4 mt-auto">
-              <button mat-icon-button *ngIf="!item.locationName" (click)="getLocation(item)">
-                <mat-icon>location_on</mat-icon>
-              </button>
-            </mat-card-actions>
-            <div *ngIf="item.locationName" class="text-sm text-center mt-4 text-gray-500">
-              Location: {{ item.locationName }}
-            </div>
           </mat-card-actions>
+          <div
+            *ngIf="item.locationName"
+            class="text-sm text-center mt-4 text-gray-500"
+          >
+            Location: {{ item.locationName }}
+          </div>
+        </mat-card-actions>
 
-          <mat-menu #shareMenu="matMenu">
-            <button mat-menu-item (click)="shareItem(item, 'whatsapp')">
-              <fa-icon [icon]="icons.whatsapp" class="text-green-500 mr-2"></fa-icon>
-              <span>Share on WhatsApp</span>
-            </button>
-            <button mat-menu-item (click)="shareItem(item, 'linkedin')">
-              <fa-icon [icon]="icons.linkedin" class="text-blue-500 mr-2"></fa-icon>
-              <span>Share on LinkedIn</span>
-            </button>
-            <button mat-menu-item (click)="shareItem(item, 'twitter')">
-              <fa-icon [icon]="icons.twitter" class="text-sky-500 mr-2"></fa-icon>
-              <span>Share on Twitter</span>
-            </button>
-          </mat-menu>
-        </mat-card>
-      </div>
+        <mat-menu #shareMenu="matMenu">
+          <button
+            mat-menu-item
+            (click)="shareItem(item, 'whatsapp')"
+          >
+            <fa-icon
+              [icon]="icons.whatsapp"
+              class="text-green-500 mr-2"
+            ></fa-icon>
+            <span>Share on WhatsApp</span>
+          </button>
+          <button
+            mat-menu-item
+            (click)="shareItem(item, 'linkedin')"
+          >
+            <fa-icon
+              [icon]="icons.linkedin"
+              class="text-blue-500 mr-2"
+            ></fa-icon>
+            <span>Share on LinkedIn</span>
+          </button>
+          <button
+            mat-menu-item
+            (click)="shareItem(item, 'twitter')"
+          >
+            <fa-icon
+              [icon]="icons.twitter"
+              class="text-sky-500 mr-2"
+            ></fa-icon>
+            <span>Share on Twitter</span>
+          </button>
+        </mat-menu>
+      </mat-card>
     </div>
-    <div *ngIf="!showMore" class="text-center mt-4">
-      <button (click)="toggleShowMore()" class="text-blue-500">View More</button>
-    </div>
-
-    <div class="swiper-pagination"></div>
   </div>
+  <div *ngIf="!showMore" class="text-center mt-4">
+    <button (click)="toggleShowMore()" class="text-blue-500 hover:underline">
+      View More
+    </button>
+  </div>
+
+  <div class="swiper-pagination"></div>
+</div>
 
 
   <div class="mt-12">
@@ -216,15 +261,6 @@
 <div *ngIf="role !== 'admin'" class="min-h-screen overflow-x-hidden flex flex-col bg-gray-50">
   <div class="bg-blue-100 py-10 text-center">
     <h1 class="text-2xl md:text-4xl font-bold text-gray-700">Lost Something? Let’s Find It!</h1>
-    <div class="mt-4">
-      <mat-form-field appearance="outline" class="w-full md:w-1/2">
-        <mat-label>Search for lost items...</mat-label>
-        <input type="text" placeholder="Enter item name" aria-label="Search" matInput (input)="onSearchInput($event)" />
-        <button mat-icon-button (click)="searchItems()" matSuffix>
-          <mat-icon>search</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
   </div>
 
   <div class="bg-green-100 p-6 rounded-md text-center mx-6 mt-6 shadow-md">
@@ -242,9 +278,6 @@
   <div class="swiper-container px-6 py-4">
     <h2 class="font-bold max-w-3xs mr-6 text-2xl max-[375px]:text-base/[17px] mb-4">Recently Reported Items</h2>
     <div class="swiper-wrapper flex md:flex-row flex-col">
-      <div *ngIf="isLoading" class="flex justify-center mt-4 mx-4">
-        <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
-      </div>
       <div *ngFor="let item of filteredSlides.slice(0, showMore ? filteredSlides.length : 2)"
         class="swiper-slide p-4 flex justify-center items-start w-full md:w-auto">
         <mat-card
@@ -285,8 +318,6 @@
               Location: {{ item.locationName }}
             </div>
           </mat-card-actions>
-
-
 
           <mat-menu #shareMenu="matMenu">
             <button mat-menu-item (click)="shareItem(item, 'whatsapp')">
@@ -334,47 +365,8 @@
 </div>
 </div>
 
-<!-- Floating Chat Icon -->
-<!-- <div *ngIf="!isChatOpen" class="fixed bottom-6 right-6 z-50">
-  <button (click)="toggleChat()"
-    class="bg-[#219C90] hover:bg-[#1A7C6A] p-4 rounded-full shadow-lg text-white flex items-center justify-center" aria-label="Open Chat">
-    <mat-icon>chat</mat-icon>
-  </button>
-</div> -->
-<!-- Chat Window -->
-<!-- <div *ngIf="isChatOpen" class="fixed bottom-10 right-6 bg-white w-full md:w-1/4 h-[400px] shadow-lg rounded-t-lg flex flex-col">
- 
-  <div class="bg-[#219C90] text-white p-4 flex justify-between items-center rounded-t-lg">
-    <h3 class="text-lg font-semibold">Claim It Chat</h3>
-    <button (click)="toggleChat()" class="text-gray-200 hover:text-gray-50 focus:outline-none" aria-label="Close Chat">
-      ✕
-    </button>
-  </div>
 
-
-  <div class="flex-1 overflow-y-auto p-4 bg-gray-100">
-    <div *ngFor="let message of messages" class="mb-2">
-      <div *ngIf="message.startsWith('You:')" class="bg-[#219C90] p-2 rounded-lg text-sm text-white max-w-[70%] ml-auto">
-        {{ message.replace('You: ', '') }}
-      </div>
-      <div *ngIf="message.startsWith('AI:')" class="bg-gray-200 p-2 rounded-lg text-sm text-gray-700 max-w-[70%]">
-        {{ message.replace('AI: ', '') }}
-      </div>
-    </div>
-  </div>
-
-  
-  <div class="bg-gray-200 p-4">
-    <textarea [(ngModel)]="chatInput" class="w-full p-2 rounded-md" rows="3" placeholder="Type a message..." (keydown.enter)="sendMessage()"></textarea>
-    <button (click)="sendMessage()" class="bg-[#219C90] text-white p-2 mt-2 rounded-md w-full" [disabled]="loading">
-      Send
-    </button>
-  </div>
-</div> -->
-
-
-
-
+<app-loader *ngIf="isLoading"></app-loader>
 <div class="flex-none">
   <app-form-footer></app-form-footer>
 </div>

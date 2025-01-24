@@ -20,6 +20,7 @@ import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submi
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-view-or-unclaim',
   standalone: true,
@@ -36,6 +37,7 @@ import { RouterModule } from '@angular/router';
     FormFooterComponent,
     MatTooltipModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule,
     LoaderComponent,
     MatIconModule,
     ReactiveFormsModule,
@@ -51,8 +53,9 @@ export default class ViewOrUnclaimComponent {
   viewUnclaimForm: any= FormGroup
   searchQuery: string = '';
   searchResults: any = [];
+  initalDataResults: any = [];
   showNoResults: boolean = true;
-  loader:boolean=true;
+  isLoading:boolean=true;
   displaycoloums: any = [
     {
       label: "Image",
@@ -138,13 +141,25 @@ export default class ViewOrUnclaimComponent {
       status: this.viewUnclaimForm.value.status ? this.viewUnclaimForm.value.status : '',
     
     }
+    this.isLoading = true
     this.service.getAllItems(reqbody).subscribe((res: any) => {
       this.searchResults = res.itemRequests
-      this.loader = false;
+      this.isLoading = false;
     })
 
   }
-
+  listOfItems(){
+    this.isLoading = true
+    this.service.listOfItems(this.searchQuery).subscribe(
+      (res: any) => {
+        this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED");
+        this.isLoading = false
+      },
+      (error) => {
+        console.error('Error fetching search results:', error);
+      }
+    );
+  }
   SearchAndClear(type: any) {
     if (type === 'clear') {
       this.viewUnclaimForm.reset() 
@@ -170,9 +185,9 @@ export default class ViewOrUnclaimComponent {
           status:'UNCLAIMED',
           claimId:event.requestId
         }
-        this.loader = true
+        this.isLoading = true
         this.service.unClaimItem(params).subscribe((res:any)=>{
-          this.loader = false
+          this.isLoading = false
           const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
             width: "500px",
             data: {
@@ -182,7 +197,7 @@ export default class ViewOrUnclaimComponent {
             },
           });
           dialogRef.afterClosed().subscribe((result) => {
-            this.loader = true
+            this.isLoading = true
             this.search()
           });
         })

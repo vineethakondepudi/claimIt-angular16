@@ -28,10 +28,14 @@
   text-align: left;
   font-weight: 600;
 }
+.swiper-container {
+  width: 100%;
+  overflow: hidden; /* Prevent slides from overflowing */
+}
 
 .swiper-wrapper {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: transform 0.3s ease-in-out;
 }
 
 // .swiper-slide {

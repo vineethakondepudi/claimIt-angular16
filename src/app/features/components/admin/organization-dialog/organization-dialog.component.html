@@ -40,10 +40,8 @@
           </div>
           <p *ngIf="files.length === 0" class="text-gray-500 text-center">No image selected.</p>
         </div>
-        <div *ngIf="isLoading" class="flex justify-center mt-4">
-          <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
-        </div>
-        <div *ngIf="!isLoading; else loading">
+    
+    
           <ul>
             <li *ngFor="let item of formattedData">
               <strong>{{ item.key }}:</strong>
@@ -59,13 +57,9 @@
               </span>
             </li>
           </ul>
-        </div>
+    
         
-        <ng-template #loading>
-          <div class="flex justify-center mt-4">
-            <mat-progress-spinner mode="indeterminate" color="primary"></mat-progress-spinner>
-          </div>
-        </ng-template>
+   
         
         <div class="w-full flex justify-between">
           <button mat-raised-button color="primary" class="mt-4 ml-auto" [disabled]="!files.length" (click)="onCloseDialog()">
@@ -78,3 +72,4 @@
     
   </mat-card-content>
 </mat-card>
+<app-loader *ngIf="isLoading"></app-loader>

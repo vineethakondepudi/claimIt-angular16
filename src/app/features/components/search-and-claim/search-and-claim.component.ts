@@ -129,7 +129,10 @@ export default class SearchAndClaimComponent implements OnInit {
   files: any[] = [];
   uplodedfilesdata: any[] = []
   matchedItems: any = [];
+  initalDataResults: any = [];
+  noresultsFound:boolean = false
   loader: boolean = false
+  selectedFileName: string | null = null;
   items: any[] = [];
   showTooltip = true;
   searchResults: any = [];
@@ -151,7 +154,7 @@ export default class SearchAndClaimComponent implements OnInit {
     sortId: "foundDate",
   };
   isMobileView = false;
-  selectedCategory: string = '';
+  selectedCategory: any;
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
   searchCompleted!: boolean;
   pictureSearchCompleted!: boolean;
@@ -199,11 +202,13 @@ export default class SearchAndClaimComponent implements OnInit {
         this.searchItems();
       }
     });
+    this.listOfItems();
     this.loadCategories();
     this.checkViewport();
     this.showDelay.value = 0; // Set show delay to 500ms
     this.hideDelay.value = 200;
   }
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.checkViewport();
@@ -217,15 +222,16 @@ export default class SearchAndClaimComponent implements OnInit {
   searchItems() {
     if (this.searchQuery.trim() !== '') {
       this.searchResults = []; // Clear previous results
-      this.searchCompleted = false; // Reset search completion status  
-      const apiUrl = `http://172.17.12.101:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
-
-      this.http.get<any[]>(apiUrl).subscribe(
-        (response) => {
+      this.claimService.searchItems(this.searchQuery).subscribe(
+        (response:any) => {
+          if( response.message= "No items found matching your search"){
+            this.noresultsFound = true
+            this.initalDataResults = false
+             }
           if (Array.isArray(response)) {
-            // Filter results for items with status "UNCLAIMED"
             this.searchResults = response.filter(item => item.status === "UNCLAIMED");
           } else {
+          
             console.error('API response is not an array', response);
           }
           this.searchCompleted = true; // Mark search as completed
@@ -235,9 +241,26 @@ export default class SearchAndClaimComponent implements OnInit {
           this.searchCompleted = true; // Mark search as completed even on error
         }
       );
+    }else {
+    //  if(!this.isMobileView && !this.categories){
+    //   this.listOfItems()
+    //  }
     }
   }
-
+listOfItems(){
+  this.isLoading = true
+  this.claimService.listOfItems(this.searchQuery).subscribe(
+    (res: any) => {
+      this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED");
+      this.searchCompleted = true; 
+      this.isLoading = false
+    },
+    (error) => {
+      console.error('Error fetching search results:', error);
+      this.searchCompleted = true; // Mark search as completed even on error
+    }
+  );
+}
   closeTooltip() {
     this.showTooltip = false;
   }
@@ -273,14 +296,16 @@ export default class SearchAndClaimComponent implements OnInit {
   search(): void {
     this.searchResults = [];
        this.isLoading = true;
-
-    const apiUrl = `http://172.17.12.101:8081/api/users/search?query=${this.selectedCategory}`;
-    this.http.get<any[]>(apiUrl).subscribe(
+       this.claimService.searchItems(this.selectedCategory).subscribe(
       (data: any) => {
+        if( data.message= "No items found matching your search"){
+          this.noresultsFound = true
+          this.initalDataResults = false
+           }
         if (Array.isArray(data)) {
           this.categerorydata = data.filter(item => item.status === "UNCLAIMED");
              this.isLoading = false;
-
+             this.noresultsFound = false
           if (this.categerorydata.length === 0) {
             this.categeoryerror = true;
           } else {
@@ -298,31 +323,6 @@ export default class SearchAndClaimComponent implements OnInit {
     );
   }
 
-  saveSearch() {
-    if (this.searchQuery.trim() !== '') {
-      if (!this.savedSearches.includes(this.searchQuery)) {
-        this.savedSearches.push(this.searchQuery);
-        localStorage.setItem('savedSearches', JSON.stringify(this.savedSearches));
-        this.snackBar.open('Search saved successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      } else {
-        this.snackBar.open('This search is already saved.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      }
-    } else {
-      this.snackBar.open('Search query cannot be empty.', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
-    }
-  }
   applySavedSearch() {
     if (this.selectedSavedSearch) {
       this.searchQuery = this.selectedSavedSearch;
@@ -330,13 +330,16 @@ export default class SearchAndClaimComponent implements OnInit {
     }
   }
   clearSearch() {
+    this.noresultsFound = false
     this.searchQuery = '';
     this.searchResults = [];
     this.matchedItems = [];
     this.categerorydata = [];
     this.files = [];
+    this.selectedCategory = null;
     this.searchCompleted = false;
     this.pictureSearchCompleted = false;
+    this.listOfItems()
   }
   loadSavedSearches() {
     const storedSearches = localStorage.getItem('savedSearches');
@@ -360,7 +363,6 @@ export default class SearchAndClaimComponent implements OnInit {
     }
   }
   clearcategory() {
-    this.categories = []
     this.categerorydata = []
   }
   selectCategory(category: string) {
@@ -370,7 +372,7 @@ export default class SearchAndClaimComponent implements OnInit {
     this.search();
   }
   public onSelect(event: any): void {
-    const files = event.target.files;
+    const files =  this.isMobileView ?event.target.files : event.addedFiles;
     if (files && files.length > 0) {
       const file = files[0];
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/jfif'];
@@ -412,11 +414,26 @@ export default class SearchAndClaimComponent implements OnInit {
       );
     }
   }
+  onCategoryChange(selected: string | null): void {
+    // Update the selected category
+    this.selectedCategory = selected;
+  
+    // Clear previous category data
+    this.categerorydata = [];
+    this.searchResults = [];
+    this.noresultsFound = false;
+    this.categeoryerror = false;
+  
+    // Perform a search only if a category is selected
+    if (this.selectedCategory) {
+      this.search();
+    }
+  }
   getCategoryIcon(name: string): string {
     return this.categoryIcons[name] || 'help';
   }
   loadCategories(): void {
-    this.http.get<any[]>('http://172.17.12.101:8081/api/admin/getcategories')
+    this.http.get<any[]>('http://172.17.12.38:8081/claimit/lookup')
       .subscribe({
         next: (data) => {
           this.categories = data;
@@ -425,6 +442,26 @@ export default class SearchAndClaimComponent implements OnInit {
           console.error('Error loading categories:', err);
         }
       });
+  }
+
+  public onImportToExcel() {
+    this.files = []
+  }
+   onFileSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.files = Array.from(input.files);
+      this.selectedFileName = this.files[0].name;
+      this.uploadImage(this.files[0]).subscribe((response: any) => {
+        if( response.message= "No matching items found."){
+          this.noresultsFound = true
+          this.initalDataResults = false
+           }
+        this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED") || [];
+       
+      });
+      
+    }
   }
 
   public uploadImage(file: File): Observable<any> {
@@ -436,9 +473,6 @@ export default class SearchAndClaimComponent implements OnInit {
     });
   }
 
-  public onImportToExcel() {
-    this.files = []
-  }
   claimItem(item: Item) {
     const dialogRef = this.matDialog.open(CreateClaimComponent, {
       width: "500px",
@@ -469,7 +503,8 @@ export default class SearchAndClaimComponent implements OnInit {
             });
             dialogRef.afterClosed().subscribe((result) => {
                  this.isLoading = true
-              this.search()
+              this.search();
+              this.clearSearch();
             });
           }
         })

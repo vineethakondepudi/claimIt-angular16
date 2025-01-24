@@ -10,6 +10,8 @@ import { FormFooterComponent } from '../form-footer/form-footer.component';
 import { FormSubmissionModalComponent } from '../form-submission-modal/form-submission-modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimitService } from 'src/app/features/sharedServices/claimit.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-contact',
@@ -22,6 +24,8 @@ import { ClaimitService } from 'src/app/features/sharedServices/claimit.service'
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    LoaderComponent,
+    MatProgressSpinnerModule,
     MatButtonModule,
   ],
   templateUrl: './contact.component.html',
@@ -31,6 +35,7 @@ export default class ContactComponent {
   supportEmail: any = 'support@lostandfoundapp.com'
   contactForm!: FormGroup;
   enableSave: boolean = true
+  isLoading:boolean = false
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   constructor(private fb: FormBuilder, public dialog: MatDialog, private service:ClaimitService) {
 
@@ -52,7 +57,7 @@ export default class ContactComponent {
     return this.contactForm.get('email');
   }
   contactUs() {
- 
+    this.isLoading  = true;
     const reqbody = {
       name: this.contactForm.value.name ? this.contactForm.value.name : '',
       mail: this.contactForm.value.email ? this.contactForm.value.email : '',
@@ -60,7 +65,7 @@ export default class ContactComponent {
     }
     this.service.contactUs(reqbody).subscribe(
       (res: any) => {
-        
+        this.isLoading  = false;
       })
    
       
