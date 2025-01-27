@@ -116,6 +116,7 @@ export default class AdditemComponent implements OnInit {
   };
   isOrganizationSelected: boolean = false; 
   selectedOrgId: string = '';
+  itemUploaded: boolean = false;
   files: any[] = []; 
 
   constructor(private service: ClaimitService, private dialog: MatDialog) {}
@@ -130,8 +131,10 @@ export default class AdditemComponent implements OnInit {
   }
   
   onAddItemClick(): void {
+    this.isLoading = true
     this.service.organizationList().subscribe(
       (res: any) => {
+        this.isLoading = false
         const dialogRef = this.dialog.open(OrganizationDialogComponent, {
           width: '400px',
           data: { organizationList: res },
@@ -139,7 +142,9 @@ export default class AdditemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
           this.isLoading  = true;
-         this. fetchData()
+         this. fetchData();
+         this.service.setItemUploaded(true);
+         location.reload();
           
         });
         this.isLoading  = false;
@@ -149,7 +154,6 @@ export default class AdditemComponent implements OnInit {
       }
     );
   }
-
   fetchData(): void {
     const query = this.searchQuery.trim();
     this.isLoading  = true;

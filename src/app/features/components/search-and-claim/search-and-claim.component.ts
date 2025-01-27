@@ -131,6 +131,9 @@ export default class SearchAndClaimComponent implements OnInit {
   matchedItems: any = [];
   initalDataResults: any = [];
   noresultsFound:boolean = false
+  noresultsforItemsearch:boolean = false
+  noresultsforPicturesearch:boolean = false
+  noresultsforCtegerorysearch:boolean = false
   loader: boolean = false
   selectedFileName: string | null = null;
   items: any[] = [];
@@ -194,6 +197,7 @@ export default class SearchAndClaimComponent implements OnInit {
   };
   showDelay = { value: 0 }; // Delay in milliseconds
   hideDelay = { value: 200 };
+  categerySearchResult :boolean = false
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.itemName = params['id'];
@@ -226,6 +230,7 @@ export default class SearchAndClaimComponent implements OnInit {
         (response:any) => {
           if( response.message= "No items found matching your search"){
             this.noresultsFound = true
+            this.noresultsforItemsearch = true
             this.initalDataResults = false
              }
           if (Array.isArray(response)) {
@@ -276,6 +281,7 @@ listOfItems(){
       );
   }
   onCategorySelect(categoryName: string): void {
+    this.categerySearchResult = true
     this.selectedCategory = categoryName
     this.categerorydata = this.categories.filter(category => category.name === categoryName);
     this.search()
@@ -300,12 +306,14 @@ listOfItems(){
       (data: any) => {
         if( data.message= "No items found matching your search"){
           this.noresultsFound = true
+          this.noresultsforCtegerorysearch = true
           this.initalDataResults = false
            }
         if (Array.isArray(data)) {
           this.categerorydata = data.filter(item => item.status === "UNCLAIMED");
              this.isLoading = false;
              this.noresultsFound = false
+             this.noresultsforCtegerorysearch = false
           if (this.categerorydata.length === 0) {
             this.categeoryerror = true;
           } else {
@@ -330,12 +338,16 @@ listOfItems(){
     }
   }
   clearSearch() {
+    this.noresultsforCtegerorysearch = false
+    this.noresultsforItemsearch = false
+    this.noresultsforPicturesearch = false
     this.noresultsFound = false
     this.searchQuery = '';
     this.searchResults = [];
     this.matchedItems = [];
     this.categerorydata = [];
     this.files = [];
+    this.selectedFileName = null
     this.selectedCategory = null;
     this.searchCompleted = false;
     this.pictureSearchCompleted = false;
@@ -452,13 +464,16 @@ listOfItems(){
     if (input.files && input.files.length > 0) {
       this.files = Array.from(input.files);
       this.selectedFileName = this.files[0].name;
+      this.isLoading = true
       this.uploadImage(this.files[0]).subscribe((response: any) => {
         if( response.message= "No matching items found."){
           this.noresultsFound = true
+          this.noresultsforPicturesearch = true
           this.initalDataResults = false
+          this.isLoading = false
            }
         this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED") || [];
-       
+        this.isLoading = false
       });
       
     }

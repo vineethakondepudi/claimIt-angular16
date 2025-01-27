@@ -143,12 +143,7 @@ export default class AdminSearchComponent {
   }
   ngOnInit() {
     this.initializeAdminForm()
-    // this.search()
-    this.isLoading = true
-    this.service.getadminData().subscribe((res: any) => {
-      this.initalData = res.data
-         this.isLoading = false
-    })
+    this.search()
 
   }
   initializeAdminForm() {

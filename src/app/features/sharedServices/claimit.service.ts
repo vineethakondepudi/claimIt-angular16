@@ -11,7 +11,12 @@ export class ClaimitService {
   constructor(private http: HttpClient) { }
   private notificationCountSource = new BehaviorSubject<number>(0);
   notificationCount$ = this.notificationCountSource.asObservable();
+  private itemUploadedSubject = new BehaviorSubject<boolean>(false);
+  itemUploaded$ = this.itemUploadedSubject.asObservable();
 
+  setItemUploaded(status: boolean) {
+    this.itemUploadedSubject.next(status);
+  }
 
   private pendingClaimsSubject = new BehaviorSubject<number>(0);
 

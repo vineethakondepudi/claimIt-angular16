@@ -79,16 +79,17 @@ export class SearchResultsDialogComponent {
     this.dialogRef.close();
     this.router.navigate(['claimit/searchAndClaim'], { queryParams: { id: item.itemName } });
   }
-    previewImage(event: any) {
-      const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-        width: "500px",
-        data: {
-          requiredData: event,
-          title: 'Preview Image'
-        },
-      });
+  previewImage(event: any) {
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: '500px',
+      data: {
+        requiredData: event,
+        title: 'Preview Image',
+      },
+    });
   
-      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      });
-    }
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      console.log('Dialog closed with result:', confirmed);
+    });
+  }
 }

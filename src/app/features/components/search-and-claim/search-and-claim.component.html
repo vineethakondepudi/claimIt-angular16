@@ -14,10 +14,13 @@
         </button>
       </mat-form-field>
     </div>
-    <div *ngIf="searchCompleted && searchResults.length === 0" class="no-results-container">
-      <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-      <p class="pl-[100px] font-bold text-lg">No results found</p>
-    </div>
+    <div *ngIf="noresultsforItemsearch"
+      class="relative flex flex-col items-center justify-center bg-white">
+   <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+     No Records Found
+   </p>
+ </div>
     <div *ngIf="searchResults?.length > 0" class="flex-grow  mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
       <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
         [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
@@ -45,10 +48,13 @@
         [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
       </app-data-table>
     </div>
-    <div *ngIf="pictureSearchCompleted" class="no-results-container">
-      <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-      <p class="pl-[100px] font-bold text-lg">No results found.</p>
-    </div>
+    <div *ngIf="noresultsforPicturesearch"
+      class="relative flex flex-col items-center justify-center bg-white">
+   <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+     No Records Found
+   </p>
+ </div>
     <mat-form-field appearance="fill" class="category-dropdown">
       <mat-label>Search with in category</mat-label>
       <mat-select [(value)]="selectedCategory" (selectionChange)="onCategorySelect($event.value)">
@@ -60,17 +66,23 @@
         <mat-icon>clear</mat-icon>
       </button>
     </mat-form-field>
-    <div *ngIf="categeoryerror" class="no-results-container">
+    <!-- <div *ngIf="categeoryerror" class="no-results-container">
       <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
       <p class="pl-[100px] font-bold text-lg">No results found.</p>
-    </div>
+    </div> -->
    
     <div *ngIf="!categeoryerror && categerorydata?.length > 0" class="flex-grow mt-5 bg-[#E8F2F3]">
       <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
         [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"
         (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
     </div>
-
+    <div *ngIf="noresultsforCtegerorysearch"
+      class="relative flex flex-col items-center justify-center bg-white">
+   <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+     No Records Found
+   </p>
+ </div>
     <ngx-dropzone (change)="onSelect($event)" class="desktop-dropzone">
       <ngx-dropzone-label>
         Drag and drop image here or click to upload
@@ -83,6 +95,32 @@
   </div>
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div  *ngIf="!isMobileView" class="min-h-screen flex flex-col">
@@ -99,7 +137,7 @@
                       (closed)="containerPanelOpened = false">
                       <mat-expansion-panel-header>
                           <mat-panel-title class="text-lg">
-                              <span class="font-semibold">Search</span>
+                              <span class="font-semibold">Filters</span>
                           </mat-panel-title>
                           <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
                       </mat-expansion-panel-header>
@@ -169,7 +207,7 @@
                         </div>
                       
                         <!-- Buttons Container -->
-                        <div class="w-full flex justify-end gap-2 mt-4">
+                        <div class="w-full flex justify-end gap-2 mt-[-4rem]">
                           <button mat-button color="warn" (click)="clearSearch()">
                             Clear
                           </button>
@@ -207,7 +245,7 @@
               [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
           </div>
-          <div *ngIf="noresultsFound && !(searchResults?.length > 0 ||matchedItems?.length > 0 || categerorydata?.length > 0  || initalDataResults?.length > 0 )" 
+          <div *ngIf="noresultsFound && !(searchResults?.length > 0 ||matchedItems?.length > 0 || categerorydata?.length > 0  || initalDataResults?.length > 0 ) && !noresultsforItemsearch && !noresultsforPicturesearch && !noresultsforCtegerorysearch" 
             class="relative flex flex-col items-center justify-center bg-white">
          <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
          <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
@@ -233,7 +271,7 @@
          
           <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
               <mat-icon class="text-[#00897b] ">visibility</mat-icon>
-              <span class="text-xs">View/Unclaim</span>
+              <span class="text-xs">View History</span>
           </button>
             
       </div>
@@ -251,7 +289,7 @@
       </button>
       <button class="flex flex-col items-center text-gray-600 hover:text-teal-500" [routerLink]="'/claimit/viewOrUnclaim'">
           <mat-icon class="text-[#00897b]">visibility</mat-icon>
-          <span class="text-xs">View/Unclaim</span>
+          <span class="text-xs">View History</span>
       </button>
   </div>
 </div>

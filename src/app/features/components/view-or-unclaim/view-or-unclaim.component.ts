@@ -88,7 +88,7 @@ export default class ViewOrUnclaimComponent {
     },
     {
       label: "Status",
-      name: "claimStatus",
+      name: "status",
       type: "text",
       isSortable: true,
       position: "left",
@@ -118,7 +118,7 @@ export default class ViewOrUnclaimComponent {
   ngOnInit() {
     this.initialForm( )
     this.isLoading = true
-    this.initalDatatable()
+    this.search()
   }
 
   initalDatatable(){
@@ -143,7 +143,7 @@ export default class ViewOrUnclaimComponent {
     }
     this.isLoading = true
     this.service.getAllItems(reqbody).subscribe((res: any) => {
-      this.searchResults = res.itemRequests
+      this.searchResults = res.claimHistory
       this.isLoading = false;
     })
 
@@ -165,6 +165,7 @@ export default class ViewOrUnclaimComponent {
       this.viewUnclaimForm.reset() 
       this.searchResults = [];
       this.showNoResults = true;
+      this.search()
     } else if (type === 'search') {
       this.search()
     }

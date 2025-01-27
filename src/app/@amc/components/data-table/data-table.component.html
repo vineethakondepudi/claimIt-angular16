@@ -141,97 +141,110 @@
   </div>
 </div>
 
-<div *ngIf="isMobileView && dataSource.data.length > 0 && !getData" class="grid grid-cols-2 gap-2 p-2"
-  style="margin-top: -15px;">
-  <div class="card border rounded-lg shadow-md p-2" *ngFor="let element of dataSource.data">
-    <img *ngIf="element.image" [src]="'data:image/jpeg;base64,' + element.image" alt="Item Image"
-      class="my-2 w-[150px] h-[100px] rounded-md object-contain mx-auto"
+<div 
+  *ngIf="isMobileView && dataSource.data.length > 0 && !getData" 
+  class="grid grid-cols-2 gap-4 p-4">
+  
+  <!-- Individual Card -->
+  <div class="card border rounded-lg shadow-md p-4 flex flex-col space-y-4" 
+       *ngFor="let element of dataSource.data">
+       
+    <!-- Image Section -->
+    <img 
+      *ngIf="element.image" 
+      [src]="'data:image/jpeg;base64,' + element.image" 
+      alt="Item Image"
+      class="w-full h-32 rounded-md object-contain"
       (click)="openImagePreview('data:image/jpeg;base64,' + element.image)" />
-      <div class="flex flex-col items-start">
-        <div class="flex-1">
-          <strong>{{ element.status }}</strong>
-        </div>
-        <div class="mt-2">
-          <button
-            *ngIf="!removeArchive && !showUnClaim && !adminActions"
-            (click)="unClaimItem(element)"
-            [disabled]="element.status !== 'PENDING_PICKUP'"
-            mat-raised-button
-            color="primary"
-            class="txt-button">
-            UnClaim
-          </button>
-        
-          <button
-            *ngIf="element.status === 'PENDING_APPROVAL'"
-            mat-stroked-button
-            color="primary"
-            class="cancel-button"
-            (click)="approveClaimReq(element)">
-            Approve
-          </button>
-        
-          <button
-            *ngIf="element.status === 'ARCHIVED' || element.status === 'PENDING_APPROVAL'"
-            mat-stroked-button
-            color="warn"
-            class="cancel-button"
-            (click)="rejectClaimReq(element)">
-            Reject
-          </button>
-        
-          <button
-            *ngIf="element.status === 'REJECTED' || element.status === 'UNCLAIMED'"
-            (click)="removeItem(element)"
-            mat-stroked-button
-            color="warn"
-            class="cancel-button">
-            Remove
-          </button>
-        
-          <button
-            *ngIf="element.status === 'PENDING_PICKUP'"
-            (click)="markAsClaimed(element)"
-            mat-stroked-button
-            color="primary"
-            class="cancel-button">
-            Claimed
-          </button>
-        </div>
+    
+    <!-- Status Section -->
+    <div   *ngIf="!this.searchResultspage"  class="text-center w-full">
+      <strong 
+        class="block text-xs text-gray-700" 
+        [ngClass]="{ 'text-xs font-light': element.status === 'PENDING_APPROVAL' }">
+        {{ element.status === 'PENDING_APPROVAL' ? 'PENDING APPROVAL' : element.status }}
+      </strong>
+    </div>
+    
+    <!-- Action Buttons Section -->
+    <div class="flex flex-col space-y-2">
+      <!-- Approve/Reject Buttons -->
+      <div 
+        *ngIf="element.status === 'PENDING_APPROVAL' && !this.searchResultspage" 
+        class="flex justify-between gap-2">
+        <button 
+          mat-button 
+          color="primary" 
+          class="flex-1 text-sm bg-blue-500 text-white rounded py-2" 
+          (click)="approveClaimReq(element)">
+          Approve
+        </button>
+        <button 
+          mat-button 
+          color="warn" 
+          class="flex-1 text-sm bg-red-500 text-white rounded py-2" 
+          (click)="rejectClaimReq(element)">
+          Reject
+        </button>
       </div>
 
-    <div *ngFor="let column of tableColumns">
-      <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
-        <div class="flex flex-col space-y-2">
-          <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
-          <div class="grid grid-cols-2 gap-4 items-center">
-            <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-              (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4 mb-2">
-              Claim
-            </button>
-            <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-              class="text-sm py-2 px-4 mt-4" (click)="openQrDialog(element)">
-              <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-              <span class="text-xs">QR Code</span>
-            </button>
+      <!-- UnClaim Button -->
+      <button
+        *ngIf="!removeArchive && !showUnClaim && !adminActions && !this.searchResultspage && !this.userviewUnclaimpage"
+        [disabled]="element.status !== 'PENDING_PICKUP'"
+        class="w-full text-sm bg-blue-500 text-white rounded py-2"
+        (click)="unClaimItem(element)">
+        UnClaim
+      </button>
+
+      <!-- Remove Button -->
+      <button
+        *ngIf="(element.status !== 'ARCHIVED' && element.status !== 'EXPIRED') && !this.searchResultspage "
+        class="w-full text-sm bg-red-500 text-white rounded py-2"
+        (click)="removeItem(element)">
+        Remove
+      </button>
+
+      <!-- Claimed Button -->
+      <button
+        *ngIf="element.status === 'PENDING_PICKUP' && !this.searchResultspage"
+        class="w-full text-sm bg-blue-500 text-white rounded py-2"
+        (click)="markAsClaimed(element)">
+        Claimed
+      </button>
+      <div *ngFor="let column of tableColumns">
+        <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
+          <div class="flex flex-col space-y-2">
+            <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
+            <div class="grid grid-cols-2 gap-4 items-center">
+              <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
+                (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4 mb-2">
+                Claim
+              </button>
+              <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
+                class="text-sm py-2 px-4 mt-4" (click)="openQrDialog(element)">
+                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+                <span class="text-xs">QR Code</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div *ngIf="column.type === 'text'" class="flex-1">
+              <strong>{{ column.label }}:</strong> {{ element[column.name] }}
+            </div>
+            <div *ngIf="column.name === 'name' && !adminserarchpage " class="flex items-center">
+              <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
+                (click)="openQrDialog(element)">
+                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+                <span class="text-xs">QR Code</span>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="flex justify-between items-center">
-          <div *ngIf="column.type === 'text'" class="flex-1">
-            <strong>{{ column.label }}:</strong> {{ element[column.name] }}
-          </div>
-          <div *ngIf="column.name === 'name'" class="flex items-center">
-            <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
-              (click)="openQrDialog(element)">
-              <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-              <span class="text-xs">QR Code</span>
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
+
 
 <div *ngIf="showImagePreview" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
   <div class="bg-white p-4 rounded-lg">

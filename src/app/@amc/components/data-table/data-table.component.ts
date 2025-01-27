@@ -95,15 +95,20 @@ export class DataTableComponent<T> {
   isMobileView = false;
   searchQuery: string = '';
   addItemSearchResults: any
+  itemUploaded: boolean = false;
   currentRoute: any
   getData: any
+  searchResultspage:any
+  userviewUnclaimpage:any
+  adminserarchpage:any
   constructor(public router: Router, private datePipe: DatePipe, private dialog: MatDialog, private service: ClaimitService) { }
   ngOnInit() {
     this.currentRoute = this.router.url;
-    console.log(this.currentRoute);
     this.currentRoute.includes("/addItem")
     this.getData = this.currentRoute.includes("/addItem")
-
+    this.searchResultspage = this.currentRoute.includes("/claimit/searchAndClaim")
+    this.userviewUnclaimpage = this.currentRoute.includes("/claimit/viewOrUnclaim")
+    this.adminserarchpage = this.currentRoute.includes("/claimit/search")
     this.displayedColumns = this.tableColumns.map((col) => col.name);
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
       return col.isChecked === true;
@@ -114,10 +119,12 @@ export class DataTableComponent<T> {
     this.displayedColumns = columnNames;
 
     this.checkViewport();
-    if(this.isMobileView){
+    if(this.isMobileView && !this.searchResultspage && !this.userviewUnclaimpage && !this.adminserarchpage){
       this.addItem()
+      this.service.itemUploaded$.subscribe((status) => {
+        this.itemUploaded = status;
+      });
      }
-     console.log(this.dataSource.data, 'datasource')
   }
   addItem() {
     this.isLoading = true
@@ -128,7 +135,6 @@ export class DataTableComponent<T> {
           date: key.split(":")[1], // Extract the date part from "date:YYYY/MM/DD"
           items: res[key]
         }));
-        console.log(this.addItemSearchResults);
         this.isLoading = false
       },
       (error) => {
