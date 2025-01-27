@@ -74,7 +74,7 @@ export class ClaimitService {
     return this.http.put(environment.approveOrRejectClaim+'?itemId='+reqbody.itemId+'&status='+reqbody.status+'&rejectedReason='+reqbody.reasonForReject,'')
   }
   public markASClaimed(reqbody:any){
-    return this.http.put(environment.markASClaimed,reqbody)
+    return this.http.post(environment.markASClaimed,reqbody)
   }
   
   public statusCount(month: string, year: number) {

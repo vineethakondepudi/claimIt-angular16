@@ -82,9 +82,7 @@
        No Records Found
      </p>
    </div>
-    <div class="flex-none">
-        <app-form-footer></app-form-footer>
-    </div>
+ 
     <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
         <div class="flex justify-between items-center h-16 px-4 ">
           <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/dashboard'" >
@@ -105,3 +103,6 @@
     </div>
 </div>
 <app-loader *ngIf="isLoading"></app-loader>
+<div class="flex-none">
+  <app-form-footer></app-form-footer>
+</div>
