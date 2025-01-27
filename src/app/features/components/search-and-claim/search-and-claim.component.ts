@@ -415,6 +415,9 @@ listOfItems(){
         (response) => {
           if (response.success) {
             this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED");
+            if(response.message ==="Matching items found.") {
+              this.noresultsforPicturesearch = true
+            }
           } else {
             this.pictureSearchCompleted = true
           }
@@ -466,9 +469,9 @@ listOfItems(){
       this.selectedFileName = this.files[0].name;
       this.isLoading = true
       this.uploadImage(this.files[0]).subscribe((response: any) => {
-        if( response.message= "No matching items found."){
+        if( response.message= "Matching items found."){
           this.noresultsFound = true
-          this.noresultsforPicturesearch = true
+          // this.noresultsforPicturesearch = true
           this.initalDataResults = false
           this.isLoading = false
            }

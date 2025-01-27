@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -57,6 +57,7 @@ export default class AdminSearchComponent {
   initalData: any = [];
   showNoResults: boolean = true;
   adminSearch!: FormGroup
+  isMobileView = false;
   loader: boolean = true;
   isLoading :boolean =  false;
   displaycoloums: any = [
@@ -144,6 +145,7 @@ export default class AdminSearchComponent {
   ngOnInit() {
     this.initializeAdminForm()
     this.search()
+    this.checkViewport();
 
   }
   initializeAdminForm() {
@@ -174,6 +176,14 @@ export default class AdminSearchComponent {
 
   }
 
+@HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkViewport();
+  }
+
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
+  }
 
   SearchAndClear(type: any) {
     if (type === 'clear') {

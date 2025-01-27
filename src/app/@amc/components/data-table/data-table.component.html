@@ -161,11 +161,13 @@
     <div   *ngIf="!this.searchResultspage"  class="text-center w-full">
       <strong 
         class="block text-xs text-gray-700" 
-        [ngClass]="{ 'text-xs font-light': element.status === 'PENDING_APPROVAL' }">
-        {{ element.status === 'PENDING_APPROVAL' ? 'PENDING APPROVAL' : element.status }}
+        [ngClass]="{ 'text-sm font-bold': element.status === 'PENDING_APPROVAL' }">
+        {{ element.status === 'PENDING_APPROVAL' ? 'PENDING' : element.status }}
       </strong>
     </div>
-    
+    <div   *ngIf="userviewUnclaimpage"  class="text-center w-full">
+      <strong>UserName:</strong> {{element.userName}}
+    </div>
     <!-- Action Buttons Section -->
     <div class="flex flex-col space-y-2">
       <!-- Approve/Reject Buttons -->
@@ -198,15 +200,17 @@
       </button>
 
       <!-- Remove Button -->
-      <button
-        *ngIf="(element.status !== 'ARCHIVED' && element.status !== 'EXPIRED') && !this.searchResultspage "
+      <button  mat-button 
+      color="warn" 
+        *ngIf="(element.status !== 'ARCHIVED' && element.status !== 'EXPIRED') && !this.searchResultspage && !userviewUnclaimpage "
         class="w-full text-sm bg-red-500 text-white rounded py-2"
         (click)="removeItem(element)">
         Remove
       </button>
 
       <!-- Claimed Button -->
-      <button
+      <button   mat-button 
+      color="primary" 
         *ngIf="element.status === 'PENDING_PICKUP' && !this.searchResultspage"
         class="w-full text-sm bg-blue-500 text-white rounded py-2"
         (click)="markAsClaimed(element)">

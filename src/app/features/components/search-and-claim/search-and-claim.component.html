@@ -14,7 +14,7 @@
         </button>
       </mat-form-field>
     </div>
-    <div *ngIf="noresultsforItemsearch"
+    <div *ngIf="noresultsforItemsearch && !(searchResults?.length > 0)"
       class="relative flex flex-col items-center justify-center bg-white">
    <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
    <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
@@ -221,26 +221,26 @@
                   </mat-expansion-panel>
               </mat-accordion>
           </mat-card>
-          <div *ngIf="!(searchResults?.length > 0 || categerorydata?.length > 0 || matchedItems?.length > 0)"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+          <div *ngIf="!(searchResults?.length > 0 || categerorydata?.length > 0 || matchedItems?.length > 0)"  class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
             <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
               [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="initalDataResults"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
             </app-data-table>
           </div>
           <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length && !isMobileView"
-            class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+            class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
             <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
               [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)"
               (sort)="handleSort($event)"></app-data-table>
         </div>
         
-          <div *ngIf="matchedItems?.length > 0"  class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+          <div *ngIf="matchedItems?.length > 0"  class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
             <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
               [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
             </app-data-table>
           </div>
-          <div *ngIf="searchResults?.length > 0"class="flex-grow mt-5 bg-[#E8F2F3] p-5">
+          <div *ngIf="searchResults?.length > 0"class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
             <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
               [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
