@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 
 export class QrcodeDialogComponent {
-  @ViewChild('qrCode', { static: false, read: ElementRef }) qrCode!: ElementRef;
+  @ViewChild('qrCode') qrCode!: QRCodeComponent;
+  // @ViewChild('qrCode', { static: false, read: ElementRef }) qrCode!: ElementRef;
   requiredData: any;
   title!: string;
   constructor(
@@ -51,46 +52,64 @@ export class QrcodeDialogComponent {
         return { colorDark: '#000000', colorLight: '#FFFFFF' }; 
     }
   }
-  onPrintQrCode(): void {
-    const printContent = document.getElementById('printable-qr-code');
-    if (printContent) {
-        const printWindow = window.open('', '_blank');
-        printWindow?.document.write(`
-            <html>
-                <head>
-                    <title>Print QR Code</title>
-                    <style>
-                        body {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 100vh;
-                            margin: 0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${printContent.innerHTML}
-                </body>
-            </html>
-        `);
-        printWindow?.document.close();
-        printWindow?.print();
-        printWindow?.close();
-    }
-}
-onSaveQrCode(): void {
-  const canvas = this.qrCode.nativeElement.querySelector('canvas') as HTMLCanvasElement;
-  if (canvas) {
-      const image = canvas.toDataURL('image/png'); // Get image as data URL
-      const link = document.createElement('a'); // Create a download link
-      link.href = image;
-      link.download = 'qr-code.png'; // File name
-      link.click(); // Trigger download
-  } else {
+  onSaveQrCode(): void {
+    const canvas = this.qrCode.qrcElement.nativeElement.querySelector('canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const combinedCanvas = document.createElement('canvas');
+      const context = combinedCanvas.getContext('2d');
+      if (!context) {
+        console.error('Could not get 2D context for canvas.');
+        return;
+      }
+      const qrCodeSize = 200; 
+      const padding = 20; 
+      const idHeight = 30; 
+      combinedCanvas.width = qrCodeSize + 2 * padding;
+      combinedCanvas.height = qrCodeSize + 2 * padding + idHeight;
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+      context.fillStyle = '#000000';
+      context.font = '16px Arial';
+      context.textAlign = 'center';
+      context.fillText(`ID: ${this.data.requiredData.uniqueId}`, combinedCanvas.width / 2, idHeight - 10);
+      context.drawImage(canvas, padding, idHeight + padding, qrCodeSize, qrCodeSize);
+      const combinedImage = combinedCanvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = combinedImage;
+      link.download = `qr-code-with-id-${this.data.requiredData.uniqueId}.png`;
+      link.click();
+      const printWindow = window.open('', '_blank');
+      printWindow?.document.write(`
+        <html>
+          <head>
+            <title>Print QR Code</title>
+            <style>
+              body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+              }
+              img {
+                max-width: 100%;
+                max-height: 100%;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${combinedImage}" alt="QR Code with ID">
+          </body>
+        </html>
+      `);
+      printWindow?.document.close();
+      printWindow?.print();
+      printWindow?.close();
+    } else {
       console.error('QR code canvas not found.');
+    }
   }
-}
+
 
   onCancel() {
     this.dialogRef.close('no');

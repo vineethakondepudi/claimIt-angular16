@@ -121,134 +121,137 @@
 <!-- below is cards displaying in 2 colomns -->
 <div *ngIf="isMobileView && dataSource.data.length > 0 && getData">
   <div *ngFor="let group of addItemSearchResults" class="mt-4">
-    <h2 class="text-lg font-bold">{{ group.date }}</h2>
-    <div class="grid grid-cols-2 gap-4 mt-2">
+    <h2 class="text-lg font-bold mb-4">{{ group.date }}</h2>
+    <div class="grid grid-cols-1 gap-4">
       <div *ngFor="let item of group.items" class="card border rounded-lg shadow-md p-4">
-        <img *ngIf="item.image" [src]="'data:image/jpeg;base64,' + item.image"
-          (click)="openImagePreview('data:image/jpeg;base64,' + item.image)" alt="Item Image"
-          class="w-full h-[150px] object-contain rounded-md" />
-        <!-- <h3 class="font-bold text-sm">{{ item.name }}</h3>               -->
-        <div class="grid grid-cols-2 items-center gap-4 mt-2">
-          <h3 class="font-bold text-sm">{{ item.name }}</h3>
-          <button (click)="openQrDialog(item)" class="flex flex-col items-center text-gray-600 hover:text-teal-500">
-            <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-            <span class="text-xs">QR Code</span>
+        <div class="flex gap-4">
+          <!-- Square Image Container -->
+          <div class="w-1/3 aspect-square shrink-0">
+            <img 
+              *ngIf="item.image" 
+              [src]="'data:image/jpeg;base64,' + item.image" 
+              alt="Item Image"
+              class="w-full h-full rounded-md object-cover"
+              (click)="openImagePreview('data:image/jpeg;base64,' + item.image)">
+          </div>
+
+          <!-- Content Container -->
+          <div class="w-2/3 flex flex-col">
+            <!-- Item Name -->
+            <h3 class="font-bold text-sm truncate">{{ item.name }}</h3>
+
+            <!-- QR Code Button (Aligned to the right) -->
+            <div class="flex justify-end mt-2">
+              <button 
+                class="flex flex-col items-center text-gray-600 hover:text-teal-500 p-2"
+                (click)="openQrDialog(item)">
+                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+                <span class="text-xs mt-1">QR Code</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isMobileView && dataSource.data.length > 0 && !getData" class="grid grid-cols-1 gap-4 p-2">
+  <div class="card border rounded-lg shadow-md p-4" *ngFor="let element of dataSource.data">
+    <div class="flex gap-4">
+      <!-- Square Image Container -->
+      <div class="w-1/3 aspect-square shrink-0">
+        <img 
+          *ngIf="element.image" 
+          [src]="'data:image/jpeg;base64,' + element.image" 
+          alt="Item Image"
+          class="w-full h-full rounded-md object-cover"
+          (click)="openImagePreview('data:image/jpeg;base64,' + element.image)">
+      </div>
+
+      <!-- Content Container -->
+      <div class="w-2/3 flex flex-col justify-between">
+        <!-- Status Section -->
+        <div>
+          <div *ngIf="!this.searchResultspage" class="mb-2">
+            <strong 
+              class="text-xs text-gray-700 font-medium"
+              [ngClass]="{ 'text-sm font-bold': element.status === 'PENDING_APPROVAL' }">
+              {{ element.status === 'PENDING_APPROVAL' ? 'PENDING' : element.status }}
+            </strong>
+          </div>
+          
+          <div *ngIf="userviewUnclaimpage" class="mb-2">
+            <strong>UserName:</strong> {{element.userName}}
+          </div>
+
+          <!-- Title and Details -->
+          <div *ngFor="let column of tableColumns">
+            <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="text-sm">
+              <h3 class="font-bold text-sm truncate mb-1">{{ element.title }}</h3>
+              <!-- <div class="flex justify-between items-center mb-1">
+                <span><strong>{{ column.label }}:</strong></span>
+                <span>{{ element[column.name] }}</span>
+              </div> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col gap-2 mt-2">
+          <div *ngIf="element.status === 'PENDING_APPROVAL' && !this.searchResultspage" 
+               class="flex justify-between gap-2">
+            <button mat-button color="primary" 
+                    class="flex-1 text-sm bg-blue-500 text-white rounded py-1"
+                    (click)="approveClaimReq(element)">
+              Approve
+            </button>
+            <button mat-button color="warn" 
+                    class="flex-1 text-sm bg-red-500 text-white rounded py-1"
+                    (click)="rejectClaimReq(element)">
+              Reject
+            </button>
+          </div>
+
+          <button *ngIf="!removeArchive && !showUnClaim && !adminActions && !this.searchResultspage && !this.userviewUnclaimpage"
+                  [disabled]="element.status !== 'PENDING_PICKUP'"
+                  class="w-full text-sm bg-blue-500 text-white rounded py-1"
+                  (click)="unClaimItem(element)">
+            UnClaim
           </button>
-        </div>
 
+          <button mat-button color="warn" 
+                  *ngIf="(element.status !== 'ARCHIVED' && element.status !== 'EXPIRED') && !this.searchResultspage && !userviewUnclaimpage"
+                  class="w-full text-sm bg-red-500 text-white rounded py-1"
+                  (click)="removeItem(element)">
+            Remove
+          </button>
+
+          <button mat-button color="primary" 
+                  *ngIf="element.status === 'PENDING_PICKUP' && !this.searchResultspage"
+                  class="w-full text-sm bg-blue-500 text-white rounded py-1"
+                  (click)="markAsClaimed(element)">
+            Claimed
+          </button>
+
+          <div *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim" 
+               class="grid grid-cols-2 gap-2">
+            <button mat-raised-button color="primary" 
+                    class="text-sm py-1"
+                    (click)="createClaimItem(element)">
+              Claim
+            </button>
+            <button class="flex items-center justify-center gap-1 text-[#00897b]"
+                    (click)="openQrDialog(element)">
+              <mat-icon class="text-xl">qr_code</mat-icon>
+              <!-- <span class="text-xs">QR Code</span> -->
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<div 
-  *ngIf="isMobileView && dataSource.data.length > 0 && !getData" 
-  class="grid grid-cols-2 gap-4 p-4">
-  
-  <!-- Individual Card -->
-  <div class="card border rounded-lg shadow-md p-4 flex flex-col space-y-4" 
-       *ngFor="let element of dataSource.data">
-       
-    <!-- Image Section -->
-    <img 
-      *ngIf="element.image" 
-      [src]="'data:image/jpeg;base64,' + element.image" 
-      alt="Item Image"
-      class="w-full h-32 rounded-md object-contain"
-      (click)="openImagePreview('data:image/jpeg;base64,' + element.image)" />
-    
-    <!-- Status Section -->
-    <div   *ngIf="!this.searchResultspage"  class="text-center w-full">
-      <strong 
-        class="block text-xs text-gray-700" 
-        [ngClass]="{ 'text-sm font-bold': element.status === 'PENDING_APPROVAL' }">
-        {{ element.status === 'PENDING_APPROVAL' ? 'PENDING' : element.status }}
-      </strong>
-    </div>
-    <div   *ngIf="userviewUnclaimpage"  class="text-center w-full">
-      <strong>UserName:</strong> {{element.userName}}
-    </div>
-    <!-- Action Buttons Section -->
-    <div class="flex flex-col space-y-2">
-      <!-- Approve/Reject Buttons -->
-      <div 
-        *ngIf="element.status === 'PENDING_APPROVAL' && !this.searchResultspage" 
-        class="flex justify-between gap-2">
-        <button 
-          mat-button 
-          color="primary" 
-          class="flex-1 text-sm bg-blue-500 text-white rounded py-2" 
-          (click)="approveClaimReq(element)">
-          Approve
-        </button>
-        <button 
-          mat-button 
-          color="warn" 
-          class="flex-1 text-sm bg-red-500 text-white rounded py-2" 
-          (click)="rejectClaimReq(element)">
-          Reject
-        </button>
-      </div>
-
-      <!-- UnClaim Button -->
-      <button
-        *ngIf="!removeArchive && !showUnClaim && !adminActions && !this.searchResultspage && !this.userviewUnclaimpage"
-        [disabled]="element.status !== 'PENDING_PICKUP'"
-        class="w-full text-sm bg-blue-500 text-white rounded py-2"
-        (click)="unClaimItem(element)">
-        UnClaim
-      </button>
-
-      <!-- Remove Button -->
-      <button  mat-button 
-      color="warn" 
-        *ngIf="(element.status !== 'ARCHIVED' && element.status !== 'EXPIRED') && !this.searchResultspage && !userviewUnclaimpage "
-        class="w-full text-sm bg-red-500 text-white rounded py-2"
-        (click)="removeItem(element)">
-        Remove
-      </button>
-
-      <!-- Claimed Button -->
-      <button   mat-button 
-      color="primary" 
-        *ngIf="element.status === 'PENDING_PICKUP' && !this.searchResultspage"
-        class="w-full text-sm bg-blue-500 text-white rounded py-2"
-        (click)="markAsClaimed(element)">
-        Claimed
-      </button>
-      <div *ngFor="let column of tableColumns">
-        <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="grid grid-cols-1 gap-4 text-sm">
-          <div class="flex flex-col space-y-2">
-            <h3 class="font-bold text-sm truncate " style="margin-bottom: -15px;">{{ element.title }}</h3>
-            <div class="grid grid-cols-2 gap-4 items-center">
-              <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-                (click)="createClaimItem(element)" mat-raised-button color="primary" class="text-sm py-2 px-4 mb-2">
-                Claim
-              </button>
-              <button *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim"
-                class="text-sm py-2 px-4 mt-4" (click)="openQrDialog(element)">
-                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-                <span class="text-xs">QR Code</span>
-              </button>
-            </div>
-          </div>
-          <div class="flex justify-between items-center">
-            <div *ngIf="column.type === 'text'" class="flex-1">
-              <strong>{{ column.label }}:</strong> {{ element[column.name] }}
-            </div>
-            <div *ngIf="column.name === 'name' && !adminserarchpage " class="flex items-center">
-              <button class="flex flex-col items-center text-gray-600 hover:text-teal-500"
-                (click)="openQrDialog(element)">
-                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-                <span class="text-xs">QR Code</span>
-              </button>
-            </div>
-          </div>
-        </div>
-    </div>
-  </div>
-</div>
-
 
 <div *ngIf="showImagePreview" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
   <div class="bg-white p-4 rounded-lg">

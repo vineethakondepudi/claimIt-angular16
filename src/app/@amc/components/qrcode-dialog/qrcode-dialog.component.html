@@ -10,10 +10,15 @@
 </div>
 <mat-divider></mat-divider>
 <mat-dialog-content align="start" class="mt-2">
-    <div *ngIf="data.requiredData" class="flex flex-row justify-center gap-2">
+    <div *ngIf="data.requiredData" class="flex flex-col items-center gap-2">
+        <!-- Display the ID -->
+        <div class="text-lg font-medium">
+            ID: {{ data.requiredData.uniqueId }}
+        </div>
+        <!-- QR Code -->
         <qrcode 
             #qrCode
-            [qrdata]="generateQrCodeData(requiredData)" 
+            [qrdata]="generateQrCodeData(data.requiredData)" 
             [width]="200" 
             [errorCorrectionLevel]="'M'"
             [colorDark]="getQrCodeColors(data.requiredData.status).colorDark"
