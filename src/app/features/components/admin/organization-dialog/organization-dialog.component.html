@@ -25,7 +25,7 @@
           </ngx-dropzone>
         </div>
         <div class="w-full flex justify-end">
-          <button mat-raised-button color="primary" class="mt-4" [disabled]="!files.length" (click)="stepper.next();submit()">
+          <button mat-raised-button color="primary" class="mt-4" [disabled]="!files.length" (click)="stepper.next();submitItem1()">
             <mat-icon>arrow_forward</mat-icon> Next
           </button>
         </div>
@@ -42,27 +42,29 @@
         </div>
     
     
-          <ul>
-            <li *ngFor="let item of formattedData">
-              <strong>{{ item.key }}:</strong>
-              <span>
-                {{ isTruncated && item.key === 'description' ? (item.value | slice: 0: 100) + '...' : item.value }}
-                <a
-                  *ngIf="item.key === 'description'"
-                  href="javascript:void(0)"
-                  (click)="toggleTruncate()"
-                >
+        <ul>
+          <li *ngFor="let item of formattedData">
+            <strong>{{ item.key }}:</strong>
+            <span *ngIf="item.key !== 'description'">
+              {{ item.value }}
+            </span>
+            <span *ngIf="item.key === 'description'">
+              <ng-container *ngIf="!isEditingDescription">
+                {{ isTruncated ? (item.value | slice: 0:100) + '...' : item.value }}
+                <a href="javascript:void(0)" (click)="toggleTruncate()">
                   {{ isTruncated ? 'Read More' : 'Show Less' }}
                 </a>
-              </span>
-            </li>
-          </ul>
-    
-        
-   
+                <i class="create-icon" (click)="editDescription(item)">✏️</i>
+              </ng-container>
+              <ng-container *ngIf="isEditingDescription">
+                <textarea [(ngModel)]="editableDescription" placeholder="Edit description" rows="4" class="styled-textarea"></textarea>
+              </ng-container>
+            </span>
+          </li>
+        </ul>
         
         <div class="w-full flex justify-between">
-          <button mat-raised-button color="primary" class="mt-4 ml-auto" [disabled]="!files.length" (click)="onCloseDialog()">
+          <button mat-raised-button color="primary" class="mt-4 ml-auto" [disabled]="!files.length" (click)="onCloseDialog();submitItem()">
             <mat-icon>check_circle</mat-icon> Submit
           </button>
         </div>

@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-organization-dialog',
@@ -39,12 +40,16 @@ export class OrganizationDialogComponent {
   isTruncated: boolean = true;
   isLoading: boolean = false;
   formattedData:any;
+  formData!: any;
+  isEditingDescription = false;
+  editableDescription = '';
+ imageDataResponse: any;
 showFullData: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
     private service: ClaimitService,
-    private matDialog: MatDialog,  private fb: FormBuilder,
+    private matDialog: MatDialog,  private fb: FormBuilder,private http: HttpClient
   ) {
     this.organizationList = data.organizationList;
     
@@ -102,8 +107,6 @@ showFullData: boolean = false;
         break;
       }
     }
-  
-    // If no valid files were found, reset files
     if (!validFiles) {
       this.files = [];
     }
@@ -120,11 +123,11 @@ showFullData: boolean = false;
   onUploadImage(): void {
     this.files = [];
     if (this.files.length > 0 && this.selectedOrgId) {
-      const formData = new FormData();
-      formData.append('image', this.files[0].file);
-      formData.append('orgId', this.selectedOrgId);
+      this.formData = new FormData();
+      this.formData.append('image', this.files[0].file);
+      this.formData.append('orgId', this.selectedOrgId);
   
-      this.service.adminUploadItem(this.selectedOrgId, formData).subscribe(
+      this.service.adminUploadItem(this.selectedOrgId, this.formData).subscribe(
         (response) => {
           this.isOrganizationSelected = false;
           this.files = [];
@@ -139,7 +142,45 @@ showFullData: boolean = false;
       console.warn('No file selected for upload.');
     }
     
+  } submitItem() {
+    const updatedData = { ...this.imageDataResponse };
+    if (this.isEditingDescription) {
+      updatedData.description = this.editableDescription; 
+    }
+    this.isLoading = false
+    this.formData.append('image', this.files[0].file);
+    this.formData.append('orgId', this.selectedOrgId);
+    this.formData.append('editedLabels', this.editableDescription)
+    this.http.post('https://100.28.242.219.nip.io/api/admin/upload',  this.formData)
+      .subscribe(response => {
+        console.log('Data submitted:', response);
+        this.isEditingDescription = false;
+        this.isLoading = true
+      });
   }
+  editDescription(item: any) {
+    this.editableDescription = item.value;
+    this.isEditingDescription = true;
+  }
+  submitItem1() {
+    if (this.files.length > 0) {
+       this.formData = new FormData();
+      console.log("this.files", this.files);
+      
+      this.formData.append('image', this.files[0].file);
+      this.formData.append('orgId', this.selectedOrgId);
+      this.http.post('https://100.28.242.219.nip.io/api/admin/image',  this.formData).subscribe(
+        (response) => {
+          this.formatResponse(response);          
+        this.imageDataResponse = response
+        },
+        (error) => {
+          console.error('Error uploading item:', error);
+        }
+      );
+    }
+  }
+
   submit(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.files.length > 0 && this.selectedOrgId) {
@@ -166,6 +207,7 @@ showFullData: boolean = false;
       }
     });
   }
+  
   
   async onNextClick(stepper: MatStepper): Promise<void> {
     try {

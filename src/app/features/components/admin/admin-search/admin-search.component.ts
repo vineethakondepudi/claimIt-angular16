@@ -219,7 +219,7 @@ export default class AdminSearchComponent {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
       data: {
-        message: 'Are you sure you want to remove this item?',
+        message: 'Are you sure you want to remove this expired item?',
         title: 'Remove'
       },
     });

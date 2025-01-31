@@ -1,100 +1,71 @@
 <div *ngIf="isMobileView" class="px-5 pt-5 bg-[#E8F2F3]">
   <span class="font-bold max-w-3xs mr-6 text-2xl">Search and Claim</span>
-  <div class="filter-container">
-    <div class="search-section">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Search your lost item</mat-label>
-        <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery"
-          (keyup.enter)="searchItems()" />
-        <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
-          <mat-icon>search</mat-icon>
-        </button>
-        <button *ngIf="searchQuery && searchQuery.trim().length > 0" mat-icon-button matSuffix (click)="clearSearch()">
-          <mat-icon>clear</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
-    <div *ngIf="noresultsforItemsearch && !(searchResults?.length > 0)"
-      class="relative flex flex-col items-center justify-center bg-white">
-   <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-     No Records Found
-   </p>
- </div>
-    <div *ngIf="searchResults?.length > 0" class="flex-grow  mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
-      <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
-        [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
-        [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
-    </div>
-    <hr *ngIf="searchResults.length === 0" class="my-4 border-gray-700" />
-    <div class="grid grid-cols-5 items-center gap-4 ">
-      <span class="text-lg col-span-3">Search with a picture</span>
-      <button mat-fab color="primary" (click)="triggerFileInput()" aria-label="Upload Image"
-        class="flex justify-center items-center" matTooltip="Upload an image" [matTooltipShowDelay]="showDelay.value"
-        [matTooltipHideDelay]="hideDelay.value">
+  
+  <div class="w-full flex items-center mt-4">
+    <mat-form-field appearance="outline" class="w-full flex-grow">
+      <mat-label>Search your lost item</mat-label>
+      <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery" (keyup.enter)="searchItems()" />
+      <button mat-icon-button matSuffix (click)="triggerFileInput()">
         <mat-icon>camera_alt</mat-icon>
       </button>
-      <input #fileInput type="file" (change)="onSelect($event)" class="hidden" />
-      <button *ngIf="files.length > 0" mat-icon-button matSuffix (click)="clearSearch()"
-        class="flex justify-center items-center">
-        <mat-icon>close_small</mat-icon>
+      <button mat-icon-button matSuffix [matMenuTriggerFor]="filterMenu">
+        <mat-icon>filter_list</mat-icon>
       </button>
-    </div>
-    <hr *ngIf="!pictureSearchCompleted" class="my-4 border-gray-700" />
-   
-    <div class="flex-grow  bg-[#E8F2F3]" *ngIf="matchedItems?.length > 0">
-      <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
-        [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
-        [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
-      </app-data-table>
-    </div>
-    <div *ngIf="noresultsforPicturesearch"
-      class="relative flex flex-col items-center justify-center bg-white">
-   <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-     No Records Found
-   </p>
- </div>
-    <mat-form-field appearance="fill" class="category-dropdown">
-      <mat-label>Search with in category</mat-label>
-      <mat-select [(value)]="selectedCategory" (selectionChange)="onCategorySelect($event.value)">
-        <mat-option *ngFor="let category of categories" [value]="category.name">
+      <mat-menu #filterMenu="matMenu">
+        <button mat-menu-item *ngFor="let category of categories" (click)="selectCategory1(category.name)">
           {{ category.name }}
-        </mat-option>
-      </mat-select>
-      <button *ngIf="selectedCategory" mat-icon-button matSuffix (click)="clearcategory()">
-        <mat-icon>clear</mat-icon>
+        </button>
+      </mat-menu>
+      <button mat-icon-button matSuffix *ngIf="searchQuery || selectedCategory || files.length > 0" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-    <!-- <div *ngIf="categeoryerror" class="no-results-container">
-      <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-      <p class="pl-[100px] font-bold text-lg">No results found.</p>
-    </div> -->
-   
-    <div *ngIf="!categeoryerror && categerorydata?.length > 0" class="flex-grow mt-5 bg-[#E8F2F3]">
-      <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
-        [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"
-        (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
-    </div>
-    <div *ngIf="noresultsforCtegerorysearch"
-      class="relative flex flex-col items-center justify-center bg-white">
-   <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-   <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-     No Records Found
-   </p>
- </div>
-    <ngx-dropzone (change)="onSelect($event)" class="desktop-dropzone">
-      <ngx-dropzone-label>
-        Drag and drop image here or click to upload
-      </ngx-dropzone-label>
-      <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
-        [file]="f.file" (removed)="onRemove(f)">
-        <ngx-dropzone-label class="block text-sm">{{ f.file.name }}</ngx-dropzone-label>
-      </ngx-dropzone-preview>
-    </ngx-dropzone>
   </div>
+  <input #fileInput type="file" (change)="onSelect($event)" class="hidden" />
+  <mat-menu #filterMenu="matMenu" class="max-h-60 overflow-y-auto">
+    <button mat-menu-item *ngFor="let category of categories" (click)="onCategorySelect(category.name)">
+      {{ category.name }}
+    </button>
+  </mat-menu>
 
+  <div *ngIf="searchResults?.length > 0" class="flex-grow mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
+    <app-data-table [tableData]="searchResults" [tableColumns]="displaycoloums" [isPageable]="true" 
+      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" 
+      (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
+  </div>
+  <div *ngIf="!(searchResults?.length > 0 || categerorydata?.length > 0 || matchedItems?.length > 0)"  class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
+    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+      [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="initalDataResults"
+      [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+    </app-data-table>
+  </div>
+  <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length && !isMobileView"
+    class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
+    <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
+      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)"
+      (sort)="handleSort($event)"></app-data-table>
 </div>
+
+  <div *ngIf="matchedItems?.length > 0"  class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
+    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+      [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
+      [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
+    </app-data-table>
+  </div>
+  <div *ngIf="!categeoryerror && categerorydata?.length > 0" class="flex-grow mt-5 bg-[#E8F2F3]">
+    <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
+      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"
+      (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
+  </div>
+  <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0) &&  noresultsFound" 
+    class="relative flex flex-col items-center justify-center bg-white">
+ <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+ <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+   No Records Found4
+ </p>
+</div>
+</div>
+
 
 
 
@@ -249,7 +220,7 @@
             class="relative flex flex-col items-center justify-center bg-white">
          <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
          <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-           No Records Found
+           No Records Found4
          </p>
        </div>
        

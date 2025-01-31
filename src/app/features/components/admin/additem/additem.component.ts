@@ -81,7 +81,7 @@ export default class AdditemComponent implements OnInit {
     },
     {
       label: 'Category',
-      name: 'name',
+      name: 'categoryName',
       type: 'text',  
       isSortable: true,
       position: "left",
@@ -130,30 +130,22 @@ export default class AdditemComponent implements OnInit {
     this.defaultSearchQuery.sortId = sortParams.active;
   }
   
-  onAddItemClick(): void {
-    this.isLoading = true
-    this.service.organizationList().subscribe(
-      (res: any) => {
-        this.isLoading = false
-        const dialogRef = this.dialog.open(OrganizationDialogComponent, {
-          width: '400px',
-          data: { organizationList: res },
-        });
-
-        dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
-          this.isLoading  = true;
-         this. fetchData();
-         this.service.setItemUploaded(true);
-         location.reload();
-          
-        });
-        this.isLoading  = false;
-      },
-      (error) => {
-        console.error('Error fetching organizations:', error);
-      }
-    );
+  onAddItemClick(): void { 
+    this.isLoading = false; 
+  
+    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
+      width: '400px',
+      data: { organizationList: [] }, 
+    });
+  
+    dialogRef.afterClosed().subscribe((selectedOrgId: string | undefined) => {
+      this.isLoading = true;
+      this.fetchData();
+      this.service.setItemUploaded(true);
+      location.reload();
+    });
   }
+  
   fetchData(): void {
     const query = this.searchQuery.trim();
     this.isLoading  = true;

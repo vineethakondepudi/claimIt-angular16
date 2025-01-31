@@ -75,13 +75,20 @@
                 [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary" class="txt-button">
                 UnClaim
               </button>
-              <button [disabled]="element.status !== 'UNCLAIMED'" *ngIf="!removeArchive && showUnClaim"
-                (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
-                Claim
-              </button>
+              <button *ngIf="element.status !== 'PENDING_APPROVAL' && !removeArchive && showUnClaim"
+              (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+        Claim
+      </button>
+      
+      <div *ngIf="element.status === 'PENDING_APPROVAL' && (!adminserarchpage || searchResultspage) ">
+        <a (click)="openQrDialog(element)" class="underline hover:text-blue-500">
+          <mat-icon>qr_code</mat-icon>
+        </a>
+      </div>
+      
               <button *ngIf="removeArchive" (click)="removeItem(element)"
                 [disabled]="element.status === 'PENDING_PICKUP'" mat-raised-button color="warn" class="txt-button">
-                Remove
+                Expired
               </button>
               <div *ngIf="adminActions">
                 <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu"
@@ -99,7 +106,7 @@
                   </button><br><br>
                   <button [disabled]="element.status !== 'REJECTED' && element.status !== 'UNCLAIMED'"
                     (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
-                    Remove
+                    Expired
                   </button><br><br>
                   <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)"
                     mat-stroked-button color="primary" class="cancel-button">
@@ -136,20 +143,30 @@
           </div>
 
           <!-- Content Container -->
-          <div class="w-2/3 flex flex-col">
-            <!-- Item Name -->
-            <h3 class="font-bold text-sm truncate">{{ item.name }}</h3>
+         <div class="w-2/3 flex flex-col">
+  <!-- Item Name -->
+  <h3 class="font-bold text-sm truncate sm:whitespace-normal sm:break-words">
+    {{ item.categoryName }}
+    <!-- Add a "more" button if text overflows -->
+  </h3>
 
-            <!-- QR Code Button (Aligned to the right) -->
-            <div class="flex justify-end mt-2">
-              <button 
-                class="flex flex-col items-center text-gray-600 hover:text-teal-500 p-2"
-                (click)="openQrDialog(item)">
-                <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
-                <span class="text-xs mt-1">QR Code</span>
-              </button>
-            </div>
-          </div>
+  <!-- Received Date -->
+  <div class="flex">
+    <strong>ReceivedDate :</strong> &nbsp;
+    <span>{{ item.receivedDate | date: 'shortDate' }}</span>
+  </div>
+
+  <!-- QR Code Button (Aligned to the right) -->
+  <div class="flex justify-end mt-2">
+    <button 
+      class="flex flex-col items-center text-gray-600 hover:text-teal-500 p-2"
+      (click)="openQrDialog(item)">
+      <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
+      <span class="text-xs mt-1">QR Code</span>
+    </button>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
@@ -188,11 +205,11 @@
           <!-- Title and Details -->
           <div *ngFor="let column of tableColumns">
             <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="text-sm">
-              <h3 class="font-bold text-sm truncate mb-1">{{ element.title }}</h3>
-              <!-- <div class="flex justify-between items-center mb-1">
-                <span><strong>{{ column.label }}:</strong></span>
-                <span>{{ element[column.name] }}</span>
-              </div> -->
+              <h3 class="font-bold text-sm truncate mb-1">{{ element.categoryName }}</h3>
+              <div class="flex">
+                <span><strong>{{ column.label }}:</strong></span> &nbsp;
+              {{ element[column.name] | date: 'shortDate' }}
+              </div>
             </div>
           </div>
         </div>
@@ -234,19 +251,20 @@
             Claimed
           </button>
 
-          <div *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim" 
-               class="grid grid-cols-2 gap-2">
-            <button mat-raised-button color="primary" 
-                    class="text-sm py-1"
-                    (click)="createClaimItem(element)">
+          <div *ngIf="element.status === 'UNCLAIMED' && !removeArchive && showUnClaim" class="grid grid-cols-2 gap-2">
+            <!-- Claim button visible only when status is UNCLAIMED -->
+            <button mat-raised-button color="primary" class="text-sm py-1" (click)="createClaimItem(element)">
               Claim
             </button>
-            <button class="flex items-center justify-center gap-1 text-[#00897b]"
-                    (click)="openQrDialog(element)">
+          </div>
+          
+          <div *ngIf="element.status === 'PENDING_APPROVAL' && !removeArchive && showUnClaim" class="grid grid-cols-2 gap-2">
+            <button class="flex items-center justify-center gap-1 text-[#00897b]" (click)="openQrDialog(element)">
               <mat-icon class="text-xl">qr_code</mat-icon>
               <!-- <span class="text-xs">QR Code</span> -->
             </button>
           </div>
+          
         </div>
       </div>
     </div>
@@ -263,6 +281,7 @@
 </div> 
 <!-- No Data Placeholder -->
  <div *ngIf="dataSource.data.length === 0" class="text-center">
-  <img src="assets/noresults.png" alt="No Results" class="w-32 mx-auto" />
+  <!-- <img  src="assets/Animation - 1737116880117 (1).gif" alt="No Results" class="w-32 mx-auto" /> -->
   <p class="text-teal-600 mt-4">No Records Found</p>
 </div>
+<app-loader *ngIf="isLoading"></app-loader>

@@ -235,7 +235,7 @@ export default class DashboardComponent {
   ngOnInit(): void {
     this.slides = this.slides || [];
   
-     this.initializeMap();
+    //  this.initializeMap();
     this.startCountdown();
     this.fetchSlides();
     this.displayTwoRandomCharities();
@@ -245,7 +245,7 @@ export default class DashboardComponent {
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
     this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
-    this.initMap();
+    // this.initMap();
   }
   ngOnDestroy(): void {
     this.countdownTimers.forEach(timer => clearInterval(timer));
@@ -275,17 +275,17 @@ export default class DashboardComponent {
           this.suggestions.push("Take batteries to a special recycling center.");
         }
       }
-      this.initMap();
+      // this.initMap();
     }
   }
-  initMap() {
-    this.map = L.map('map').setView([ 0,0], 13);
-    L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=xJWFJF5JvkaPr6hJCReR', {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19,
-    }).addTo(this.map);
+  // initMap() {
+  //   this.map = L.map('map').setView([ 0,0], 13);
+  //   L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=xJWFJF5JvkaPr6hJCReR', {
+  //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  //     maxZoom: 19,
+  //   }).addTo(this.map);
     
-  }
+  // }
   provideLocationBasedTips() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -352,23 +352,23 @@ export default class DashboardComponent {
   
     window.open(shareUrl, '_blank');
   }
-  private initializeMap(): void {
-    const mapContainer = document.getElementById('map');
-    if (!mapContainer) {
-      console.error('Map container not found!');
-      return;
-    }
+  // private initializeMap(): void {
+  //   const mapContainer = document.getElementById('map');
+  //   if (!mapContainer) {
+  //     console.error('Map container not found!');
+  //     return;
+  //   }
 
-    this.map = L.map('map', {
-      center: [18.000792934619952, 83.52597181488764],
-      zoom: 10,
-    });
+  //   this.map = L.map('map', {
+  //     center: [18.000792934619952, 83.52597181488764],
+  //     zoom: 10,
+  //   });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(this.map);
+  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     attribution: '&copy; OpenStreetMap contributors',
+  //   }).addTo(this.map);
     
-  }
+  // }
   startCountdown1(item: any): void {
     item.remainingTime = this.calculateTimeRemaining(item.expirationDate);
     const timer = setInterval(() => {
@@ -388,7 +388,7 @@ export default class DashboardComponent {
         disableOnInteraction: false,
       }, 
     });
-    this.initializeMap();
+    // this.initializeMap();
   }
   formatTime(ms: number): string {
     const days = Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -438,7 +438,7 @@ export default class DashboardComponent {
   }
   fetchSlides(): void {
     this.isLoading = true;
-    const apiUrl = 'http://172.17.12.101:8081/api/users/search';
+    const apiUrl = 'https://100.28.242.219.nip.io/api/users/search';
     
     this.claimService.getUSerSlides().subscribe({
       next: (data: any) => {
@@ -550,7 +550,7 @@ forceUpdate(): void {
   }
   searchItems() {
     if (this.searchQuery.trim()) {
-      const apiUrl = `http://172.17.12.101:8081/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
+      const apiUrl = `https://100.28.242.219.nip.io/api/users/search?query=${encodeURIComponent(this.searchQuery)}`;
 
       this.http.get<Item[]>(apiUrl).subscribe(
         (response: Item[]) => {

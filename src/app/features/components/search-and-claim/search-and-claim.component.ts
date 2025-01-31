@@ -26,6 +26,7 @@ import { FormSubmissionModalComponent } from 'src/app/@amc/components/form-submi
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
+import {MatMenuModule, MatMenuTrigger} from '@angular/material/menu';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 interface Item {
@@ -53,6 +54,7 @@ interface Item {
     MatTableModule,
     MatTooltipModule,
     MatCardModule,
+    MatMenuModule,
     FormFooterComponent,
     MatExpansionModule,
     MatDialogModule,
@@ -87,15 +89,15 @@ export default class SearchAndClaimComponent implements OnInit {
       isChecked: true,
       index: 2,
     },
-    {
-      label: 'QR Code',
-      name: 'qrcode',
-      type: 'qrcode',
-      isSortable: true,
-      position: "left",
-      isChecked: true,
-      index: 4,
-    },
+    // {
+    //   label: 'QR Code',
+    //   name: 'qrcode',
+    //   type: 'qrcode',
+    //   isSortable: true,
+    //   position: "left",
+    //   isChecked: true,
+    //   index: 4,
+    // },
     // {
     //   label: "FoundDate",
     //   name: "foundDate",
@@ -159,6 +161,7 @@ export default class SearchAndClaimComponent implements OnInit {
   isMobileView = false;
   selectedCategory: any;
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+  @ViewChild(MatMenuTrigger) filterMenuTrigger!: MatMenuTrigger;
   searchCompleted!: boolean;
   pictureSearchCompleted!: boolean;
   categeorySearchCompleted!: boolean;
@@ -211,6 +214,8 @@ export default class SearchAndClaimComponent implements OnInit {
     this.checkViewport();
     this.showDelay.value = 0; // Set show delay to 500ms
     this.hideDelay.value = 200;
+    this.listOfItems();
+
   }
 
   @HostListener('window:resize', ['$event'])
@@ -234,7 +239,7 @@ export default class SearchAndClaimComponent implements OnInit {
             this.initalDataResults = false
              }
           if (Array.isArray(response)) {
-            this.searchResults = response.filter(item => item.status === "UNCLAIMED");
+            this.searchResults = response.filter(item => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
           } else {
           
             console.error('API response is not an array', response);
@@ -256,7 +261,7 @@ listOfItems(){
   this.isLoading = true
   this.claimService.listOfItems(this.searchQuery).subscribe(
     (res: any) => {
-      this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED");
+      this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
       this.searchCompleted = true; 
       this.isLoading = false
     },
@@ -270,7 +275,7 @@ listOfItems(){
     this.showTooltip = false;
   }
   fetchCategories(): void {
-    this.http.get<{ id: number; name: string }[]>('http://172.17.12.101:8081/api/admin/getcategories')
+    this.http.get<{ id: number; name: string }[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
       .subscribe(
         (response) => {
           this.categories = response;
@@ -286,7 +291,10 @@ listOfItems(){
     this.categerorydata = this.categories.filter(category => category.name === categoryName);
     this.search()
   }
-
+  openFilterMenu(event: Event) {
+    event.stopPropagation();
+    this.filterMenuTrigger.openMenu();
+  }
   public triggerFileInput(): void {
     if (this.fileInput && this.fileInput.nativeElement) {
       this.fileInput.nativeElement.click();
@@ -310,7 +318,7 @@ listOfItems(){
           this.initalDataResults = false
            }
         if (Array.isArray(data)) {
-          this.categerorydata = data.filter(item => item.status === "UNCLAIMED");
+          this.categerorydata = data.filter(item => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
              this.isLoading = false;
              this.noresultsFound = false
              this.noresultsforCtegerorysearch = false
@@ -383,6 +391,30 @@ listOfItems(){
     this.selectedCategory = category;
     this.search();
   }
+
+  // Fetch categories from API
+fetchCategories1(): void {
+  this.http.get<{ id: number; name: string }[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
+    .subscribe(
+      (response) => {
+        this.categories = response;
+      },
+      (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    );
+}
+
+// Select a category and perform search
+selectCategory1(categoryName: string): void {
+  this.searchResults = []; // Reset previous results
+  this.matchedItems = [];
+  this.selectedCategory = categoryName;
+  this.categerySearchResult = true;
+  this.categerorydata = this.categories.filter(category => category.name === categoryName);
+  this.search();
+}
+
   public onSelect(event: any): void {
     const files =  this.isMobileView ?event.target.files : event.addedFiles;
     if (files && files.length > 0) {
@@ -414,8 +446,8 @@ listOfItems(){
       this.uploadImage(file).subscribe(
         (response) => {
           if (response.success) {
-            this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED");
-            if(response.message ==="Matching items found.") {
+            this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
+            if(response.message === "No matching items found.") {
               this.noresultsforPicturesearch = true
             }
           } else {
@@ -448,7 +480,7 @@ listOfItems(){
     return this.categoryIcons[name] || 'help';
   }
   loadCategories(): void {
-    this.http.get<any[]>('http://172.17.12.101:8081/api/admin/getcategories')
+    this.http.get<any[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
       .subscribe({
         next: (data) => {
           this.categories = data;
@@ -469,13 +501,13 @@ listOfItems(){
       this.selectedFileName = this.files[0].name;
       this.isLoading = true
       this.uploadImage(this.files[0]).subscribe((response: any) => {
-        if( response.message= "Matching items found."){
+        if( response.message= "No matching items found."){
           this.noresultsFound = true
           // this.noresultsforPicturesearch = true
           this.initalDataResults = false
           this.isLoading = false
            }
-        this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED") || [];
+        this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED" || item.status === "PENDING_APPROVAL") || [];
         this.isLoading = false
       });
       
@@ -485,7 +517,7 @@ listOfItems(){
   public uploadImage(file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
-    const picUrl = 'http://172.17.12.101:8081/api/users/search-by-image';
+    const picUrl = 'https://100.28.242.219.nip.io/api/users/search-by-image';
     return this.http.post(picUrl, formData, {
       headers: new HttpHeaders(),
     });
@@ -504,8 +536,8 @@ listOfItems(){
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         const REQBODY = {
-          userName: data.value.name,
-          userEmail: data.value.email,
+          name: data.value.name,
+          email: data.value.email,
           itemId: item.itemId
         }
            this.isLoading = true
