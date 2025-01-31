@@ -108,6 +108,15 @@ export default class SearchAndClaimComponent implements OnInit {
     //   index: 3,
     // },
     {
+      label: 'Category',
+      name: 'categoryName',
+      type: 'text',  
+      isSortable: true,
+      position: "left",
+      isChecked: true,
+      index: 3,
+    },
+    {
       label: "ReceivedDate",
       name: "receivedDate",
       type: "date",

@@ -191,6 +191,7 @@
         <!-- Status Section -->
         <div>
           <div *ngIf="!this.searchResultspage" class="mb-2">
+            <span><strong>Status:</strong></span> &nbsp;
             <strong 
               class="text-xs text-gray-700 font-medium"
               [ngClass]="{ 'text-sm font-bold': element.status === 'PENDING_APPROVAL' }">
@@ -198,13 +199,17 @@
             </strong>
           </div>
           
-          <div *ngIf="userviewUnclaimpage" class="mb-2">
+          <div *ngIf="userviewUnclaimpage " class="mb-2">
             <strong>UserName:</strong> {{element.userName}}
           </div>
-
+          <div class="mb-2" *ngIf="adminserarchpage && !searchResultspage ">
+            <span><strong>UserName:</strong></span> &nbsp;
+          {{ element.name }}
+          </div>
           <!-- Title and Details -->
-          <div *ngFor="let column of tableColumns">
-            <div *ngIf="['receivedDate', 'name'].includes(column.name)" class="text-sm">
+  
+          <div *ngFor="let column of tableColumns" >
+            <div *ngIf="['receivedDate', 'name'].includes(column.name) && (!adminserarchpage || searchResultspage)" class="text-sm">
               <h3 class="font-bold text-sm truncate mb-1">{{ element.categoryName }}</h3>
               <div class="flex">
                 <span><strong>{{ column.label }}:</strong></span> &nbsp;
@@ -212,6 +217,8 @@
               </div>
             </div>
           </div>
+      
+        
         </div>
 
         <!-- Action Buttons -->
