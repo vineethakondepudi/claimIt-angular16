@@ -40,11 +40,45 @@ export class OrganizationDialogComponent {
   isTruncated: boolean = true;
   isLoading: boolean = false;
   formattedData:any;
+  selectedCategory: any;
   formData!: any;
   isEditingDescription = false;
   editableDescription = '';
  imageDataResponse: any;
 showFullData: boolean = false;
+private categoryIcons: { [key: string]: string } = {
+  'Electronics': 'devices',
+  'Personal Accessories': 'watch',
+  'Clothes & Accessories': 'checkroom',
+  'Work Tools': 'construction',
+  'Storage Items': 'archive',
+  'Groceries': 'shopping_cart',
+  'Expensive Items': 'attach_money',
+  'Uncategorized Items': 'help',
+  'Toys and Baby Products': 'toys',
+  'Bags': 'work',
+  'Documents': 'description',
+  'Home and Furniture': 'weekend',
+  'Vehicles': 'directions_car',
+  'Childcare Items': 'child_friendly',
+  'Pets': 'pets',
+  'Books & Publications': 'menu_book',
+  'Musical Instruments': 'music_note',
+  'Art & Craft Supplies': 'brush',
+  'Fitness & Outdoor Equipment': 'fitness_center',
+  'Medical Items': 'medical_services',
+  'Tech Accessories': 'memory',
+  'Travel Essentials': 'flight',
+  'Food & Beverage Containers': 'lunch_dining',
+  'Gaming Equipment': 'sports_esports',
+  'Event Items': 'event',
+  'Fashion Accessories': 'style',
+  'Plants & Gardening Tools': 'yard',
+  'Kitchen Appliances': 'kitchen'
+};
+categories: { id: number; name: string }[] = [];
+categerorydata: any = [];
+categoryNames: any[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
@@ -69,6 +103,20 @@ showFullData: boolean = false;
     this.step2Form = this.fb.group({
       preview: ['', Validators.required]
     });
+    this.fetchCategories()
+  }
+  fetchCategories(): void {
+    this.http.get<{ id: number; name: string }[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
+      .subscribe(
+        (response) => {
+          this.categories = response;
+          this.categoryNames = this.categories.map(category => category.name);
+          console.log(this.categoryNames);
+        },
+        (error) => {
+          console.error('Error fetching categories:', error);
+        }
+      );
   }
   onOrganizationSelect(orgId: string): void {
     this.selectedOrgId = orgId;
@@ -79,6 +127,9 @@ showFullData: boolean = false;
   }
   private checkScreenSize(): void {
     this.isMobileScreen = window.innerWidth <= 768; // Adjust breakpoint as needed
+  }
+  getCategoryIcon(name: string): string {
+    return this.categoryIcons[name] || 'help';
   }
   onSelectFile(event: any): void {
     const allowedTypes = ['image/jpeg','image/png', 'image/gif', 'image/bmp', 'image/jfif'];
@@ -126,6 +177,7 @@ showFullData: boolean = false;
       this.formData = new FormData();
       this.formData.append('image', this.files[0].file);
       this.formData.append('orgId', this.selectedOrgId);
+      this.formData.append('categoryname',   this.selectedCategory)
   
       this.service.adminUploadItem(this.selectedOrgId, this.formData).subscribe(
         (response) => {
@@ -158,6 +210,10 @@ showFullData: boolean = false;
         this.isLoading = true
       });
   }
+  onCategoryChange(event: any): void {
+    this.selectedCategory = event.detail.value;
+  }
+
   editDescription(item: any) {
     this.editableDescription = item.value;
     this.isEditingDescription = true;

@@ -216,11 +216,11 @@
               [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
           </div>
-          <div *ngIf="noresultsFound && !(searchResults?.length > 0 ||matchedItems?.length > 0 || categerorydata?.length > 0  || initalDataResults?.length > 0 ) && !noresultsforItemsearch && !noresultsforPicturesearch && !noresultsforCtegerorysearch" 
+          <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0) &&  noresultsFound" 
             class="relative flex flex-col items-center justify-center bg-white">
          <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
          <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-           No Records Found4
+           No Records Found
          </p>
        </div>
        

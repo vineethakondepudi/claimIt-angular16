@@ -33,18 +33,41 @@
     
       <!-- Step 2: Image Preview -->
       <mat-step>
-        <ng-template matStepLabel>Preview</ng-template>
-        <div class="mt-4">
-          <div *ngIf="files.length > 0">
-            <img [src]="files[0].preview" alt="Preview" class="w-full max-w-xs mx-auto rounded-md" />
+        <div class="mt-4 flex flex-col items-center">
+          <div *ngIf="files.length > 0" class="w-full flex justify-center">
+            <img [src]="files[0].preview" alt="Preview" class="w-full max-w-xs rounded-md" />
           </div>
           <p *ngIf="files.length === 0" class="text-gray-500 text-center">No image selected.</p>
         </div>
-    
-    
-        <ul>
-          <li *ngFor="let item of formattedData">
-            <strong>{{ item.key }}:</strong>
+        
+        <div class="w-full flex justify-center mt-4">
+          <mat-form-field appearance="outline" class="w-full max-w-md">
+            <mat-label>Select within Category</mat-label>
+            <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange($event.value)">
+              <mat-select-trigger>
+                <span *ngIf="selectedCategory" class="text-base font-medium">
+                  {{ selectedCategory }}
+                </span>
+                <span *ngIf="!selectedCategory" class="text-base text-gray-500">
+                  Select a category
+                </span>
+              </mat-select-trigger>
+              
+              <mat-option *ngFor="let item of categories" [value]="item.name">
+                <div class="flex items-center gap-2">
+                  <!-- <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
+                    {{ getCategoryIcon(item.name) }}
+                  </mat-icon> -->
+                  <span class="text-base font-medium truncate">{{ item.name }}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
+        <ul class="mt-4 w-full max-w-md mx-auto">
+          <li *ngFor="let item of formattedData" class="mb-2">
+            <strong class="uppercase">{{ item.key }}:</strong>
             <span *ngIf="item.key !== 'description'">
               {{ item.value }}
             </span>
@@ -54,21 +77,23 @@
                 <a href="javascript:void(0)" (click)="toggleTruncate()">
                   {{ isTruncated ? 'Read More' : 'Show Less' }}
                 </a>
-                <i class="create-icon" (click)="editDescription(item)">✏️</i>
+                <i class="create-icon ml-2" (click)="editDescription(item)">✏️</i>
               </ng-container>
               <ng-container *ngIf="isEditingDescription">
-                <textarea [(ngModel)]="editableDescription" placeholder="Edit description" rows="4" class="styled-textarea"></textarea>
+                <textarea [(ngModel)]="editableDescription" placeholder="Edit description" rows="4" class="styled-textarea w-full"></textarea>
               </ng-container>
             </span>
           </li>
         </ul>
         
-        <div class="w-full flex justify-between">
-          <button mat-raised-button color="primary" class="mt-4 ml-auto" [disabled]="!files.length" (click)="onCloseDialog();submitItem()">
+        <div class="w-full flex justify-end mt-4">
+          <button mat-raised-button color="primary" [disabled]="!files.length" (click)="onCloseDialog();submitItem()">
             <mat-icon>check_circle</mat-icon> Submit
           </button>
         </div>
       </mat-step>
+      
+      
     </mat-horizontal-stepper>
     
     

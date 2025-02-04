@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormControl, FormsModule } from '@angular/forms';
@@ -174,7 +174,7 @@ export default class SearchAndClaimComponent implements OnInit {
   searchCompleted!: boolean;
   pictureSearchCompleted!: boolean;
   categeorySearchCompleted!: boolean;
-  constructor(private http: HttpClient, private route: ActivatedRoute, private snackBar: MatSnackBar, private matDialog: MatDialog, private claimService: ClaimitService) {
+  constructor(private http: HttpClient, private route: ActivatedRoute,private cdr: ChangeDetectorRef, private snackBar: MatSnackBar, private matDialog: MatDialog, private claimService: ClaimitService) {
     this.loadSavedSearches();
   }
   private categoryIcons: { [key: string]: string } = {
@@ -238,8 +238,10 @@ export default class SearchAndClaimComponent implements OnInit {
     this.files = this.files.filter(f => f !== file);
   }
   searchItems() {
+    
     if (this.searchQuery.trim() !== '') {
       this.searchResults = []; // Clear previous results
+      this.clearSearch()
       this.claimService.searchItems(this.searchQuery).subscribe(
         (response:any) => {
           if( response.message= "No items found matching your search"){
@@ -249,6 +251,7 @@ export default class SearchAndClaimComponent implements OnInit {
              }
           if (Array.isArray(response)) {
             this.searchResults = response.filter(item => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
+            this.cdr.detectChanges();
           } else {
           
             console.error('API response is not an array', response);
@@ -295,6 +298,7 @@ listOfItems(){
       );
   }
   onCategorySelect(categoryName: string): void {
+    this.clearSearch()
     this.categerySearchResult = true
     this.selectedCategory = categoryName
     this.categerorydata = this.categories.filter(category => category.name === categoryName);
@@ -506,6 +510,7 @@ selectCategory1(categoryName: string): void {
    onFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
+      this.clearSearch()
       this.files = Array.from(input.files);
       this.selectedFileName = this.files[0].name;
       this.isLoading = true
