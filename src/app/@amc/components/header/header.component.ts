@@ -125,7 +125,7 @@ public isTabActive(tab: string): boolean {
       this.menuItems = [
         { label: 'Home', icon: 'home', route: '/claimit/dashboard' },
         { label: 'Search And Claim', icon: 'search', route: '/claimit/searchAndClaim' },
-        // { label: 'View History', icon: 'visibility', route: '/claimit/viewOrUnclaim' },
+        { label: 'category Management', icon: 'visibility', route: '/claimit/category' },
       ];
     }
 

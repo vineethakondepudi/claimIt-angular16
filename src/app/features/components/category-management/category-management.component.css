@@ -1,0 +1,29 @@
+.image-container {
+  position: relative;
+  height: 200px; /* Fixed height or use aspect-ratio */
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures images keep their aspect ratio */
+}
+.actions-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+  z-index: 1;
+}
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1% 20px; /* 1% horizontal gap (column-gap), 20px vertical gap (row-gap) */
+}
+
+.category-card {
+  flex: 0 0 19.2%; /* 5 columns: (100% - 4*1%)/5 = 19.2% */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}

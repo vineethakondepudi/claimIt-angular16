@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <form >
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Category Name</mat-label>
+      <input matInput [formControl]="categoryControl">
+      <mat-error *ngIf="categoryControl.hasError('required')">
+        Category name is required
+      </mat-error>
+      <mat-error *ngIf="categoryControl.hasError('maxlength')">
+        Maximum 50 characters allowed
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button 
+          color="primary"
+          [disabled]="categoryControl.invalid"
+          (click)="dialogRef.close(categoryControl.value)">
+    Save
+  </button>
+</mat-dialog-actions>

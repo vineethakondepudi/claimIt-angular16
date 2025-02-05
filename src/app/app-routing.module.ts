@@ -64,6 +64,11 @@ const routes: Routes = [
         title:'pending claim | claimit',
         path:'pendingClaim',
         loadComponent:()=> import('./features/components/admin/pending-claim/pending-claim.component')
+      },
+      {
+        title: 'category Management | claimit',
+        path: 'category',
+        loadComponent: () => import('./features/components/category-management/category-management.component').then(m => m.CategoryManagementComponent)
       }
     ]
   },
