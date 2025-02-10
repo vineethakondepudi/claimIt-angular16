@@ -156,7 +156,7 @@ export class CategoryManagementComponent implements OnInit {
           subCategories: result.subcategories.map((sub: string) => ({ name: sub }))
         };
         formData.append('category', JSON.stringify(categoryData));
-        this.http.post('http://172.17.12.101:8081/api/admin/addWithSubcategories', formData)
+        this.http.post('http://172.17.12.101:8081/api/admin/addCategory', formData)
           .subscribe(
             (response: any) => {
               this.categories = [...this.categories, response];
@@ -179,7 +179,7 @@ export class CategoryManagementComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const updatedCategory = { ...category, name: result.categoryName };
+        const updatedCategory = { ...category, name: result.category };
         this.http.put(`http://172.17.12.101:8081/api/admin/categories?id=${category.id}`, updatedCategory)
           .subscribe(
             response => {
