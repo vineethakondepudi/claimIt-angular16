@@ -123,6 +123,8 @@ export class CategoryManagementComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.categories = response;
+          console.log( this.categories);
+          
           this.nextId = Math.max(...this.categories.map(c => c.id)) + 1;
           this.loading = false;
         },
@@ -132,22 +134,29 @@ export class CategoryManagementComponent implements OnInit {
         }
       });
   }
+    
+  getImage(base64String: string): string {
+    return `data:image/jpeg;base64,${base64String}`;
+  }
 
   openAddDialog(): void {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
       width: "500px",
       data: { title: 'Add New Category' }
     });
-  
+ 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.categoryName) {
         const formData = new FormData();
-        formData.append('categoryName', result.categoryName);
-        formData.append('image', result.image);
-        result.subcategories.forEach((sub: string, index: number) => {
-          formData.append(`subcategories[${index}][name]`, sub);
-        });
-        this.http.post('http://172.17.12.101:8081/api/admin/addCategory', formData)
+        if (result.image) {
+          formData.append('image', result.image);
+        }
+        const categoryData = {
+          categoryName: result.categoryName,
+          subCategories: result.subcategories.map((sub: string) => ({ name: sub }))
+        };
+        formData.append('category', JSON.stringify(categoryData));
+        this.http.post('http://172.17.12.101:8081/api/admin/addWithSubcategories', formData)
           .subscribe(
             (response: any) => {
               this.categories = [...this.categories, response];
@@ -161,8 +170,6 @@ export class CategoryManagementComponent implements OnInit {
       }
     });
   }
-  
-  
 
   openEditDialog(category: Category): void {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
@@ -172,13 +179,17 @@ export class CategoryManagementComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const updatedCategory = { ...category, name: result };
+        const updatedCategory = { ...category, name: result.categoryName };
         this.http.put(`http://172.17.12.101:8081/api/admin/categories?id=${category.id}`, updatedCategory)
           .subscribe(
             response => {
+              console.log(response,"edit");
+              
               this.categories = this.categories.map(c => 
                 c.id === category.id ? updatedCategory : c
               );
+              console.log(this.categories,"editcategory");
+              
               this.showSnackBar('Category updated successfully');
             },
             error => {

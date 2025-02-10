@@ -11,7 +11,7 @@
                 [ngStyle]="{'background-color': category.bgColor}">
         <mat-card-content>
           <div class="image-container">
-            <img [src]="category.image" alt="{{category.name}}">
+            <img [src]="getImage(category.image)" >
             <div class="actions-overlay">
               <button mat-icon-button 
                       color="primary"
@@ -26,7 +26,7 @@
             </div>
           </div>
           <h2 class="category-title">
-            <span *ngFor="let line of category.displayName">{{line}}<br></span>
+            <span >{{category.name}}<br></span>
           </h2>
         </mat-card-content>
       </mat-card>
