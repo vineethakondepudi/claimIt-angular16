@@ -1,24 +1,60 @@
-<h2 mat-dialog-title>{{ data.title }}</h2>
-<mat-dialog-content>
-  <form >
+<mat-dialog-content> 
+  <form [formGroup]="categoryForm">
+    <!-- Category Name Field -->
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Category Name</mat-label>
-      <input matInput [formControl]="categoryControl">
-      <mat-error *ngIf="categoryControl.hasError('required')">
+      <input matInput formControlName="categoryName">
+      <mat-error *ngIf="categoryForm.controls['categoryName'].hasError('required')">
         Category name is required
       </mat-error>
-      <mat-error *ngIf="categoryControl.hasError('maxlength')">
+      <mat-error *ngIf="categoryForm.controls['categoryName'].hasError('maxlength')">
         Maximum 50 characters allowed
       </mat-error>
     </mat-form-field>
+    <div class="text-center p-6 flex-1">
+      <div
+        class="border-dashed border-2 rounded-lg p-[10px] mb-[29px] flex items-center justify-between"
+        style="border-color: #00897b;"
+      >
+        <input type="file" id="fileInput" class="hidden" (change)="onFileSelect($event)" />
+        
+        <!-- Show Selected File Name -->
+        <label for="fileInput" class="text-left text-gray-500">
+          {{ selectedFileName || 'No file selected' }}
+        </label>
+        
+        <!-- Upload Button -->
+        <label
+          for="fileInput"
+          class="text-white rounded px-4 py-2 cursor-pointer"
+          style="background-color: #00897b;"
+        >
+          Upload Picture
+        </label>
+      </div>
+    </div>
+    <!-- Subcategories Dynamic List -->
+    <div formArrayName="subcategories">
+      <div *ngFor="let subcategory of subcategories.controls; let i = index">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Subcategory Name</mat-label>
+          <input matInput [formControlName]="i">
+          <button mat-icon-button color="warn" (click)="removeSubcategory(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Add Subcategory Button -->
+    <button *ngIf="data.title !== 'Edit Category'" mat-button color="primary" (click)="addSubcategory()"> 
+      <mat-icon>add</mat-icon> Add Subcategory
+    </button>
+    
   </form>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button 
-          color="primary"
-          [disabled]="categoryControl.invalid"
-          (click)="dialogRef.close(categoryControl.value)">
-    Save
-  </button>
+  <button mat-button (click)="dialogRef.close()" >Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()" class="mr-[21px]">Save</button>
 </mat-dialog-actions>

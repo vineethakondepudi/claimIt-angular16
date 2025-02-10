@@ -47,43 +47,43 @@ export class CategoryManagementComponent implements OnInit {
       id: 1,
       name: 'Tools & Workshop Equipment',
       displayName: ['Tools & Workshop', 'Equipment'],
-      image: '/assets/webimage.png'
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2ZirDdwIr_MOuMCb6nGyGppyuOy3UG9SmSg&s'
     },
     {
       id: 2,
       name: 'Yard, Garden & Outdoor Living Items',
       displayName: ['Yard, Garden & Outdoor', 'Living Items'],
-      image: 'https://etimg.etb2bimg.com/thumb/msid-111923977,imgsize-135866,width-1200,height=765,overlay-etretail/apparel-fashion/apparel/india-recovered-expanded-in-orderly-fashion-from-pandemic-economic-survey-2023-24.jpg'
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ97jW8z7teh5hYD5A5sqINciWi_tmhnTtEmQ&s'
     },
     {
       id: 3,
       name: 'Home Improvement',
       displayName: ['Home Improvement'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://media.licdn.com/dms/image/C4D12AQHs17hwJgNOUw/article-cover_image-shrink_720_1280/0/1641384800034?e=2147483647&v=beta&t=ggT0l8w2sAymZIE5arvIUIwXJp3_VYoJzHz8XjIg4Ik'
     },
     {
       id: 4,
       name: 'Kitchen, Dining & Bar Supplies',
       displayName: ['Kitchen, Dining & Bar', 'Supplies'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm2rvAKBJPwQygAP25Y4M4lTdFM-n21xlvcA&s'
     },
     {
       id: 5,
       name: 'Lamps, Lighting & Ceiling Fans',
       displayName: ['Lamps, Lighting &', 'Ceiling Fans'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://abodejungle.com/cdn/shop/products/S2cc8edb0b36c416dbe3eb91dcf665727C.jpg?v=1686569664&width=320'
     },
     {
       id: 6,
       name: 'Home Decor',
       displayName: ['Home Decor'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://images.pexels.com/photos/1090638/pexels-photo-1090638.jpeg?cs=srgb&dl=pexels-fotios-photos-1090638.jpg&fm=jpg'
     },
     {
       id: 7,
       name: 'Home Organization Supplies',
       displayName: ['Home Organization', 'Supplies'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://img.freepik.com/free-photo/mirror-with-shape-eye-shelves_181624-25355.jpg'
     },
     {
       id: 8,
@@ -95,13 +95,13 @@ export class CategoryManagementComponent implements OnInit {
       id: 9,
       name: 'Bedding',
       displayName: ['Bedding'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMnbDRgQLzoLoNYDduBPZ3rDwhm3aGMI9yKQ&s'
     },
     {
       id: 10,
       name: 'Furniture',
       displayName: ['Furniture'],
-      image: 'https://www.cato.org/sites/cato.org/files/styles/optimized/public/2023-11/fast-fashion2.jpeg?itok=qCMa7eGV'
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbW8OU6NDC3omPqQdClOZdCfooSyla8NtjEg&s'
     }
   ];
   loading = true;
@@ -119,11 +119,10 @@ export class CategoryManagementComponent implements OnInit {
 
   fetchCategories(): void {
     this.loading = true;
-    this.http.get<Category[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
+    this.http.get<Category[]>('http://172.17.12.101:8081/api/admin/getcategories')
       .subscribe({
         next: (response) => {
           this.categories = response;
-          // Find the highest ID for dummy operations
           this.nextId = Math.max(...this.categories.map(c => c.id)) + 1;
           this.loading = false;
         },
@@ -136,50 +135,78 @@ export class CategoryManagementComponent implements OnInit {
 
   openAddDialog(): void {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
+      width: "500px",
       data: { title: 'Add New Category' }
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Create a complete Category object with default values
-        const newCategory: Category = {
-          id: this.nextId++,
-          name: result,
-          // Add other required properties from your Category interface
-          bgColor: '#ffffff', // Default background color
-          image: 'assets/default-category.png', // Default image path
-          displayName: result.split(' '), // Split name into array for display
-          // Add any other mandatory properties your Category interface requires
-        };
-  
-        this.categories = [...this.categories, newCategory];
-        this.showSnackBar('Category added successfully (frontend-only)');
+      if (result && result.categoryName) {
+        const formData = new FormData();
+        formData.append('categoryName', result.categoryName);
+        formData.append('image', result.image);
+        result.subcategories.forEach((sub: string, index: number) => {
+          formData.append(`subcategories[${index}][name]`, sub);
+        });
+        this.http.post('http://172.17.12.101:8081/api/admin/addCategory', formData)
+          .subscribe(
+            (response: any) => {
+              this.categories = [...this.categories, response];
+              this.showSnackBar('Category added successfully');
+            },
+            error => {
+              console.error('Error adding category:', error);
+              this.showSnackBar('Failed to add category');
+            }
+          );
       }
     });
   }
+  
+  
 
   openEditDialog(category: Category): void {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
+       width: '600px',
       data: { title: 'Edit Category', name: category.name }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Frontend-only update operation
-        this.categories = this.categories.map(c => 
-          c.id === category.id ? { ...c, name: result } : c
-        );
-        this.showSnackBar('Category updated successfully (frontend-only)');
+        const updatedCategory = { ...category, name: result };
+        this.http.put(`http://172.17.12.101:8081/api/admin/categories?id=${category.id}`, updatedCategory)
+          .subscribe(
+            response => {
+              this.categories = this.categories.map(c => 
+                c.id === category.id ? updatedCategory : c
+              );
+              this.showSnackBar('Category updated successfully');
+            },
+            error => {
+              console.error('Error updating category:', error);
+              this.showSnackBar('Failed to update category');
+            }
+          );
       }
     });
   }
+  
 
   deleteCategory(category: Category): void {
-    // Frontend-only delete operation
-    this.categories = this.categories.filter(c => c.id !== category.id);
-    this.showSnackBar('Category deleted successfully (frontend-only)');
+    if (confirm(`Are you sure you want to delete the category "${category.name}"?`)) {
+      this.http.delete(`http://172.17.12.101:8081/api/admin/delete?id=${category.id}`)
+        .subscribe(
+          response => {
+            this.categories = this.categories.filter(c => c.id !== category.id);
+            this.showSnackBar('Category deleted successfully');
+          },
+          error => {
+            console.error('Error deleting category:', error);
+            this.showSnackBar('Failed to delete category');
+          }
+        );
+    }
   }
-
+  
   private showSnackBar(message: string): void {
     this.snackBar.open(message, 'Close', { duration: 3000 });
   }

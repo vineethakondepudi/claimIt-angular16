@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,21 +27,47 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./category-dialog.component.css']
 })
 export class CategoryDialogComponent {
-  categoryControl = new FormControl('', [
-    Validators.required,
-    Validators.maxLength(50)
-  ]);
-
+  categoryForm: FormGroup;
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
+  imagePreview: string | ArrayBuffer | null = null;
   constructor(
+    private fb: FormBuilder,
     public dialogRef: MatDialogRef<CategoryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { title: string; name?: string }
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if (this.data.name) {
-      this.categoryControl.setValue(this.data.name);
+    this.categoryForm = this.fb.group({
+      categoryName: [data.category?.categoryName || '', [Validators.required, Validators.maxLength(50)]],
+      subcategories: this.fb.array(data.category?.subcategories.map((sub: { name: any; }) => this.fb.control(sub.name)) || [])
+    });
+  }
+  get subcategories(): FormArray {
+    return this.categoryForm.get('subcategories') as FormArray;
+  }
+  addSubcategory(): void {
+    this.subcategories.push(this.fb.control('', Validators.required));
+  }
+  onFileSelect(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedFile = file;
+      this.selectedFileName = file.name; 
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
-
-  onCancel(): void {
-    this.dialogRef.close();
+  removeSubcategory(index: number): void {
+    this.subcategories.removeAt(index);
+  }
+  save(): void {
+    if (this.categoryForm.valid) {
+      this.dialogRef.close({
+        ...this.categoryForm.value,
+        image: this.selectedFile 
+      });
+    }
   }
 }
