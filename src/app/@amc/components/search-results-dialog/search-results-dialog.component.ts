@@ -89,7 +89,6 @@ export class SearchResultsDialogComponent {
     });
   
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      console.log('Dialog closed with result:', confirmed);
     });
   }
 }

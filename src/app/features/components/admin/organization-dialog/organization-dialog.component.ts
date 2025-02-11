@@ -112,7 +112,6 @@ categoryNames: any[] = [];
         (response) => {
           this.categories = response;
           this.categoryNames = this.categories.map(category => category.name);
-          console.log(this.categoryNames);
         },
         (error) => {
           console.error('Error fetching categories:', error);
@@ -201,7 +200,6 @@ categoryNames: any[] = [];
     this.formData = new FormData(); // Initialize FormData to avoid appending issues
   
     const updatedData = { ...this.imageDataResponse };
-    console.log("Updated Data:", updatedData);
   
     if (this.isEditingDescription) {
       updatedData.description = this.editableDescription;
@@ -220,7 +218,6 @@ categoryNames: any[] = [];
     this.formData.append('providedCategoryName', this.categoryName || 'default');
     this.http.post("https://100.28.242.219.nip.io/api/admin/upload", this.formData).subscribe(
       (response) => {
-        console.log("Data submitted:", response);
         this.isEditingDescription = false;
         this.isLoading = false;
         this.onCloseDialog(); // Ensure this isn't closing before API call
@@ -233,8 +230,7 @@ categoryNames: any[] = [];
   }
   
   onCategoryChange(event: any) {
-    this.categoryName = event.value; // Ensure categoryName gets updated
-    console.log("Updated categoryName:", this.categoryName);
+    this.categoryName = event.value;
   }
   
 
@@ -245,7 +241,6 @@ categoryNames: any[] = [];
   submitItem1() {
     if (this.files.length > 0) {
       this.formData = new FormData();
-      console.log("Selected Category Name:", this.categoryName); // Debugging
   
       this.formData.append('image', this.files[0].file);
       this.formData.append('orgId', this.selectedOrgId);

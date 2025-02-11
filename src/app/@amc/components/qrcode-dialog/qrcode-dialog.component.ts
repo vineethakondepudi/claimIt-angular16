@@ -53,63 +53,55 @@ export class QrcodeDialogComponent {
     }
   }
   onSaveQrCode(): void {
-    const canvas = this.qrCode.qrcElement.nativeElement.querySelector('canvas') as HTMLCanvasElement;
-    if (canvas) {
-      const combinedCanvas = document.createElement('canvas');
-      const context = combinedCanvas.getContext('2d');
-      if (!context) {
-        console.error('Could not get 2D context for canvas.');
-        return;
+    const combinedCanvas = document.createElement('canvas');
+    const context = combinedCanvas.getContext('2d');
+    if (!context) {
+      console.error('Could not get 2D context for canvas.');
+      return;
+    }
+
+    const qrCodeSize = 200;
+    const padding = 20;
+    const idHeight = 30;
+
+    // Set canvas size to fit only the ID text
+    combinedCanvas.width = qrCodeSize + 2 * padding;
+    combinedCanvas.height = idHeight + 2 * padding;
+
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+    context.fillStyle = '#000000';
+    context.font = '16px Arial';
+    context.textAlign = 'center';
+
+    // Draw only the ID text
+    context.fillText(`ID: ${this.data.requiredData.uniqueId}`, combinedCanvas.width / 2, combinedCanvas.height / 2);
+
+    const combinedImage = combinedCanvas.toDataURL('image/png');
+
+    // Create a link element to trigger the download
+    const link = document.createElement('a');
+    link.href = combinedImage;
+    link.download = `id-${this.data.requiredData.uniqueId}.png`;
+
+    // Try to trigger the download on desktop and mobile
+    if (navigator.userAgent.match(/Android|iPhone|iPad|iPod/i)) {
+      // For mobile devices, let's first try opening in a new tab and let the user download manually
+      const imageWindow = window.open();
+      if (imageWindow) {
+        imageWindow.document.write('<img src="' + combinedImage + '" style="width:100%"/>');
+        imageWindow.document.close();
+        setTimeout(() => {
+          imageWindow.location.href = combinedImage; // Force it to open and allow saving
+        }, 500);
       }
-      const qrCodeSize = 200; 
-      const padding = 20; 
-      const idHeight = 30; 
-      combinedCanvas.width = qrCodeSize + 2 * padding;
-      combinedCanvas.height = qrCodeSize + 2 * padding + idHeight;
-      context.fillStyle = '#ffffff';
-      context.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
-      context.fillStyle = '#000000';
-      context.font = '16px Arial';
-      context.textAlign = 'center';
-      context.fillText(`ID: ${this.data.requiredData.uniqueId}`, combinedCanvas.width / 2, idHeight - 10);
-      context.drawImage(canvas, padding, idHeight + padding, qrCodeSize, qrCodeSize);
-      const combinedImage = combinedCanvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = combinedImage;
-      link.download = `qr-code-with-id-${this.data.requiredData.uniqueId}.png`;
-      link.click();
-      const printWindow = window.open('', '_blank');
-      printWindow?.document.write(`
-        <html>
-          <head>
-            <title>Print QR Code</title>
-            <style>
-              body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-              }
-              img {
-                max-width: 100%;
-                max-height: 100%;
-              }
-            </style>
-          </head>
-          <body>
-            <img src="${combinedImage}" alt="QR Code with ID">
-          </body>
-        </html>
-      `);
-      printWindow?.document.close();
-      printWindow?.print();
-      printWindow?.close();
     } else {
-      console.error('QR code canvas not found.');
+      // For desktop, trigger the download directly as before
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   }
-
 
   onCancel() {
     this.dialogRef.close('no');

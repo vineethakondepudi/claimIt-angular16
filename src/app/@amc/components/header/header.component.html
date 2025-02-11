@@ -48,8 +48,11 @@
         (click)="item.route === '/claimit/pendingClaim' ? resetNotificationCount() : null">
         <mat-icon>{{ item.icon }}</mat-icon>
       </button>
-      <button class="cursor-pointer bg-white" mat-icon-button matTooltip="Login" (click)="logout()">
+      <button *ngIf="userRole !== 'admin'" class="cursor-pointer bg-white" mat-icon-button matTooltip="Login" (click)="logout()">
         <mat-icon>login</mat-icon>
+      </button>
+      <button  *ngIf="userRole === 'admin'" class="cursor-pointer bg-white" mat-icon-button matTooltip="Logout" (click)="logout()">
+        <mat-icon>logout</mat-icon>
       </button>
     </div>
   </mat-toolbar>

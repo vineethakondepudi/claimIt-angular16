@@ -123,7 +123,6 @@ export class CategoryManagementComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.categories = response;
-          console.log( this.categories);
           
           this.nextId = Math.max(...this.categories.map(c => c.id)) + 1;
           this.loading = false;
@@ -181,16 +180,13 @@ export class CategoryManagementComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const updatedCategory = { ...category, name: result.categoryName };
-        console.log(result,updatedCategory,'resultedit')
         this.http.put(`https://100.28.242.219.nip.io/api/admin/categories?id=${category.id}`, updatedCategory)
           .subscribe(
             response => {
-              console.log(response,"edit");
               
               this.categories = this.categories.map(c => 
                 c.id === category.id ? updatedCategory : c
               );
-              console.log(this.categories,"editcategory");
               
               this.showSnackBar('Category updated successfully');
             },
