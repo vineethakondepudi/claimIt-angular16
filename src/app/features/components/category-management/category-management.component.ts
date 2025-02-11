@@ -119,7 +119,7 @@ export class CategoryManagementComponent implements OnInit {
 
   fetchCategories(): void {
     this.loading = true;
-    this.http.get<Category[]>('http://172.17.12.101:8081/api/admin/getcategories')
+    this.http.get<Category[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
       .subscribe({
         next: (response) => {
           this.categories = response;
@@ -156,7 +156,7 @@ export class CategoryManagementComponent implements OnInit {
           subCategories: result.subcategories.map((sub: string) => ({ name: sub }))
         };
         formData.append('category', JSON.stringify(categoryData));
-        this.http.post('http://172.17.12.101:8081/api/admin/addCategory', formData)
+        this.http.post('https://100.28.242.219.nip.io/api/admin/addCategory', formData)
           .subscribe(
             (response: any) => {
               this.categories = [...this.categories, response];
@@ -169,6 +169,7 @@ export class CategoryManagementComponent implements OnInit {
           );
       }
     });
+    this.fetchCategories()
   }
 
   openEditDialog(category: Category): void {
@@ -179,8 +180,9 @@ export class CategoryManagementComponent implements OnInit {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const updatedCategory = { ...category, name: result.category };
-        this.http.put(`http://172.17.12.101:8081/api/admin/categories?id=${category.id}`, updatedCategory)
+        const updatedCategory = { ...category, name: result.categoryName };
+        console.log(result,updatedCategory,'resultedit')
+        this.http.put(`https://100.28.242.219.nip.io/api/admin/categories?id=${category.id}`, updatedCategory)
           .subscribe(
             response => {
               console.log(response,"edit");
@@ -204,7 +206,7 @@ export class CategoryManagementComponent implements OnInit {
 
   deleteCategory(category: Category): void {
     if (confirm(`Are you sure you want to delete the category "${category.name}"?`)) {
-      this.http.delete(`http://172.17.12.101:8081/api/admin/delete?id=${category.id}`)
+      this.http.delete(`https://100.28.242.219.nip.io/api/admin/delete?id=${category.id}`)
         .subscribe(
           response => {
             this.categories = this.categories.filter(c => c.id !== category.id);

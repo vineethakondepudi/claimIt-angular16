@@ -178,7 +178,7 @@ categoryNames: any[] = [];
       this.formData = new FormData();
       this.formData.append('image', this.files[0].file);
       this.formData.append('orgId', this.selectedOrgId);
-      this.formData.append('categoryname',   this.selectedCategory)
+      this.formData.append('providedCategoryName',   this.selectedCategory)
   
       this.service.adminUploadItem(this.selectedOrgId, this.formData).subscribe(
         (response) => {
@@ -217,7 +217,7 @@ categoryNames: any[] = [];
     this.formData.append("image", this.files[0].file);
     this.formData.append("orgId", this.selectedOrgId);
     this.formData.append("editedLabels", this.editableDescription || "");
-  
+    this.formData.append('providedCategoryName', this.categoryName || 'default');
     this.http.post("https://100.28.242.219.nip.io/api/admin/upload", this.formData).subscribe(
       (response) => {
         console.log("Data submitted:", response);
@@ -249,7 +249,7 @@ categoryNames: any[] = [];
   
       this.formData.append('image', this.files[0].file);
       this.formData.append('orgId', this.selectedOrgId);
-      this.formData.append('categoryname', this.categoryName || 'default'); // Avoid undefined
+      this.formData.append('providedCategoryName', this.categoryName || 'default'); // Avoid undefined
       
       this.http.post('https://100.28.242.219.nip.io/api/admin/image', this.formData)
         .subscribe(
