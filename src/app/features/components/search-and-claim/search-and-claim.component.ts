@@ -218,7 +218,6 @@ export default class SearchAndClaimComponent implements OnInit {
         this.searchItems();
       }
     });
-    this.listOfItems();
     this.loadCategories();
     this.checkViewport();
     this.showDelay.value = 0; // Set show delay to 500ms
@@ -238,42 +237,38 @@ export default class SearchAndClaimComponent implements OnInit {
     this.files = this.files.filter(f => f !== file);
   }
   searchItems() {
-    
-    if (this.searchQuery.trim() !== '') {
-      this.searchResults = []; // Clear previous results
-      this.clearSearch()
+    console.log("Search function triggered"); // Check if function runs
+    console.log("Search Query:", this.searchQuery); // Check input value
       this.claimService.searchItems(this.searchQuery).subscribe(
-        (response:any) => {
-          if( response.message= "No items found matching your search"){
-            this.noresultsFound = true
-            this.noresultsforItemsearch = true
-            this.initalDataResults = false
-             }
+        (response: any) => {
+          console.log("API Response:", response); // Debug API response
+          if (response.message === "No items found matching your search") {
+            this.noresultsFound = true;
+            this.noresultsforItemsearch = true;
+            this.initalDataResults = false;
+          }
           if (Array.isArray(response)) {
-            this.searchResults = response.filter(item => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
+            this.searchResults = response.filter(item => 
+              item.status === "UNCLAIMED" || item.status === "PENDING_APPROVAL"
+            );
             this.cdr.detectChanges();
           } else {
-          
-            console.error('API response is not an array', response);
+            console.error("API response is not an array", response);
           }
-          this.searchCompleted = true; // Mark search as completed
+          this.searchCompleted = true;
         },
         (error) => {
-          console.error('Error fetching search results:', error);
-          this.searchCompleted = true; // Mark search as completed even on error
+          console.error("Error fetching search results:", error);
+          this.searchCompleted = true;
         }
       );
-    }else {
-    //  if(!this.isMobileView && !this.categories){
-    //   this.listOfItems()
-    //  }
-    }
   }
+  
 listOfItems(){
   this.isLoading = true
   this.claimService.listOfItems(this.searchQuery).subscribe(
     (res: any) => {
-      this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
+      this.initalDataResults = res.data
       this.searchCompleted = true; 
       this.isLoading = false
     },
@@ -517,12 +512,12 @@ selectCategory1(categoryName: string): void {
       this.uploadImage(this.files[0]).subscribe((response: any) => {
         if( response.message= "No matching items found."){
           this.noresultsFound = true
-          // this.noresultsforPicturesearch = true
           this.initalDataResults = false
           this.isLoading = false
            }
         this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED" || item.status === "PENDING_APPROVAL") || [];
         this.isLoading = false
+        this.noresultsFound = false
       });
       
     }

@@ -61,7 +61,7 @@
     class="relative flex flex-col items-center justify-center bg-white">
  <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
  <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-   No Records Found4
+   No Records Found
  </p>
 </div>
 </div>
@@ -148,9 +148,9 @@
                             <!-- Dropdown options -->
                             <mat-option *ngFor="let item of categories" [value]="item.name">
                               <div class="flex items-center gap-2">
-                                <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
+                                <!-- <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
                                   {{ getCategoryIcon(item.name) }}
-                                </mat-icon>
+                                </mat-icon> -->
                                 <span class="text-sm font-medium truncate">{{ item.name }}</span>
                               </div>
                             </mat-option>
@@ -216,11 +216,11 @@
               [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>
           </div>
-          <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0) &&  noresultsFound" 
+          <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0 || noresultsforPicturesearch)  &&  noresultsFound" 
             class="relative flex flex-col items-center justify-center bg-white">
          <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
          <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-           No Records Found
+           No Records Found1
          </p>
        </div>
        
