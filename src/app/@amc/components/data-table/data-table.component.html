@@ -75,12 +75,12 @@
                 [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary" class="txt-button">
                 UnClaim
               </button>
-              <button *ngIf="element.status !== 'PENDING_APPROVAL' && !removeArchive && showUnClaim"
+              <button *ngIf="element.status !== 'PENDING_APPROVAL' && !removeArchive && showUnClaim && element.status !== 'PENDING_PICKUP' && element.status !== 'CLAIMED' "
               (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
         Claim
       </button>
       
-      <div *ngIf="element.status === 'PENDING_APPROVAL' && (!adminserarchpage || searchResultspage) ">
+      <div *ngIf="(element.status === 'PENDING_APPROVAL' ||  element.status === 'PENDING_PICKUP' || element.status === 'CLAIMED') && (!adminserarchpage || searchResultspage) ">
         <a (click)="openQrDialog(element)" class="underline hover:text-blue-500">
           <mat-icon>qr_code</mat-icon>
         </a>
