@@ -41,6 +41,7 @@ export class OrganizationDialogComponent {
   isLoading: boolean = false;
   formattedData:any;
   selectedCategory: any;
+  categoryName:any
   formData!: any;
   isEditingDescription = false;
   editableDescription = '';
@@ -194,25 +195,48 @@ categoryNames: any[] = [];
       console.warn('No file selected for upload.');
     }
     
-  } submitItem() {
+  } 
+  
+  submitItem() {
+    this.formData = new FormData(); // Initialize FormData to avoid appending issues
+  
     const updatedData = { ...this.imageDataResponse };
+    console.log("Updated Data:", updatedData);
+  
     if (this.isEditingDescription) {
-      updatedData.description = this.editableDescription; 
+      updatedData.description = this.editableDescription;
     }
-    this.isLoading = false
-    this.formData.append('image', this.files[0].file);
-    this.formData.append('orgId', this.selectedOrgId);
-    this.formData.append('editedLabels', this.editableDescription)
-    this.http.post('https://100.28.242.219.nip.io/api/admin/upload',  this.formData)
-      .subscribe(response => {
-        console.log('Data submitted:', response);
+  
+    if (!this.files || this.files.length === 0) {
+      console.error("No files selected!");
+      return;
+    }
+  
+    this.isLoading = true; // Start loading before making the API call
+  
+    this.formData.append("image", this.files[0].file);
+    this.formData.append("orgId", this.selectedOrgId);
+    this.formData.append("editedLabels", this.editableDescription || "");
+  
+    this.http.post("https://100.28.242.219.nip.io/api/admin/upload", this.formData).subscribe(
+      (response) => {
+        console.log("Data submitted:", response);
         this.isEditingDescription = false;
-        this.isLoading = true
-      });
+        this.isLoading = false;
+        this.onCloseDialog(); // Ensure this isn't closing before API call
+      },
+      (error) => {
+        console.error("Error submitting data:", error);
+        this.isLoading = false;
+      }
+    );
   }
-  onCategoryChange(event: any): void {
-    this.selectedCategory = event.detail.value;
+  
+  onCategoryChange(event: any) {
+    this.categoryName = event.value; // Ensure categoryName gets updated
+    console.log("Updated categoryName:", this.categoryName);
   }
+  
 
   editDescription(item: any) {
     this.editableDescription = item.value;
@@ -220,22 +244,26 @@ categoryNames: any[] = [];
   }
   submitItem1() {
     if (this.files.length > 0) {
-       this.formData = new FormData();
-      console.log("this.files", this.files);
-      
+      this.formData = new FormData();
+      console.log("Selected Category Name:", this.categoryName); // Debugging
+  
       this.formData.append('image', this.files[0].file);
       this.formData.append('orgId', this.selectedOrgId);
-      this.http.post('https://100.28.242.219.nip.io/api/admin/image',  this.formData).subscribe(
-        (response) => {
-          this.formatResponse(response);          
-        this.imageDataResponse = response
-        },
-        (error) => {
-          console.error('Error uploading item:', error);
-        }
-      );
+      this.formData.append('categoryname', this.categoryName || 'default'); // Avoid undefined
+      
+      this.http.post('https://100.28.242.219.nip.io/api/admin/image', this.formData)
+        .subscribe(
+          (response) => {
+            this.formatResponse(response);
+            this.imageDataResponse = response;
+          },
+          (error) => {
+            console.error('Error uploading item:', error);
+          }
+        );
     }
   }
+  
 
   submit(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -275,6 +303,7 @@ categoryNames: any[] = [];
     }
   }
   formatResponse(response: any): void {
+    this.categoryName = response.categoryName;
     const allowedKeys = ['description', 'title'];
     this.formattedData = Object.entries(response)
       .filter(([key]) => allowedKeys.includes(key))

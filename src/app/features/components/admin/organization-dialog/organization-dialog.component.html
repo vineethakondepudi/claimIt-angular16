@@ -40,30 +40,7 @@
           <p *ngIf="files.length === 0" class="text-gray-500 text-center">No image selected.</p>
         </div>
         
-        <div class="w-full flex justify-center mt-4">
-          <mat-form-field appearance="outline" class="w-full max-w-md">
-            <mat-label>Select within Category</mat-label>
-            <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange($event.value)">
-              <mat-select-trigger>
-                <span *ngIf="selectedCategory" class="text-base font-medium">
-                  {{ selectedCategory }}
-                </span>
-                <span *ngIf="!selectedCategory" class="text-base text-gray-500">
-                  Select a category
-                </span>
-              </mat-select-trigger>
-              
-              <mat-option *ngFor="let item of categories" [value]="item.name">
-                <div class="flex items-center gap-2">
-                  <!-- <mat-icon [ngStyle]="{ color: '#388d97' }" class="text-xl">
-                    {{ getCategoryIcon(item.name) }}
-                  </mat-icon> -->
-                  <span class="text-base font-medium truncate">{{ item.name }}</span>
-                </div>
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+      
         
         <ul class="mt-4 w-full max-w-md mx-auto">
           <li *ngFor="let item of formattedData" class="mb-2">
@@ -86,8 +63,18 @@
           </li>
         </ul>
         
+<div class="w-full flex justify-center mt-4">
+  <mat-form-field appearance="outline" class="w-full max-w-md">
+    <mat-label>Select within Category</mat-label>
+    <mat-select [(ngModel)]="categoryName" (selectionChange)="onCategoryChange($event)">
+      <mat-option *ngFor="let item of categories" [value]="item.name">
+        {{ item.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
         <div class="w-full flex justify-end mt-4">
-          <button mat-raised-button color="primary" [disabled]="!files.length" (click)="onCloseDialog();submitItem()">
+          <button mat-raised-button color="primary" [disabled]="!files.length" (click)="submitItem()">
             <mat-icon>check_circle</mat-icon> Submit
           </button>
         </div>
