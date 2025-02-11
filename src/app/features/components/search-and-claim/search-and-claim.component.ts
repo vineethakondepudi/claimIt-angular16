@@ -249,7 +249,7 @@ export default class SearchAndClaimComponent implements OnInit {
           }
           if (Array.isArray(response)) {
             this.searchResults = response.filter(item => 
-              item.status === "UNCLAIMED" || item.status === "PENDING_APPROVAL"
+              item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP"
             );
             this.cdr.detectChanges();
           } else {
@@ -326,7 +326,7 @@ listOfItems(){
           this.initalDataResults = false
            }
         if (Array.isArray(data)) {
-          this.categerorydata = data.filter(item => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
+          this.categerorydata = data.filter(item => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP");
              this.isLoading = false;
              this.noresultsFound = false
              this.noresultsforCtegerorysearch = false
@@ -454,7 +454,7 @@ selectCategory1(categoryName: string): void {
       this.uploadImage(file).subscribe(
         (response) => {
           if (response.success) {
-            this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL");
+            this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP");
             if(response.message === "No matching items found.") {
               this.noresultsforPicturesearch = true
             }
@@ -515,7 +515,7 @@ selectCategory1(categoryName: string): void {
           this.initalDataResults = false
           this.isLoading = false
            }
-        this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED" || item.status === "PENDING_APPROVAL") || [];
+        this.matchedItems = response.matchedItems.filter((item: { status: string; }) =>item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP") || [];
         this.isLoading = false
         this.noresultsFound = false
       });
