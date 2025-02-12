@@ -166,7 +166,7 @@ export default class AdminSearchComponent {
     const reqbody = {
       mail: this.adminSearch.value.email ? this.adminSearch.value.email : '',
       status: this.adminSearch.value.status ? this.adminSearch.value.status : '',
-      receivedDate: this.adminSearch.value.to ? this.dp.transform(this.adminSearch.value.to) : '',
+      date: this.adminSearch.value.to ? this.dp.transform(this.adminSearch.value.to) : '',
     }
 
     this.service.adminSearch(reqbody).subscribe((res: any) => {
