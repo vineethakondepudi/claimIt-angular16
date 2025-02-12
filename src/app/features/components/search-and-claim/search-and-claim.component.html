@@ -5,9 +5,10 @@
     <mat-form-field appearance="outline" class="w-full flex-grow">
       <mat-label>Search your lost item</mat-label>
       <input type="text" matInput placeholder="Search items" [(ngModel)]="searchQuery" (keyup.enter)="searchItems()" />
+      <input #fileInput type="file" (change)="onFileSelect($event)" hidden />
       <button mat-icon-button matSuffix (click)="triggerFileInput()">
         <mat-icon>camera_alt</mat-icon>
-      </button>
+      </button>   
       <button mat-icon-button matSuffix [matMenuTriggerFor]="filterMenu">
         <mat-icon>filter_list</mat-icon>
       </button>
@@ -57,13 +58,13 @@
       [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"
       (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
   </div>
-  <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0) &&  noresultsFound" 
-    class="relative flex flex-col items-center justify-center bg-white">
- <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
- <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-   No Records Found
- </p>
-</div>
+  <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0 || noresultsforPicturesearch)  &&  noresultsFound"
+            class="relative flex flex-col items-center justify-center bg-white">
+            <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+            <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+              No Records Found
+            </p>
+          </div> 
 </div>
 
 
@@ -221,7 +222,7 @@
             class="relative flex flex-col items-center justify-center bg-white">
             <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
             <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
-              No Records Found1
+              No Records Found
             </p>
           </div>       
       </div>

@@ -237,8 +237,6 @@ export default class SearchAndClaimComponent implements OnInit {
     this.files = this.files.filter(f => f !== file);
   }
   searchItems() {
-    console.log("Search function triggered"); // Check if function runs
-    console.log("Search Query:", this.searchQuery); // Check input value
       this.claimService.searchItems(this.searchQuery).subscribe(
         (response: any) => {
           console.log("API Response:", response); // Debug API response
@@ -456,9 +454,11 @@ selectCategory1(categoryName: string): void {
         (response) => {
           if (response.success) {
             this.matchedItems = response.matchedItems.filter((item: { status: string; }) => item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP" || item.status === "CLAIMED"  || item.status === "REJECTED");
-            if(response.message === "No matching items found.") {
-              this.noresultsforPicturesearch = true
-            }
+            if( response.message == "No matching items found."){  
+              this.initalDataResults = false
+              this.noresultsFound = true;
+              this.isLoading = false
+               }
           } else {
             this.pictureSearchCompleted = true
           }
@@ -506,19 +506,13 @@ selectCategory1(categoryName: string): void {
    onFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.clearSearch()
       this.files = Array.from(input.files);
       this.selectedFileName = this.files[0].name;
       this.isLoading = true
       this.uploadImage(this.files[0]).subscribe((response: any) => {
         if( response.message= "No matching items found."){          
           this.initalDataResults = false
-          if (response.length !== 0) {
-            this.noresultsFound = false;
-          }
-          else {
-            this.noresultsFound = true;
-          }
+          this.noresultsFound = true;
           this.isLoading = false
            }
         this.matchedItems = response.matchedItems.filter((item: { status: string; }) =>item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP" || item.status === "CLAIMED"  || item.status === "REJECTED") || [];
