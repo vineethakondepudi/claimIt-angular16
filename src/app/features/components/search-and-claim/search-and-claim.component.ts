@@ -251,6 +251,7 @@ export default class SearchAndClaimComponent implements OnInit {
             this.searchResults = response.filter(item => 
               item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP" || item.status === "CLAIMED"  || item.status === "REJECTED"
             );
+            this.noresultsFound = false;
             this.cdr.detectChanges();
           } else {
             console.error("API response is not an array", response);
@@ -510,9 +511,14 @@ selectCategory1(categoryName: string): void {
       this.selectedFileName = this.files[0].name;
       this.isLoading = true
       this.uploadImage(this.files[0]).subscribe((response: any) => {
-        if( response.message= "No matching items found."){
-          this.noresultsFound = true
+        if( response.message= "No matching items found."){          
           this.initalDataResults = false
+          if (response.length !== 0) {
+            this.noresultsFound = false;
+          }
+          else {
+            this.noresultsFound = true;
+          }
           this.isLoading = false
            }
         this.matchedItems = response.matchedItems.filter((item: { status: string; }) =>item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP" || item.status === "CLAIMED"  || item.status === "REJECTED") || [];
