@@ -177,7 +177,7 @@ categoryNames: any[] = [];
       this.formData = new FormData();
       this.formData.append('image', this.files[0].file);
       this.formData.append('orgId', this.selectedOrgId);
-      this.formData.append('providedCategoryName',   this.selectedCategory)
+      this.formData.append('categoryName',   this.categoryName)
   
       this.service.adminUploadItem(this.selectedOrgId, this.formData).subscribe(
         (response) => {
@@ -210,17 +210,17 @@ categoryNames: any[] = [];
       return;
     }
   
-    this.isLoading = true; // Start loading before making the API call
+    this.isLoading = true; 
   
     this.formData.append("image", this.files[0].file);
     this.formData.append("orgId", this.selectedOrgId);
     this.formData.append("editedLabels", this.editableDescription || "");
-    this.formData.append('providedCategoryName', this.categoryName || 'default');
+    this.formData.append('categoryName', this.categoryName || 'default');
     this.http.post("https://100.28.242.219.nip.io/api/admin/upload", this.formData).subscribe(
       (response) => {
         this.isEditingDescription = false;
         this.isLoading = false;
-        this.onCloseDialog(); // Ensure this isn't closing before API call
+        this.onCloseDialog(); 
       },
       (error) => {
         console.error("Error submitting data:", error);
