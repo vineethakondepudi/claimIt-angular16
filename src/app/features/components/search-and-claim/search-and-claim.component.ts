@@ -520,7 +520,11 @@ selectCategory1(categoryName: string): void {
         this.matchedItems = response.matchedItems.filter((item: { status: string; }) =>item.status === "UNCLAIMED"|| item.status === "PENDING_APPROVAL" || item.status === "PENDING_PICKUP" || item.status === "CLAIMED"  || item.status === "REJECTED") || [];
         this.isLoading = false
         this.noresultsFound = false
-      });
+      },
+    (error:any)=>{
+      this.isLoading = false
+    }
+    );
       
     }
   }

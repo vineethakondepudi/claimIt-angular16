@@ -120,6 +120,7 @@ public isTabActive(tab: string): boolean {
         { label: 'Add Item', icon: 'add_circle', route: '/claimit/addItem' },
         { label: 'Approve / Reject Claim', icon: 'rule', route: '/claimit/search' },
         { label: 'Category Management', icon: 'visibility', route: '/claimit/category' },
+        { label: 'Expired Items', icon: 'sell', route: '/claimit/expiredItems' },
         // { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim', isNotification: true },
       ];
     } else {

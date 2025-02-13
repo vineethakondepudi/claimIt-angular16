@@ -102,6 +102,8 @@ export default class DashboardComponent {
   suggestions: string[] = [];
   userLocation: string = ''; 
   isLoading: boolean = false;
+  categoryDoughnutChartData: any;  // For "All Categories"
+  claimedDoughnutChartData: any;   // For "Claimed vs Unclaimed"
   // cdRef: any
   constructor(private claimService: ClaimitService, private http: HttpClient, private dialog: MatDialog, private cdr: ChangeDetectorRef,private chatService: ChatService) {
     this.role = localStorage.getItem('role');
@@ -244,6 +246,8 @@ export default class DashboardComponent {
     
     this.statusCount(this.currentMonth, currentYear);
     this.categoryItems(this.currentMonth, currentYear);
+    this.fetchCategoryData(this.currentMonth, currentYear); // Example: Fetch data for February 2025
+    this.fetchClaimedData(this.currentMonth, currentYear);
     this.monthName = this.selectedMonth.toLocaleString('default', { month: 'long' });
     // this.initMap();
   }
@@ -669,6 +673,47 @@ forceUpdate(): void {
     });
   }
 
+ // 1. Fetch All Categories Data
+ fetchCategoryData(month: number, year: number): void {
+  this.claimService.categoryItems(month.toString(), year).subscribe((res: any) => {
+    const categories = res[0]?.categories;
+
+    const labels = categories.map((item: any) => item.category || 'Unknown');
+    const dataPoints = categories.map((item: any) => item.totalItems);
+
+    // Generate Colors: Non-zero categories get vibrant colors; Zero items get gray
+    const backgroundColors = categories.map((item: any) => item.totalItems > 0 ? this.getRandomColor() : '#E0E0E0');
+
+    // Doughnut Chart (All Categories)
+    this.categoryDoughnutChartData = {
+      labels,
+      datasets: [{ data: dataPoints, backgroundColor: backgroundColors }]
+    };
+  });
+}
+
+// 2. Fetch Claimed vs Unclaimed Data
+fetchClaimedData(month: number, year: number): void {
+  this.claimService.categoryItems(month.toString(), year).subscribe((res: any) => {
+    const totalItems = res[0]?.categories.reduce((sum: number, item: any) => sum + item.totalItems, 0);
+    const claimedItems = Math.floor(totalItems * 0.7);  // Example: 70% claimed (adjust logic as needed)
+    const unclaimedItems = totalItems - claimedItems;
+
+    this.claimedDoughnutChartData = {
+      labels: ['Claimed', 'Unclaimed'],
+      datasets: [{
+        data: [claimedItems, unclaimedItems],
+        backgroundColor: ['#4CAF50', '#E57373']  // Green for claimed, red for unclaimed
+      }]
+    };
+  });
+}
+
+// Function to Generate Random Colors
+private getRandomColor(): string {
+  const colors = ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0', '#F44336', '#3F51B5', '#FFC107'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
   generateChartColors(count: number): string[] {
     const colors = [];
     for (let i = 0; i < count; i++) {

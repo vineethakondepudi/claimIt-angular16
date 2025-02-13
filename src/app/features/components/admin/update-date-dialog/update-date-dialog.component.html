@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Select Expiration Date</h1>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Expiration Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="expirationDate">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-button color="primary" (click)="update()">Update</button>
+</mat-dialog-actions>

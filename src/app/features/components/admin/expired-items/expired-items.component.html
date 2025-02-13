@@ -1,0 +1,84 @@
+<div class="min-h-screen flex flex-col">
+    <div class="flex-none px-gutter pt-5 bg-[#E8F2F3] ">
+        <div @fadeInRight class="flex flex-row justify-between px-5">
+            <div class="flex flex-col">
+                <h1 class="font-semibold max-w-3xs mr-6 text-2xl">Expired Items</h1>
+            </div>
+        </div>
+        <div class="flex-grow px-5">
+            <mat-card class="w-full">
+              <mat-accordion>
+                <mat-expansion-panel 
+                  hideToggle 
+                  [expanded]="true" 
+                  (opened)="containerPanelOpened = true" 
+                  (closed)="containerPanelOpened = false">
+                  
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="text-lg">
+                      <span class="font-semibold">Search</span>
+                    </mat-panel-title>
+                    <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
+                  </mat-expansion-panel-header>
+          
+                  <div class="flex flex-wrap gap-5">
+                    <!-- Input Field -->
+                    <mat-form-field>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                          <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                          <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                      </mat-form-field>
+                    <!-- Buttons Container -->
+                    <div class="w-full flex justify-end gap-2 mt-4">
+                      <button mat-button color="warn" (click)="clear()" >
+                        Clear
+                      </button>
+                      <button mat-button color="primary" (click)="search()">
+                        Search
+                      </button>
+                      <button mat-button color="primary" (click)="openUpdateDialog()">Update</button>
+                    </div>
+                  </div>
+          
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-card>
+          </div>
+         <!-- Show search results if available -->
+<div class="flex-grow mt-5 bg-[#E8F2F3]" *ngIf="searchResults && searchResults.length > 0">
+    <app-data-table 
+        [tableColumns]="displaycoloums" [adminActions]="true" 
+        [showUnClaim]="false" [isPageable]="true" [tableData]="searchResults" [paginationSizes]="[5, 10, 15, 20]"
+        [defaultPageSize]="15">
+    </app-data-table>
+</div>
+
+<!-- Show "No Records Found" if a search was performed but no results exist -->
+<div *ngIf="searchPerformed && searchResults && searchResults.length === 0" 
+     class="relative flex flex-col items-center justify-center">
+    <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
+    <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+        No Records Found
+    </p>
+</div>
+
+<!-- Show initial data if no search has been performed -->
+<div class="flex-grow mt-5 bg-[#E8F2F3]" *ngIf="!searchPerformed">
+    <app-data-table 
+        [tableColumns]="displaycoloums" [adminActions]="true" 
+        [showUnClaim]="false" [isPageable]="true" [tableData]="initalData" [paginationSizes]="[5, 10, 15, 20]"
+        [defaultPageSize]="15">
+    </app-data-table>
+</div>
+    </div>
+
+    <app-loader *ngIf="isLoading"></app-loader>
+</div>
+<div class="flex-none">
+    <app-form-footer></app-form-footer>
+</div>

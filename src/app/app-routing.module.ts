@@ -69,6 +69,11 @@ const routes: Routes = [
         title: 'category Management | claimit',
         path: 'category',
         loadComponent: () => import('./features/components/category-management/category-management.component').then(m => m.CategoryManagementComponent)
+      },
+      {
+        title: 'Expired Items | claimit',
+        path: 'expiredItems',
+        loadComponent: () => import('./features/components/admin/expired-items/expired-items.component').then(m => m.ExpiredItemsComponent)
       }
     ]
   },

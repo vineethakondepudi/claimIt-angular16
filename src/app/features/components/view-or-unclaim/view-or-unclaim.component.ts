@@ -160,24 +160,12 @@ export default class ViewOrUnclaimComponent {
         this.isLoading = false;
       },
       (error) => {
-        this.isLoading = false; // Stop loader on error
+        this.isLoading = false; 
         console.error("Search API Error:", error);
         this.showSnackBar("Search failed. Please try again.");
       }
     );
   }
-  // listOfItems(){
-  //   this.isLoading = true
-  //   this.service.listOfItems(this.searchQuery).subscribe(
-  //     (res: any) => {
-  //       this.initalDataResults = res.data.filter((item: { status: string; }) => item.status === "UNCLAIMED");
-  //       this.isLoading = false
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching search results:', error);
-  //     }
-  //   );
-  // }
   SearchAndClear(type: any) {
     if (type === 'clear') {
       this.viewUnclaimForm.reset() 
