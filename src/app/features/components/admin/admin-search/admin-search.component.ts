@@ -20,6 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RejectClaimComponent } from '../../../reject-claim/reject-claim.component';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-admin-search',
   standalone: true,
@@ -41,6 +42,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LoaderComponent,
     MatDatepickerModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     MatIconModule,
     FormsModule,
     RouterModule], 
@@ -139,7 +141,7 @@ export default class AdminSearchComponent {
     { label: 'CLAIMED', value: 'CLAIMED' },
     { label: 'UNCLAIMED', value: 'UNCLAIMED' },
   ]
-  constructor(public dialog: MatDialog, private service: ClaimitService, private fb: FormBuilder, private dp: DatePipe) {
+  constructor(public dialog: MatDialog, private service: ClaimitService, private fb: FormBuilder, private dp: DatePipe,  private snackBar: MatSnackBar) {
 
   }
   ngOnInit() {
@@ -162,19 +164,34 @@ export default class AdminSearchComponent {
   }
   
   search() {
-       this.isLoading = true
+    this.isLoading = true;
     const reqbody = {
       mail: this.adminSearch.value.email ? this.adminSearch.value.email : '',
       status: this.adminSearch.value.status ? this.adminSearch.value.status : '',
       date: this.adminSearch.value.to ? this.dp.transform(this.adminSearch.value.to) : '',
-    }
-
-    this.service.adminSearch(reqbody).subscribe((res: any) => {
-      this.searchResults = res.data
-         this.isLoading = false
-    })
-
+    };
+  
+    this.service.adminSearch(reqbody).subscribe(
+      (res: any) => {
+        this.searchResults = res.data;
+        this.isLoading = false;
+      },
+      (error) => {
+        this.isLoading = false;
+        this.showSnackBar('Search failed. Please try again.');
+        console.error("Search API Error:", error);
+      }
+    );
   }
+  
+  private showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
+  
 
 @HostListener('window:resize', ['$event'])
   onResize() {
@@ -234,7 +251,8 @@ export default class AdminSearchComponent {
                this.isLoading = false;
           },
           (error) => {
-            console.error('Error removing item:', error); // Debug API error
+            this.isLoading = false;
+          this.showSnackBar('Failed to Remove Item. Please try again.');
           }
         );
       }
@@ -272,6 +290,8 @@ export default class AdminSearchComponent {
           });
              this.isLoading = false;
         }, (error) => {
+          this.isLoading = false;
+          this.showSnackBar('Failed to approve claim. Please try again.');
         });
       }
     });
@@ -309,11 +329,13 @@ export default class AdminSearchComponent {
           });
              this.isLoading = false;
         }, (error) => {
-          console.error('Error removing item:', error);
+          this.isLoading = false;
+          this.showSnackBar('Failed to Reject claim. Please try again.');
         });
       }
     });
   }
+  
   markClaimed(event: any) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
@@ -347,7 +369,8 @@ export default class AdminSearchComponent {
           });
              this.isLoading = false;
         }, (error) => {
-          console.error('Error removing item:', error);
+          this.isLoading = false;
+          this.showSnackBar('Failed to Mark as claimed. Please try again.');
         });
       }
     });

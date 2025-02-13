@@ -15,11 +15,12 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-organization-dialog',
   standalone: true,
-  imports: [CommonModule,MatFormFieldModule, MatSelectModule,LoaderComponent, MatProgressSpinnerModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
+  imports: [CommonModule,MatFormFieldModule, MatSelectModule,LoaderComponent,MatSnackBarModule, MatProgressSpinnerModule,MatStepperModule, FormsModule,MatCardModule, NgxDropzoneModule, MatIconModule, MatButtonModule, MatDividerModule],
   templateUrl: './organization-dialog.component.html',
   styleUrls: ['./organization-dialog.component.scss'],
 })
@@ -83,7 +84,7 @@ categoryNames: any[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<OrganizationDialogComponent>,
-    private service: ClaimitService,
+    private service: ClaimitService, private snackBar: MatSnackBar,
     private matDialog: MatDialog,  private fb: FormBuilder,private http: HttpClient
   ) {
     this.organizationList = data.organizationList;
@@ -187,7 +188,8 @@ categoryNames: any[] = [];
           this.dialogRef.close();  
         },
         (error) => {
-          console.error('Error uploading file:', error);
+          this.isLoading = false;
+          this.showSnackBar('Failed to approve claim. Please try again.');
         }
       );
     } else {
@@ -195,6 +197,16 @@ categoryNames: any[] = [];
     }
     
   } 
+
+   
+  private showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
+  
   
   submitItem() {
     this.formData = new FormData(); // Initialize FormData to avoid appending issues

@@ -164,6 +164,7 @@ export default class AdditemComponent implements OnInit {
         }
       },
       (error) => {
+        this.isLoading = true;
         console.error('Error fetching data:', error);
       }
     );
@@ -181,6 +182,7 @@ export default class AdditemComponent implements OnInit {
           this.files = []; 
         },
         (error) => {
+          this.isLoading = true;
           console.error('Error uploading file:', error);
         }
       );

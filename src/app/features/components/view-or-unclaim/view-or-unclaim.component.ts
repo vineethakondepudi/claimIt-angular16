@@ -21,6 +21,7 @@ import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-view-or-unclaim',
   standalone: true,
@@ -42,6 +43,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     ReactiveFormsModule,
     FormsModule,
+    MatSnackBarModule,
     MatSelectModule,
     RouterModule],
   templateUrl: './view-or-unclaim.component.html',
@@ -112,7 +114,7 @@ export default class ViewOrUnclaimComponent {
     { label: 'CLAIMED', value: 'CLAIMED' },
     { label: 'UNCLAIMED', value: 'UNCLAIMED' },
   ]
-  constructor(public dialog: MatDialog, private service: ClaimitService,private fb: FormBuilder) {
+  constructor(public dialog: MatDialog, private service: ClaimitService,private fb: FormBuilder, private snackBar: MatSnackBar) {
 
   }
   ngOnInit() {
@@ -121,11 +123,20 @@ export default class ViewOrUnclaimComponent {
     this.search()
   }
 
-  initalDatatable(){
-    this.service.getuserHistory().subscribe((res: any) => {
-      this.initalData = res.claimHistory
-      this.isLoading = false;
-    })
+  initialDatatable() {
+    this.isLoading = true; 
+  
+    this.service.getuserHistory().subscribe(
+      (res: any) => {
+        this.initalData = res.claimHistory;
+        this.isLoading = false; 
+      },
+      (error) => {
+        this.isLoading = false; 
+        console.error("User History API Error:", error);
+        this.showSnackBar("Failed to load data. Please try again.");
+      }
+    );
   }
   initialForm() {
     this.viewUnclaimForm = this.fb.group({
@@ -139,14 +150,21 @@ export default class ViewOrUnclaimComponent {
       email: this.viewUnclaimForm.value.email ? this.viewUnclaimForm.value.email : '',
       name: this.viewUnclaimForm.value.name ? this.viewUnclaimForm.value.name : '',
       status: this.viewUnclaimForm.value.status ? this.viewUnclaimForm.value.status : '',
-    
-    }
-    this.isLoading = true
-    this.service.getAllItems(reqbody).subscribe((res: any) => {
-      this.searchResults = res.claimHistory
-      this.isLoading = false;
-    })
-
+    };
+  
+    this.isLoading = true;
+  
+    this.service.getAllItems(reqbody).subscribe(
+      (res: any) => {
+        this.searchResults = res.claimHistory;
+        this.isLoading = false;
+      },
+      (error) => {
+        this.isLoading = false; // Stop loader on error
+        console.error("Search API Error:", error);
+        this.showSnackBar("Search failed. Please try again.");
+      }
+    );
   }
   // listOfItems(){
   //   this.isLoading = true
@@ -179,32 +197,51 @@ export default class ViewOrUnclaimComponent {
         title: 'UnClaim'
       },
     });
-
+  
     dialogRef.afterClosed().subscribe((confirmed: any) => {
       if (confirmed === 'yes') {
         const params = {
-          status:'UNCLAIMED',
-          claimId:event.requestId
-        }
-        this.isLoading = true
-        this.service.unClaimItem(params).subscribe((res:any)=>{
-          this.isLoading = false
-          const dialogRef = this.dialog.open(FormSubmissionModalComponent, {
-            width: "500px",
-            data: {
-              status:'Success',
-              msg: 'Item unclaimed successfully',
-              btnName: "OK",
-            },
-          });
-          dialogRef.afterClosed().subscribe((result) => {
-            this.isLoading = true
-            this.search()
-          });
-        })
+          status: 'UNCLAIMED',
+          claimId: event.requestId
+        };
+        this.isLoading = true;
+  
+        this.service.unClaimItem(params).subscribe(
+          (res: any) => {
+            this.isLoading = false; // Stop loading on success
+  
+            const successDialogRef = this.dialog.open(FormSubmissionModalComponent, {
+              width: "500px",
+              data: {
+                status: 'Success',
+                msg: 'Item unclaimed successfully',
+                btnName: "OK",
+              },
+            });
+  
+            successDialogRef.afterClosed().subscribe(() => {
+              this.search(); 
+            });
+          },
+          (error) => {
+            this.isLoading = false; 
+            console.error("Unclaim Error:", error);
+            this.showSnackBar("Failed to unclaim the item. Please try again.");
+          }
+        );
       }
     });
   }
+  
+  // Snackbar for error messages
+  private showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
+  
   previewImage(event: any) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",

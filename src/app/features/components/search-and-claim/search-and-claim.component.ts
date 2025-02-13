@@ -465,6 +465,7 @@ selectCategory1(categoryName: string): void {
 
         },
         (error) => {
+          this.isLoading = false
           console.error('Error uploading image:', error);
         }
       );
@@ -495,6 +496,7 @@ selectCategory1(categoryName: string): void {
           this.categories = data;
         },
         error: (err) => {
+          this.isLoading = false
           console.error('Error loading categories:', err);
         }
       });
@@ -541,35 +543,55 @@ selectCategory1(categoryName: string): void {
         title: 'Request Claim'
       },
     });
-
+  
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         const REQBODY = {
           name: data.value.name,
           email: data.value.email,
           itemId: item.itemId
-        }
-           this.isLoading = true
-        this.claimService.createClaimRequest(REQBODY).subscribe((Res: any) => {
-          if (Res) {
-            const dialogRef = this.matDialog.open(FormSubmissionModalComponent, {
-              width: "500px",
-              data: {
-                status: 'Success',
-                msg: 'Claim Request Created successfully',
-                btnName: "OK",
-              },
-            });
-            dialogRef.afterClosed().subscribe((result) => {
-                 this.isLoading = true
-              this.search();
-              this.clearSearch();
-            });
+        };
+  
+        this.isLoading = true;
+  
+        this.claimService.createClaimRequest(REQBODY).subscribe(
+          (Res: any) => {
+            this.isLoading = false; 
+  
+            if (Res) {
+              const successDialogRef = this.matDialog.open(FormSubmissionModalComponent, {
+                width: "500px",
+                data: {
+                  status: 'Success',
+                  msg: 'Claim Request Created successfully',
+                  btnName: "OK",
+                },
+              });
+  
+              successDialogRef.afterClosed().subscribe(() => {
+                this.isLoading = false; 
+                this.listOfItems();
+              });
+            }
+          },
+          (error) => {
+            this.isLoading = false; 
+            console.error("Claim Request Error:", error);
+            this.showSnackBar("Failed to create claim request. Please try again.");
           }
-        })
+        );
       }
     });
   }
+  
+  private showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
+  
   previewImage(event: any) {
     const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
       width: "500px",

@@ -80,6 +80,7 @@ export default class LoginComponent {
           }
         },
         (error: any) => {
+          this.isLoading = false
           this.showToast(error.message || 'An unexpected error occurred.');
         }
       );

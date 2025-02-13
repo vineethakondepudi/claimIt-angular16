@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationModalComponent } from 'src/app/@amc/components/confirmation-modal/confirmation-modal.component';
 import { LoaderComponent } from 'src/app/@amc/components/loader/loader.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 export interface TableColumn {
   label: string;
@@ -37,6 +38,7 @@ export interface TableColumn {
     MatExpansionModule,
     MatCardModule,
     MatDialogModule,
+    MatSnackBarModule,
     LoaderComponent,
   ],
   templateUrl: './remove-or-archive.component.html',
@@ -91,7 +93,7 @@ export default class RemoveOrArchiveComponent implements OnInit {
   ];
 
  
-  constructor(private service: ClaimitService, private dialog: MatDialog) {}
+  constructor(private service: ClaimitService, private dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.fetchData();
@@ -114,12 +116,19 @@ export default class RemoveOrArchiveComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Error fetching data:', error);
+        this.loader = false;
+          this.showSnackBar('Failed to Load data. Please try again.');
       }
     );
   }
 
-
+  private showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
   confirmRemove(event: any) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
       width: "500px",
@@ -140,7 +149,8 @@ export default class RemoveOrArchiveComponent implements OnInit {
           this.fetchData();
           this.loader = false;
         }, (error) => {
-          console.error('Error removing item:', error);
+          this.loader = false;
+          this.showSnackBar('Failed to Remove item. Please try again.');
         });
       }
     });

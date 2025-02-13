@@ -38,6 +38,7 @@ export default class PendingClaimComponent {
         }
       },
       (error) => {
+        this.loader = false;
         console.error('Error fetching notifications:', error);
       }
     );
