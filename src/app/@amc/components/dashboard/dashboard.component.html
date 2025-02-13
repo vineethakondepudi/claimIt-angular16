@@ -64,15 +64,12 @@
     </div>
   
     <!-- Claimed vs Unclaimed Chart -->
-    <div class="bg-white p-4 shadow-lg rounded-lg flex flex-col h-full">
-      <ng-container *ngIf="claimedDoughnutChartData?.datasets?.length; else noData">
-        <div class="flex-grow flex items-center justify-center">
-          <canvas baseChart class="max-h-80 w-full" [data]="claimedDoughnutChartData" [type]="doughnutChartType">
-          </canvas>
-        </div>
-        <h3 class="text-center mt-4 font-semibold text-gray-700">Claimed vs Unclaimed</h3>
-      </ng-container>
-      <ng-template #noData>
+    <div class="bg-white p-6 shadow rounded">
+      <ng-container *ngIf="currentMonthData?.totalItems > 0; else noData">
+        <canvas baseChart style="height: 284px;width: 276px;" [data]="doughnutChartData" [type]="doughnutChartType">
+        </canvas>
+        <h3 class="text-center mt-4 font-semibold">Claimed vs Unclaimed</h3>
+      </ng-container><ng-template #noData>
         <p class="text-center text-gray-500">No data found for the selected month</p>
       </ng-template>
     </div>
