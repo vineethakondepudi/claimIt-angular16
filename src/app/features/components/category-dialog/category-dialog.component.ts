@@ -36,10 +36,14 @@ export class CategoryDialogComponent {
     public dialogRef: MatDialogRef<CategoryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    const subcategories = data.category?.subcategories || []; 
     this.categoryForm = this.fb.group({
-      categoryName: [data.category?.categoryName || '', [Validators.required, Validators.maxLength(50)]],
-      subcategories: this.fb.array(data.category?.subcategories.map((sub: { name: any; }) => this.fb.control(sub.name)) || [])
+      categoryName: [data.category?.name || '', [Validators.required, Validators.maxLength(50)]],
+      subcategories: this.fb.array(
+        subcategories.map((sub: { name: string }) => this.fb.control(sub.name)) // Map subcategories to form controls
+      )
     });
+    console.log(data,'data')
   }
   get subcategories(): FormArray {
     return this.categoryForm.get('subcategories') as FormArray;
@@ -61,6 +65,13 @@ export class CategoryDialogComponent {
   }
   removeSubcategory(index: number): void {
     this.subcategories.removeAt(index);
+  }
+  confirmDelete(): void {
+    this.dialogRef.close(true); // Pass `true` to indicate delete confirmation
+  }
+
+  cancel(): void {
+    this.dialogRef.close(false); // Pass `false` to cancel
   }
   save(): void {
     if (this.categoryForm.valid) {

@@ -15,15 +15,16 @@
             <div class="actions-overlay">
               <button mat-icon-button 
                       color="primary"
-                      (click)="openEditDialog(category); $event.stopPropagation()">
+                      (click)="openCategoryDialog(category, 'edit'); $event.stopPropagation()">
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-icon-button 
                       color="warn"
-                      (click)="deleteCategory(category); $event.stopPropagation()">
+                      (click)="openCategoryDialog(category, 'delete'); $event.stopPropagation()">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
+            
           </div>
           <h2 class="category-title">
             <span >{{category.name}}<br></span>
@@ -32,3 +33,4 @@
       </mat-card>
     </div>
   </div>
+  <app-loader *ngIf="isLoading"></app-loader>
