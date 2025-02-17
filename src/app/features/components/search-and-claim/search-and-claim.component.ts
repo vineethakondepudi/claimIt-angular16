@@ -174,7 +174,7 @@ export default class SearchAndClaimComponent implements OnInit {
   searchCompleted!: boolean;
   pictureSearchCompleted!: boolean;
   categeorySearchCompleted!: boolean;
-  constructor(private http: HttpClient, private route: ActivatedRoute,private cdr: ChangeDetectorRef, private snackBar: MatSnackBar, private matDialog: MatDialog, private claimService: ClaimitService) {
+  constructor(private http: HttpClient, private route: ActivatedRoute,private cdr: ChangeDetectorRef, private snackBar: MatSnackBar, public matDialog: MatDialog, private claimService: ClaimitService) {
     this.loadSavedSearches();
   }
   private categoryIcons: { [key: string]: string } = {
@@ -280,6 +280,7 @@ listOfItems(){
   closeTooltip() {
     this.showTooltip = false;
   }
+ 
   fetchCategories(): void {
     this.http.get<{ id: number; name: string }[]>('https://100.28.242.219.nip.io/api/admin/getcategories')
       .subscribe(
@@ -587,7 +588,46 @@ selectCategory1(categoryName: string): void {
       }
     });
   }
-  
+  markClaimed(event: any) {
+    alert('kk')
+    const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
+      width: "500px",
+      data: {
+        message: 'Are you sure you want mark this item as Claimed',
+        title: 'Mark as Claimed'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      if (confirmed === 'yes') {
+
+        const params = {
+          itemId: event.itemId ,
+          "claimStatus": "CLAIMED",
+          userId:event.userId
+        };
+
+           this.isLoading = true;
+        this.claimService.markASClaimed(params).subscribe((res: any) => {
+          const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
+            width: "500px",
+            data: {
+              message: 'Item Claimed Successfuly',
+              title: 'Success!!'
+            },
+          });
+      
+          dialogRef.afterClosed().subscribe((confirmed: any) => {
+            this.search();
+          });
+             this.isLoading = false;
+        }, (error) => {
+          this.isLoading = false;
+          this.showSnackBar('Failed to Mark as claimed. Please try again.');
+        });
+      }
+    });
+  } 
   private showSnackBar(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000,

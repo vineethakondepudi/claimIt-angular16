@@ -103,28 +103,37 @@ export class DataTableComponent<T> {
   adminserarchpage:any
   constructor(public router: Router, private datePipe: DatePipe, private dialog: MatDialog, private service: ClaimitService) { }
   ngOnInit() {
-    this.currentRoute = this.router.url;
-    this.currentRoute.includes("/addItem")
-    this.getData = this.currentRoute.includes("/addItem")
-    this.searchResultspage = this.currentRoute.includes("/claimit/searchAndClaim")
-    this.userviewUnclaimpage = this.currentRoute.includes("/claimit/viewOrUnclaim")
-    this.adminserarchpage = this.currentRoute.includes("/claimit/search")
-    this.displayedColumns = this.tableColumns.map((col) => col.name);
-    this.filteredColumns = this.tableColumns.filter((col: TableColumn) => {
-      return col.isChecked === true;
-    });
-    const columnNames = this.filteredColumns.map(
-      (tableColumn: TableColumn) => tableColumn.name
-    );
-    this.displayedColumns = columnNames;
+    this.updateComponentLogic();
+    window.addEventListener("resize", this.onResize1);
+  }
 
-    this.checkViewport();
-    if(this.isMobileView && !this.searchResultspage && !this.userviewUnclaimpage && !this.adminserarchpage){
-      this.addItem()
+  ngOnDestroy() {
+    window.removeEventListener("resize", this.onResize1);
+  }
+
+  @HostListener("window:resize", [])
+  onResize1() {
+    this.updateComponentLogic();
+  }
+  updateComponentLogic() {
+    this.isMobileView = window.innerWidth < 768; // Define your mobile breakpoint
+
+    this.currentRoute = this.router.url;
+    this.getData = this.currentRoute.includes("/addItem");
+    this.searchResultspage = this.currentRoute.includes("/claimit/searchAndClaim");
+    this.userviewUnclaimpage = this.currentRoute.includes("/claimit/viewOrUnclaim");
+    this.adminserarchpage = this.currentRoute.includes("/claimit/search");
+
+    this.displayedColumns = this.tableColumns.map((col) => col.name);
+    this.filteredColumns = this.tableColumns.filter((col: TableColumn) => col.isChecked === true);
+    this.displayedColumns = this.filteredColumns.map((col: TableColumn) => col.name);
+
+    if (this.isMobileView && !this.searchResultspage && !this.userviewUnclaimpage && !this.adminserarchpage) {
+      this.addItem();
       this.service.itemUploaded$.subscribe((status) => {
         this.itemUploaded = status;
       });
-     }
+    }
   }
   addItem() {
     this.isLoading = true
@@ -144,7 +153,9 @@ export class DataTableComponent<T> {
     );
 
   }
- 
+  // ngOnDestroy() {
+  //   window.removeEventListener('resize', () => this.checkViewport());
+  // }
   setTableDataSource(data: T[]) {
     this.dataSource = new MatTableDataSource<T>(data);
     this.dataSource.paginator = this.paginator;
@@ -198,9 +209,14 @@ export class DataTableComponent<T> {
   }
 
   checkViewport() {
-    this.isMobileView = window.innerWidth <= 768; // Mobile breakpoint
+    const isNowMobile = window.innerWidth <= 768;
+    
+    if (isNowMobile && !this.isMobileView) {
+      location.reload(); // Refresh the page when entering mobile view
+    }
+  
+    this.isMobileView = isNowMobile;
   }
-
 
   public handleToggleColumns(col: TableColumn) {
     const isChecked = col.isChecked;

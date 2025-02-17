@@ -31,31 +31,31 @@
 
   <div *ngIf="searchResults?.length > 0" class="flex-grow mx-3 scrollbar-hide overflow-y-auto bg-[#E8F2F3]">
     <app-data-table [tableData]="searchResults" [tableColumns]="displaycoloums" [isPageable]="true" 
-      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" 
+      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"   (markClaimed)="markClaimed($event)"
       (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
   </div>
   <div *ngIf="!(searchResults?.length > 0 || categerorydata?.length > 0 || matchedItems?.length > 0)"  class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
-    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"   (markClaimed)="markClaimed($event)"
       [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="initalDataResults"
       [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
     </app-data-table>
   </div>
   <div *ngIf="!searchResults?.length && categerorydata?.length > 0 &&  !matchedItems?.length && !isMobileView"
     class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
-    <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
+    <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"  (markClaimed)="markClaimed($event)"
       [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)"
       (sort)="handleSort($event)"></app-data-table>
 </div>
 
   <div *ngIf="matchedItems?.length > 0"  class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
-    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"
+    <app-data-table (previewImage)="previewImage($event)" (ClaimItem)="claimItem($event)" (sort)="handleSort($event)"  (markClaimed)="markClaimed($event)"
       [tableColumns]="displaycoloums" [showUnClaim]="true" [isPageable]="true" [tableData]="matchedItems"
       [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
     </app-data-table>
   </div>
   <div *ngIf="!categeoryerror && categerorydata?.length > 0" class="flex-grow mt-5 bg-[#E8F2F3]">
     <app-data-table [tableData]="categerorydata" [tableColumns]="displaycoloums" [isPageable]="true"
-      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"
+      [defaultPageSize]="15" [showUnClaim]="true" (ClaimItem)="claimItem($event)"  (markClaimed)="markClaimed($event)"
       (previewImage)="previewImage($event)" (sort)="handleSort($event)"></app-data-table>
   </div>
   <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0 || noresultsforPicturesearch)  &&  noresultsFound"
