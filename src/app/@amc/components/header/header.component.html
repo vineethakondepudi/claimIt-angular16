@@ -1,62 +1,63 @@
-<mat-sidenav-container class="flex h-screen" autosize>
+<mat-sidenav-container class="flex h-screen">
   <!-- Sidebar -->
   <mat-sidenav 
     [mode]="isMobile ? 'over' : 'side'" 
-    [opened]="!isMobile" 
-    class="bgcolor" 
+    [opened]="!isMobile || isSidebarOpen" 
+    class="bgcolor transition-transform transform duration-300 ease-in-out" 
     *ngIf="authSuccess && !router.url.includes('login')"
-    [ngClass]="{ 'mobile-sidebar': isMobile }">
+    [ngClass]="{ 'mobile-sidebar': isMobile, 'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen }"
+    (closedStart)="isSidebarOpen = false">
+    
     <!-- Sidebar content -->
-    <mat-list *ngIf="!isMobile">
+    <mat-list>
       <span *ngFor="let item of menuItems">
-        <mat-list-item (click)="router.navigateByUrl(item.route)">
-          <span class="flex h-10 rounded cursor-pointer px-2 py-1" 
-                (click)="router.navigateByUrl(item.route)" 
+        <mat-list-item (click)="navigateTo(item.route)">
+          <span class="flex h-10 rounded cursor-pointer px-2 py-1"
                 [class.active-button]="isTabActive(item.route)">
-            <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text text-white"
+            <mat-icon mat-list-icon class="ml-0.5 mt-1 cursor-pointer text-white"
                       [class.active-button]="isTabActive(item.route)" 
                       [matTooltip]="opened ? '' : item.label" 
                       matTooltipPosition="right">
               {{ item.icon }}
             </mat-icon>
-            <span *ngIf="opened" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text text-base"
-                  [class.active-button]="isTabActive(item.route)">{{ item.label }}</span>
+            <span *ngIf="opened || isMobile" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text-base"
+                  [class.active-button]="isTabActive(item.route)">
+              {{ item.label }}
+            </span>
           </span>
         </mat-list-item>
       </span>
     </mat-list>
-
-    <!-- Mobile Sidebar -->
-    <div *ngIf="isMobile" class="mobile-menu">
-      <span *ngFor="let item of menuItems" class="mobile-menu-item" (click)="router.navigateByUrl(item.route)">
-        <mat-icon class="mobile-menu-icon">{{ item.icon }}</mat-icon>
-        <span class="mobile-menu-label">{{ item.label }}</span>
-      </span>
-    </div>
   </mat-sidenav>
-<div class="flex-grow">
-  <mat-toolbar class="flex justify-between header p-0 shadow-md" *ngIf="!router.url.includes('login')">
-    <!-- Toolbar content -->
-    <div class="flex justify-end w-full">
-      <button 
-        *ngFor="let item of tabRoutes" 
-        [routerLink]="item.route" 
-        class="cursor-pointer bg-white mr-1" 
-        mat-icon-button 
-        [matTooltip]="item.label"
-        [ngClass]="{ 'text-red-500': item.isNotification && notificationCount > 0 }"
-        (click)="item.route === '/claimit/pendingClaim' ? resetNotificationCount() : null">
-        <mat-icon>{{ item.icon }}</mat-icon>
-      </button>
-      <button *ngIf="userRole !== 'admin'" class="cursor-pointer bg-white" mat-icon-button matTooltip="Login" (click)="logout()">
-        <mat-icon>login</mat-icon>
-      </button>
-      <button  *ngIf="userRole === 'admin'" class="cursor-pointer bg-white" mat-icon-button matTooltip="Logout" (click)="logout()">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar>
-  <router-outlet></router-outlet>
-</div>
 
+  <div class="flex-grow">
+    <!-- Toolbar -->
+    <mat-toolbar class="flex justify-between header p-0 shadow-md" *ngIf="!router.url.includes('login')">
+      <div class="flex items-center">
+        <button *ngIf="isMobile" (click)="toggleSidebar()" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+
+      <div class="flex justify-end w-full">
+        <button 
+          *ngFor="let item of tabRoutes" 
+          [routerLink]="item.route" 
+          class="cursor-pointer bg-white mr-1" 
+          mat-icon-button 
+          [matTooltip]="item.label"
+          [ngClass]="{ 'text-red-500': item.isNotification && notificationCount > 0 }"
+          (click)="item.route === '/claimit/pendingClaim' ? resetNotificationCount() : null">
+          <mat-icon>{{ item.icon }}</mat-icon>
+        </button>
+        <button *ngIf="userRole !== 'admin'" class="cursor-pointer bg-white" mat-icon-button matTooltip="Login" (click)="logout()">
+          <mat-icon>login</mat-icon>
+        </button>
+        <button *ngIf="userRole === 'admin'" class="cursor-pointer bg-white" mat-icon-button matTooltip="Logout" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </div>
 </mat-sidenav-container>

@@ -45,6 +45,7 @@ export class HeaderComponent {
   applicationName = APP_NAME
   @Input() hideMenu: boolean | undefined;
   authSuccess: boolean = true;
+  isSidebarOpen = false;
   showReports: boolean = false;
   opened: boolean = true;
   param: any;
@@ -83,6 +84,15 @@ export class HeaderComponent {
   @HostListener('window:resize', ['$event'])
   openedMenu(event: Event) {
     this.opened = window.innerWidth >= 800;
+  }
+  navigateTo(route: string) {
+    this.router.navigateByUrl(route);
+    if (this.isMobile) {
+      this.isSidebarOpen = false;
+    }
+  }
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 
   openMenu() {
