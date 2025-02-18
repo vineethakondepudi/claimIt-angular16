@@ -39,9 +39,6 @@
           </div>
           <p *ngIf="files.length === 0" class="text-gray-500 text-center">No image selected.</p>
         </div>
-        
-      
-        
         <ul class="mt-4 w-full max-w-md mx-auto">
           <li *ngFor="let item of formattedData" class="mb-2">
             <strong class="uppercase">{{ item.key }}:</strong>
@@ -62,25 +59,30 @@
             </span>
           </li>
         </ul>
+        <p *ngIf="(editableDescription ?? '').length > 200" class="text-red-500 text-sm">
+          Description exceeds 200 characters. Please edit it to proceed with submission.
+        </p>
         
-<div class="w-full flex justify-center mt-4">
-  <mat-form-field appearance="outline" class="w-full max-w-md">
-    <mat-label>Select within Category</mat-label>
-    <mat-select [(ngModel)]="categoryName" (selectionChange)="onCategoryChange($event)">
-      <mat-option *ngFor="let item of categories" [value]="item.name">
-        {{ item.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+    
+        <div class="w-full flex justify-center mt-4">
+          <mat-form-field appearance="outline" class="w-full max-w-md">
+            <mat-label>Select within Category</mat-label>
+            <mat-select [(ngModel)]="categoryName" (selectionChange)="onCategoryChange($event)">
+              <mat-option *ngFor="let item of categories" [value]="item.name">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+    
         <div class="w-full flex justify-end mt-4">
-          <button mat-raised-button color="primary" [disabled]="!files.length" (click)="submitItem()">
+          <button mat-raised-button color="primary" 
+          [disabled]="!files.length || ((editableDescription ?? '').length > 200)"
+                  (click)="submitItem()">
             <mat-icon>check_circle</mat-icon> Submit
           </button>
         </div>
       </mat-step>
-      
-      
     </mat-horizontal-stepper>
     
     

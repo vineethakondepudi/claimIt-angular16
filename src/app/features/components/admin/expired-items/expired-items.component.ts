@@ -116,7 +116,7 @@ export class ExpiredItemsComponent {
   endDate: Date | null = null;
   searchResults: any = [];
   searchPerformed = false;
-  selectedOrganization: string | null =null;
+  selectedOrganization: string | '' ='';
   initalData:any = []
   constructor(private dialog: MatDialog,private http: HttpClient) {}
   ngOnInit() {
@@ -141,7 +141,7 @@ export class ExpiredItemsComponent {
       const params = new HttpParams()
         .set('fromDate', fromDate)
         .set('toDate', toDate)
-        .set('orgId', 'Miracle');
+        .set('orgId', this.selectedOrganization);
         this.isLoading = true
       this.http.get('https://100.28.242.219.nip.io/api/admin/archived', { params })
         .subscribe(response => {
@@ -181,7 +181,7 @@ export class ExpiredItemsComponent {
       .set('fromDate', fromDate)
       .set('toDate', toDate)
       .set('expirationDate', expDate)
-      .set('orgId', 'Miracle');
+      .set('orgId', this.selectedOrganization);
 
     this.http.put('https://100.28.242.219.nip.io/api/admin/archiveExpired', {}, { params })
       .subscribe(response => {
@@ -197,7 +197,7 @@ export class ExpiredItemsComponent {
     this.startDate = null;
     this.endDate = null;
     this.searchPerformed = false
-    this.selectedOrganization = null
+    this.selectedOrganization = ''
   }
 
 }

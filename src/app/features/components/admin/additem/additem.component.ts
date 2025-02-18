@@ -142,7 +142,6 @@ export default class AdditemComponent implements OnInit {
       this.isLoading = true;
       this.fetchData();
       this.service.setItemUploaded(true);
-      location.reload();
     });
   }
   

@@ -45,7 +45,7 @@ export class OrganizationDialogComponent {
   categoryName:any
   formData!: any;
   isEditingDescription = false;
-  editableDescription = '';
+  editableDescription: string | undefined = '';
  imageDataResponse: any;
 showFullData: boolean = false;
 private categoryIcons: { [key: string]: string } = {

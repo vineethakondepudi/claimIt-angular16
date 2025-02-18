@@ -101,6 +101,8 @@ export class DataTableComponent<T> {
   searchResultspage:any
   userviewUnclaimpage:any
   adminserarchpage:any
+  expiedItemspage:any
+  categoryManagementpage:any
   constructor(public router: Router, private datePipe: DatePipe, private dialog: MatDialog, private service: ClaimitService) { }
   ngOnInit() {
     this.updateComponentLogic();
@@ -123,12 +125,13 @@ export class DataTableComponent<T> {
     this.searchResultspage = this.currentRoute.includes("/claimit/searchAndClaim");
     this.userviewUnclaimpage = this.currentRoute.includes("/claimit/viewOrUnclaim");
     this.adminserarchpage = this.currentRoute.includes("/claimit/search");
-
+    this.categoryManagementpage = this.currentRoute.includes("/claimit/category");
+    this.expiedItemspage = this.currentRoute.includes("/claimit/expiredItems");
     this.displayedColumns = this.tableColumns.map((col) => col.name);
     this.filteredColumns = this.tableColumns.filter((col: TableColumn) => col.isChecked === true);
     this.displayedColumns = this.filteredColumns.map((col: TableColumn) => col.name);
 
-    if (this.isMobileView && !this.searchResultspage && !this.userviewUnclaimpage && !this.adminserarchpage) {
+    if (this.isMobileView && !this.searchResultspage && !this.userviewUnclaimpage && !this.adminserarchpage && !this.expiedItemspage && !this.categoryManagementpage) {
       this.addItem();
       this.service.itemUploaded$.subscribe((status) => {
         this.itemUploaded = status;
@@ -153,9 +156,6 @@ export class DataTableComponent<T> {
     );
 
   }
-  // ngOnDestroy() {
-  //   window.removeEventListener('resize', () => this.checkViewport());
-  // }
   setTableDataSource(data: T[]) {
     this.dataSource = new MatTableDataSource<T>(data);
     this.dataSource.paginator = this.paginator;
@@ -176,18 +176,12 @@ export class DataTableComponent<T> {
     if (!element?.receivedDate) {
       return false;
     }
-  
     const receivedDate = new Date(element.receivedDate);
     const currentDate = new Date();
-    
-    // Calculate the difference in days
     const differenceInTime = currentDate.getTime() - receivedDate.getTime();
     const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-  
-    // Check if status is 'REJECTED' or 'UNCLAIMED' and receivedDate is more than 30 days old
     return (element.status === 'REJECTED' || element.status === 'UNCLAIMED') && differenceInDays > 30;
   }
-  // Method to close the image preview modal
   closeImagePreview() {
     this.selectedImage = null;
     this.showImagePreview = false;
