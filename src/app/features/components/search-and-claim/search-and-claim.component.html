@@ -122,7 +122,7 @@
                             matInput
                             placeholder="Search items"
                             [(ngModel)]="searchQuery"
-                            (keyup.enter)="searchItems()"
+                            (ngModelChange)="searchItems()"
                           />
                           <button mat-icon-button matSuffix (click)="searchItems()" aria-label="Search">
                             <mat-icon>search</mat-icon>
@@ -212,7 +212,7 @@
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15">
             </app-data-table>
           </div>
-          <div *ngIf="searchResults?.length > 0"class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
+          <div *ngIf="searchResults?.length > 0 && !noresultsFound" class="flex-grow mt-5 bg-[#E8F2F3]" [ngClass]="{ 'p-1': isMobileView, 'p-5': !isMobileView }">
             <app-data-table (ClaimItem)="claimItem($event)" (previewImage)="previewImage($event)" [showUnClaim]="true"
               [tableColumns]="displaycoloums" [isPageable]="true" [tableData]="searchResults" (sort)="handleSort($event)"
               [paginationSizes]="[5, 10, 15, 20]" [defaultPageSize]="15"></app-data-table>

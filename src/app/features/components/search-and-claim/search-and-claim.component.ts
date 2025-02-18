@@ -237,6 +237,10 @@ export default class SearchAndClaimComponent implements OnInit {
     this.files = this.files.filter(f => f !== file);
   }
   searchItems() {
+      this.noresultsFound = false; // Reset before making API call
+      this.noresultsforItemsearch = false;
+      this.initalDataResults = false;
+      this.searchCompleted = false;
       this.claimService.searchItems(this.searchQuery).subscribe(
         (response: any) => {
           console.log("API Response:", response); // Debug API response
