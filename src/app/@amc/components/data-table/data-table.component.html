@@ -75,24 +75,31 @@
                 [disabled]="element.status !== 'PENDING_PICKUP'" mat-raised-button color="primary" class="txt-button">
                 UnClaim
               </button>
-              <button *ngIf="element.status !== 'PENDING_APPROVAL' && !removeArchive && showUnClaim && element.status !== 'PENDING_PICKUP' && element.status !== 'CLAIMED' &&  element.status !== 'REJECTED' "
-              (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
-        Claim
-      </button>
-      
-      <div *ngIf="(element.status === 'PENDING_APPROVAL' ||  element.status === 'PENDING_PICKUP' || element.status === 'CLAIMED' || element.status === 'REJECTED' ) && (!adminserarchpage || searchResultspage) ">
-        <a (click)="openQrDialog(element)" class="underline hover:text-blue-500">
-          <mat-icon>qr_code</mat-icon>
-        </a>
-      </div>
-      
+              <button mat-button color="primary" *ngIf="element.status === 'PENDING_PICKUP' && this.searchResultspage"
+              class="txt-button" (click)="markAsClaimed(element)">
+                Claimed
+              </button>
+              <button
+                *ngIf="element.status !== 'PENDING_APPROVAL' && !removeArchive && showUnClaim && element.status !== 'PENDING_PICKUP' && element.status !== 'CLAIMED' &&  element.status !== 'REJECTED' "
+                (click)="createClaimItem(element)" mat-raised-button color="primary" class="txt-button">
+                Claim
+              </button>
+            
+              <div
+                *ngIf="(element.status === 'PENDING_APPROVAL'  || element.status === 'CLAIMED' || element.status === 'REJECTED' ) && (!adminserarchpage || searchResultspage) ">
+                <a (click)="openQrDialog(element)" class="underline hover:text-blue-500">
+                  <mat-icon>qr_code</mat-icon>
+                </a>
+              </div>
+            
               <button *ngIf="removeArchive" (click)="removeItem(element)"
-                [disabled]="element.status === 'PENDING_PICKUP' || !isExpired(element)" mat-raised-button color="warn" class="txt-button">
+                [disabled]="element.status === 'PENDING_PICKUP' || !isExpired(element)" mat-raised-button color="warn"
+                class="txt-button">
                 Expired
               </button>
               <div *ngIf="adminActions">
-                <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu"
-                  matTooltip="" matTooltipHideDelay="100">
+                <button class="ml-4 flex-none" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" matTooltip=""
+                  matTooltipHideDelay="100">
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu" class="px-4 py-2" (click)="$event.stopPropagation()" style="width: 150px;">
@@ -100,20 +107,17 @@
                     class="cancel-button" (click)="approveClaimReq(element)">
                     Approve
                   </button><br><br>
-                  <button [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'"
-                    mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
+                  <button [disabled]=" element.status !== 'ARCHIVED' && element.status !== 'PENDING_APPROVAL'" mat-stroked-button
+                    color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
                     Reject
                   </button><br><br>
                   <button [disabled]="(element.status !== 'REJECTED' && element.status !== 'UNCLAIMED') || !isExpired(element)"
-                  (click)="removeItem(element)" 
-                  mat-stroked-button 
-                  color="warn" 
-                  class="cancel-button">
-            Expired
-          </button>
-          <br><br>
-                  <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)"
-                    mat-stroked-button color="primary" class="cancel-button">
+                    (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
+                    Expired
+                  </button>
+                  <br><br>
+                  <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)" mat-stroked-button
+                    color="primary" class="cancel-button">
                     Claimed
                   </button>
                 </mat-menu>
@@ -291,7 +295,7 @@
   </div>
 </div> 
 <!-- No Data Placeholder -->
- <div *ngIf="dataSource.data.length === 0" class="text-center">
+ <div *ngIf="dataSource.data.length === 0" class="text-center p-[230px]" >
   <img  src="assets/Animation - 1737116880117 (1).gif" alt="No Results" class="w-32 mx-auto" />
   <p class="text-gray-600 mt-4">No Records Found</p>
 </div>

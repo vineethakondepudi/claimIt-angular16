@@ -21,29 +21,39 @@
                     <mat-icon>{{ containerPanelOpened ? 'expand_less' : 'expand_more' }}</mat-icon>
                   </mat-expansion-panel-header>
           
-                  <div class="flex flex-wrap gap-5">
-                    <!-- Input Field -->
+                  <div class="flex flex-wrap gap-5 items-center ">
+                    <!-- Organization Dropdown -->
+                    <mat-form-field appearance="outline" class="dropdown-width" >
+                      <mat-label>Select Organization</mat-label>
+                      <mat-select [(ngModel)]="selectedOrganization">
+                        <mat-option value="Miracle">Miracle</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  
+                    <!-- Date Range Picker -->
                     <mat-form-field>
-                        <mat-label>Enter a date range</mat-label>
-                        <mat-date-range-input [rangePicker]="picker">
-                          <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
-                          <input matEndDate placeholder="End date" [(ngModel)]="endDate">
-                        </mat-date-range-input>
-                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #picker></mat-date-range-picker>
-                      </mat-form-field>
-                    <!-- Buttons Container -->
-                    <div class="w-full flex justify-end gap-2 mt-4">
-                      <button mat-button color="warn" (click)="clear()" >
-                        Clear
-                      </button>
-                      <button mat-button color="primary" (click)="search()">
-                        Search
-                      </button>
-                      <button mat-button color="primary" (click)="openUpdateDialog()">Update</button>
-                    </div>
+                      <mat-label>Enter a date range</mat-label>
+                      <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                        <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+                      </mat-date-range-input>
+                      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
                   </div>
+                  
+                  <!-- Buttons Container -->
+                  <div class="w-full flex justify-end gap-2 mt-4">
+                    <button mat-button color="warn" (click)="clear()">
+                      Clear
+                    </button>
+                    <button mat-button color="primary" (click)="search()">
+                      Search
+                    </button>
+                    <button mat-button color="primary" (click)="openUpdateDialog()">Update</button>
+                  </div>
+                  
           
                 </mat-expansion-panel>
               </mat-accordion>
