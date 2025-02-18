@@ -172,7 +172,21 @@ export class DataTableComponent<T> {
     this.selectedImage = imageSrc;
     this.showImagePreview = true;
   }
-
+  isExpired(element: any): boolean {
+    if (!element?.receivedDate) {
+      return false;
+    }
+  
+    const receivedDate = new Date(element.receivedDate);
+    const currentDate = new Date();
+    
+    // Calculate the difference in days
+    const differenceInTime = currentDate.getTime() - receivedDate.getTime();
+    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+  
+    // Check if status is 'REJECTED' or 'UNCLAIMED' and receivedDate is more than 30 days old
+    return (element.status === 'REJECTED' || element.status === 'UNCLAIMED') && differenceInDays > 30;
+  }
   // Method to close the image preview modal
   closeImagePreview() {
     this.selectedImage = null;
@@ -258,7 +272,7 @@ export class DataTableComponent<T> {
 
     switch (value) {
         case 'CLAIMED':
-            return { backgroundColor: '#B2EDE8', textColor: '#13776F' }; // Teal
+            return { backgroundColor: '#B2EDE8', textColor: '#13776F' }; // gray
         case 'PENDING_PICKUP':
             return { backgroundColor: '#FEE9E9', textColor: '#A33333' }; // Red
         case 'OPEN':

@@ -87,7 +87,7 @@
       </div>
       
               <button *ngIf="removeArchive" (click)="removeItem(element)"
-                [disabled]="element.status === 'PENDING_PICKUP'" mat-raised-button color="warn" class="txt-button">
+                [disabled]="element.status === 'PENDING_PICKUP' || !isExpired(element)" mat-raised-button color="warn" class="txt-button">
                 Expired
               </button>
               <div *ngIf="adminActions">
@@ -104,10 +104,14 @@
                     mat-stroked-button color="warn" class="cancel-button" (click)="rejectClaimReq(element)">
                     Reject
                   </button><br><br>
-                  <button [disabled]="element.status !== 'REJECTED' && element.status !== 'UNCLAIMED'"
-                    (click)="removeItem(element)" mat-stroked-button color="warn" class="cancel-button">
-                    Expired
-                  </button><br><br>
+                  <button [disabled]="(element.status !== 'REJECTED' && element.status !== 'UNCLAIMED') || !isExpired(element)"
+                  (click)="removeItem(element)" 
+                  mat-stroked-button 
+                  color="warn" 
+                  class="cancel-button">
+            Expired
+          </button>
+          <br><br>
                   <button [disabled]="element.status !== 'PENDING_PICKUP'" (click)="markAsClaimed(element)"
                     mat-stroked-button color="primary" class="cancel-button">
                     Claimed
@@ -159,7 +163,7 @@
   <!-- QR Code Button (Aligned to the right) -->
   <div class="flex justify-end mt-2">
     <button 
-      class="flex flex-col items-center text-gray-600 hover:text-teal-500 p-2"
+      class="flex flex-col items-center text-gray-600 hover:text-gray-500 p-2"
       (click)="openQrDialog(item)">
       <mat-icon class="text-[#00897b] text-3xl">qr_code</mat-icon>
       <span class="text-xs mt-1">QR Code</span>
@@ -289,6 +293,6 @@
 <!-- No Data Placeholder -->
  <div *ngIf="dataSource.data.length === 0" class="text-center">
   <img  src="assets/Animation - 1737116880117 (1).gif" alt="No Results" class="w-32 mx-auto" />
-  <p class="text-teal-600 mt-4">No Records Found</p>
+  <p class="text-gray-600 mt-4">No Records Found</p>
 </div>
 <app-loader *ngIf="isLoading"></app-loader>

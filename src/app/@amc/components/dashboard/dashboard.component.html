@@ -17,7 +17,7 @@
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-white shadow p-4 text-center rounded">
       <h2 class="text-xl font-semibold">Total Items</h2>
-      <p class="text-2xl font-bold text-teal-500">{{ currentMonthData?.totalItems || 0 }}</p>
+      <p class="text-2xl font-bold text-gray-500">{{ currentMonthData?.totalItems || 0 }}</p>
     </div>
     <div class="bg-white shadow p-4 text-center rounded">
       <h2 class="text-xl font-semibold">Claimed</h2>
@@ -200,7 +200,7 @@
       <!-- Button to Show New Charities -->
       <div class="text-center mb-6">
         <button (click)="displayTwoRandomCharities()"
-          class="bg-teal-500 text-white px-4 py-2 rounded shadow hover:bg-teal-600 transition-colors duration-200">
+          class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-colors duration-200">
           Show New Charities
         </button>
       </div>
@@ -214,7 +214,7 @@
           <div class="p-6">
             <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ charity.name }}</h3>
             <p class="text-gray-600 mb-4">{{ charity.description }}</p>
-            <p class="text-sm text-teal-600 font-semibold mb-2">
+            <p class="text-sm text-gray-600 font-semibold mb-2">
               <strong>Impact:</strong> {{ charity.impact }}
             </p>
             <p class="text-sm text-blue-600 mb-4">

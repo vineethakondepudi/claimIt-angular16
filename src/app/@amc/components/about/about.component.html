@@ -1,38 +1,38 @@
-<div class="bg-gray-50 p-6 md:p-12">
-  <div class="text-center bg-teal-600 text-white py-12 rounded-lg shadow-md">
+<div class=" p-6 md:p-12">
+  <div class="text-center bg-gray-800 text-white py-12 rounded-lg shadow-md">
     <h1 class="text-4xl font-bold mb-4">Reuniting Lost Items with Their Owners</h1>
-    <p class="text-lg">Helping you find, claim, or donate lost items.</p>
+    <p class="text-lg text-gray-300">Helping you find, claim, or donate lost items.</p>
   </div>
 
   <div class="mt-12">
-    <h2 class="text-3xl font-semibold text-center mb-6">How It Works</h2>
+    <h2 class="text-3xl font-semibold text-center text-white mb-6">How It Works</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="text-center p-6 bg-white shadow rounded-lg">
-        <mat-icon class="text-teal-500 text-6xl overflow-visible mb-4">search</mat-icon>
-        <h3 class="text-xl font-semibold mb-2">Find</h3>
-        <p>Search for your lost items easily using our platform.</p>
+      <div class="text-center p-6 bg-white shadow-md rounded-lg">
+        <mat-icon class="text-gray-900 text-6xl overflow-visible mb-4">search</mat-icon>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Find</h3>
+        <p class="text-gray-700">Search for your lost items easily using our platform.</p>
       </div>
-      <div class="text-center p-6 bg-white shadow rounded-lg">
-        <mat-icon class="text-teal-500 text-6xl mb-4">how_to_reg</mat-icon>
-        <h3 class="text-xl font-semibold mb-2">Claim</h3>
-        <p>Claim ownership by providing valid details and proof.</p>
+      <div class="text-center p-6 bg-white shadow-md rounded-lg">
+        <mat-icon class="text-gray-900 text-6xl mb-4">how_to_reg</mat-icon>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Claim</h3>
+        <p class="text-gray-700">Claim ownership by providing valid details and proof.</p>
       </div>
-      <div class="text-center p-6 bg-white shadow rounded-lg">
-        <mat-icon class="text-teal-500 text-6xl mb-4">volunteer_activism</mat-icon>
-        <h3 class="text-xl font-semibold mb-2">Donate</h3>
-        <p>Unclaimed items will be donated to a charity.</p>
+      <div class="text-center p-6 bg-white shadow-md rounded-lg">
+        <mat-icon class="text-gray-900 text-6xl mb-4">volunteer_activism</mat-icon>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Donate</h3>
+        <p class="text-gray-700">Unclaimed items will be donated to a charity.</p>
       </div>
     </div>
   </div>
 
   <div class="mt-10">
-    <h2 class="text-3xl font-semibold text-center mb-4">Success Stories</h2>
+    <h2 class="text-3xl font-semibold text-center text-white mb-4">Success Stories</h2>
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide" *ngFor="let p of slides">
-          <div class="text-center p-6 bg-white shadow rounded-lg w-72">
-            <p>{{p.para}}</p>
-            <span class="block mt-4 text-right font-semibold text-teal-500">- {{p.name}}</span>
+          <div class="text-center p-6 bg-white shadow-md rounded-lg w-72">
+            <p class="text-gray-700">{{p.para}}</p>
+            <span class="block mt-4 text-right font-semibold text-gray-900">- {{p.name}}</span>
           </div>
         </div>
       </div>
@@ -41,6 +41,7 @@
     </div>
   </div>
 </div>
-<div class="flex-none">
+
+<div class="flex-none bg-gray-800 text-white">
   <app-form-footer></app-form-footer>
 </div>

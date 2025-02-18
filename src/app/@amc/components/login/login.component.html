@@ -1,21 +1,26 @@
 <div class="h-screen flex flex-col">
   <!-- Header -->
-  <header class="flex items-center justify-between bg-[#1E959B] shadow-lg h-16 z-10 relative">
+  <header class="flex items-center justify-between bg-[#2b2b2b;] shadow-lg h-16 z-10 relative">
     <div class="flex items-center space-x-2 m-[30px]">
       <span class="text-2xl font-semibold text-white">Claim IT</span>
     </div>
   </header>
   <div *ngIf="!isMobileView" class="relative flex-grow w-full h-full bg-darkblue">
-    <img src="assets/lockscreen.png" alt="Login Screen" class="absolute inset-0  w-[67%] opacity-70 h-full object-cover">
+    <img src="assets/lockscreen.png" alt="Login Screen" class="absolute inset-0 w-[67%] opacity-70 h-full object-cover">
     <div class="absolute top-0 right-0 h-full bg-white/90 flex items-center justify-center w-1/3 p-8 shadow-lg">
       <div class="rounded-lg max-w-md w-full">
+  
+        <!-- Responsive Image -->
+        <img src="assets/NorthGwinnettMiddleSchoolPrimaryLogoImage.png" alt="NorthGwinnettMiddleSchoolPrimaryLogoImage" 
+             class="w-full max-w-[15rem] h-auto max-h-[calc(100%-5px)]  object-contain mx-auto block">
+  
         <p class="text-sm font-medium text-center mb-4">Enter your credentials.</p>
         <form [formGroup]="loginForm">
           <mat-form-field class="w-full mb-4" appearance="outline">
             <mat-label>Username/Mail Id</mat-label>
             <input matInput placeholder="Enter your username" formControlName="email">
           </mat-form-field>
-
+  
           <mat-form-field class="w-full mb-2" appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Enter your password" formControlName="password">
@@ -23,18 +28,18 @@
               <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
           </mat-form-field>
-
+  
           <div class="mb-2 flex items-center justify-between space-x-3">
             <mat-checkbox>Remember me</mat-checkbox>
             <button impact="none" tone="primary" shape="rounded" size="small">
               Forgot your password?
             </button>
           </div>
-
+  
           <button mat-raised-button type="button" color="primary" class="w-full mb-2" (click)="onSubmit()">Login</button>
-
+  
           <button mat-button type="button" color="primary" (click)="userNavigate()">You Lost Something?</button>
-
+  
           <div class="text-sm text-muted-foreground mt-2 text-red-500">
             {{errMsg}}
           </div>
@@ -42,6 +47,8 @@
       </div>
     </div>
   </div>
+
+  
   <div  *ngIf="isMobileView" class="flex-grow flex items-center justify-center bg-[#E8F2F3]">
     <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
       <p class="text-sm font-medium text-center mb-4">Enter your credentials.</p>

@@ -61,7 +61,7 @@
   <div *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0 || noresultsforPicturesearch)  &&  noresultsFound"
             class="relative flex flex-col items-center justify-center bg-white">
             <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-            <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+            <p class="mt-36 p-3 text-center text-gray-600 tracking-tight">
               No Records Found
             </p>
           </div> 
@@ -162,7 +162,7 @@
                         <div class="text-center p-6 flex-1">
                           <div
                             class="border-dashed border-2 rounded-lg p-[10px] mb-[29px] flex items-center justify-between"
-                            style="border-color: #00897b;"
+                            style="border-color: #2b2b2b;"
                           >
                             <input type="file" id="fileInput" class="hidden" (change)="onFileSelect($event)" />
                             <label for="fileInput" class="text-left text-gray-500">
@@ -171,7 +171,7 @@
                             <label
                               for="fileInput"
                               class="text-white rounded px-4 py-2 cursor-pointer"
-                              style="background-color: #00897b;"
+                              style="background-color:#2b2b2b;"
                             >
                               Upload Picture
                             </label>
@@ -221,7 +221,7 @@
             *ngIf="(searchResults?.length == 0 || noresultsforPicturesearch || categerorydata?.length == 0  || initalDataResults?.length == 0 || noresultsforPicturesearch)  &&  noresultsFound"
             class="relative flex flex-col items-center justify-center bg-white">
             <img src="assets/Animation - 1737116880117 (1).gif" alt="No results found" class="no-results-gif pl-[100px]" />
-            <p class="mt-36 p-3 text-center text-teal-600 tracking-tight">
+            <p class="mt-36 p-3 text-center text-gray-600 tracking-tight">
               No Records Found
             </p>
           </div>       
@@ -231,16 +231,16 @@
  
   <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 md:hidden">
       <div class="flex justify-between items-center h-16 px-4 ">
-        <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/dashboard'" >
+        <button class="flex flex-col items-center text-gray-600 hover:text-gray-500 " [routerLink]="'/claimit/dashboard'" >
           <mat-icon class="text-[#00897b] ">home</mat-icon>
           <span class="text-xs">Home</span>
       </button>
-          <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/searchAndClaim'" >
+          <button class="flex flex-col items-center text-gray-600 hover:text-gray-500 " [routerLink]="'/claimit/searchAndClaim'" >
               <mat-icon class="text-[#00897b] ">search</mat-icon>
               <span class="text-xs">Search And Claim</span>
           </button>
          
-          <button class="flex flex-col items-center text-gray-600 hover:text-teal-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
+          <button class="flex flex-col items-center text-gray-600 hover:text-gray-500 " [routerLink]="'/claimit/viewOrUnclaim'" >
               <mat-icon class="text-[#00897b] ">visibility</mat-icon>
               <span class="text-xs">View History</span>
           </button>
