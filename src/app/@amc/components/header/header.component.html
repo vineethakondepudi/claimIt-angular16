@@ -20,8 +20,8 @@
                       matTooltipPosition="right">
               {{ item.icon }}
             </mat-icon>
-            <span *ngIf="opened || isMobile" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text-base"
-                  [class.active-button]="isTabActive(item.route)">
+            <span *ngIf="opened || isMobile" class="mt-1 ml-4 cursor-pointer text-[#FFFFFF] text-base "
+                  [class.active-button]="isTabActive(item.route)" [style.font-size.px]="isMobile ? 13 : null">
               {{ item.label }}
             </span>
           </span>
