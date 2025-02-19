@@ -131,7 +131,6 @@ public isTabActive(tab: string): boolean {
         { label: 'Approve / Reject Claim', icon: 'rule', route: '/claimit/search' },
         { label: 'Category Management', icon: 'visibility', route: '/claimit/category' },
         { label: 'Expired Items', icon: 'sell', route: '/claimit/expiredItems' },
-        // { label: 'Notifications', icon: 'notifications', route: '/claimit/pendingClaim', isNotification: true },
       ];
     } else {
       this.menuItems = [

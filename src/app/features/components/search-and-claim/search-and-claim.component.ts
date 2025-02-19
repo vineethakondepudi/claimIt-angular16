@@ -237,6 +237,10 @@ export default class SearchAndClaimComponent implements OnInit {
     this.files = this.files.filter(f => f !== file);
   }
   searchItems() {
+    if (!this.searchQuery || this.searchQuery.trim() === "") {
+    location.reload()
+      return;
+    }
       this.noresultsFound = false; // Reset before making API call
       this.noresultsforItemsearch = false;
       this.initalDataResults = false;
@@ -269,6 +273,8 @@ export default class SearchAndClaimComponent implements OnInit {
   
 listOfItems(){
   this.isLoading = true
+  this.noresultsFound = false;
+  this.searchResults = [];
   this.claimService.listOfItems(this.searchQuery).subscribe(
     (res: any) => {
       this.initalDataResults = res.data
